@@ -7,10 +7,6 @@
     "lint": "eslint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jnxzu/Node-Vue-Instagram-Clone.git"
-  },
   "keywords": [
     "javascript",
     "vue",
@@ -18,10 +14,6 @@
   ],
   "author": "Marta Rybarczyk, Janek Bielówka, Dominika Cesarz",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jnxzu/Node-Vue-Instagram-Clone/issues"
-  },
-  "homepage": "https://github.com/jnxzu/Node-Vue-Instagram-Clone#readme",
   "devDependencies": {
     "eslint": "^7.12.0",
     "eslint-plugin-vue": "^7.1.0"
