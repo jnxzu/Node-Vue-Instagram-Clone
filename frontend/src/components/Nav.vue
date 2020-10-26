@@ -21,13 +21,13 @@
           </router-link>
         </div>
         <div class="nav__inner__right__icon">
-          <router-link to="/inbox/messages">
+          <router-link to="/messages">
             <img src="@/assets/messages-icon.png" alt="Messages" />
             <div class="nav-selection"></div>
           </router-link>
         </div>
         <div class="nav__inner__right__profile">
-          <router-link to="/me">
+          <router-link to="/u/me">
             <img src="@/assets/profile.jpg" alt="Profile" />
             <div class="nav-selection"></div>
           </router-link>
