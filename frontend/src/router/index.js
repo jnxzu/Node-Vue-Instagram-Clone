@@ -18,7 +18,7 @@ const routes = [
     component: Timeline,
   },
   {
-    path: '/:username',
+    path: '/u/:username',
     name: 'Profile',
     component: Profile,
   },
