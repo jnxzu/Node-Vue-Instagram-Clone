@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <Nav />
-    <div class="main">
+    <main>
       <router-view />
-    </div>
+    </main>
   </div>
 </template>
 
@@ -40,8 +40,9 @@ a {
   width: 100vw;
 }
 
-.main {
+main {
   background: var(--bg);
   margin-top: 55px;
+  min-height: calc(100vh - 55px);
 }
 </style>

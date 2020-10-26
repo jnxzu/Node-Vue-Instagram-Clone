@@ -27,7 +27,7 @@
           </router-link>
         </div>
         <div class="nav__inner__right__profile">
-          <router-link to="/me">
+          <router-link to="/profile">
             <img src="@/assets/profile.jpg" alt="Profile" />
             <div class="nav-selection"></div>
           </router-link>
@@ -50,7 +50,7 @@ export default {
   height: 55px;
   display: flex;
   position: fixed;
-  top: 0%;
+  top: 0;
   width: 100%;
   justify-content: center;
   border-bottom: 1px solid var(--border);
