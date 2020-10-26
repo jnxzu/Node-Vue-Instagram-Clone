@@ -31,6 +31,11 @@ export default {
   --border: #dbdbdb;
 }
 
+a {
+  color: black;
+  text-decoration: none;
+}
+
 #app {
   width: 100vw;
 }
