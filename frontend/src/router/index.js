@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import Timeline from '../views/Timeline.vue';
 import Profile from '../views/Profile.vue';
+import Post from '../views/Post.vue';
 import Messages from '../views/Messages.vue';
 import Register from '../views/Register.vue';
 import Login from '../views/Login.vue';
@@ -17,9 +18,14 @@ const routes = [
     component: Timeline,
   },
   {
-    path: '/profile',
+    path: '/:username',
     name: 'Profile',
     component: Profile,
+  },
+  {
+    path: '/p/:id',
+    name: 'Post',
+    component: Post,
   },
   {
     path: '/messages',
