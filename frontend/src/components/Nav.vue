@@ -21,16 +21,20 @@
           </router-link>
         </div>
         <div class="nav__inner__right__icon">
-          <router-link to="/messages">
+          <router-link to="/inbox/messages">
             <img src="@/assets/messages-icon.png" alt="Messages" />
             <div class="nav-selection"></div>
           </router-link>
         </div>
         <div class="nav__inner__right__profile">
-          <router-link to="/profile">
+          <router-link to="/me">
             <img src="@/assets/profile.jpg" alt="Profile" />
             <div class="nav-selection"></div>
           </router-link>
+        </div>
+        <div class="nav__inner__right__icon">
+          <img src="@/assets/logout-icon.png" alt="Logout" />
+          <div class="nav-selection"></div>
         </div>
       </div>
     </div>
@@ -63,7 +67,7 @@ export default {
     justify-content: center;
     align-items: center;
 
-    @media (max-width: 500px) {
+    @media (max-width: 600px) {
       justify-content: space-between;
     }
 
@@ -89,7 +93,7 @@ export default {
     }
 
     &__center {
-      @media (max-width: 500px) {
+      @media (max-width: 600px) {
         display: none;
       }
       max-height: 55px;
@@ -122,6 +126,7 @@ export default {
         display: flex;
         flex-direction: column;
         margin-right: 15px;
+        cursor: pointer;
 
         img {
           height: 30px;
@@ -142,10 +147,12 @@ export default {
       &__profile {
         display: flex;
         flex-direction: column;
+        margin-right: 15px;
 
         img {
           height: 36px;
           border-radius: 50%;
+          border: 1px solid var(--border);
         }
 
         .nav-selection {
