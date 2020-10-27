@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Nav from './components/Nav.vue';
+import Nav from './components/Nav/Nav.vue';
 
 export default {
   name: 'App',
@@ -34,6 +34,10 @@ export default {
 a {
   color: black;
   text-decoration: none;
+  &:active,
+  &:focus {
+    outline: none;
+  }
 }
 
 #app {
