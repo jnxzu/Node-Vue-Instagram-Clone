@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "airbnb",
+    "prettier",
+    "plugin:vue/essential",
+    "@vue/airbnb"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "error"
+    ]
+  },
+  "root": true,
+  "env": {
+    "node": true
+  },
+  "parserOptions": {
+    "parser": "babel-eslint"
+  }
+}
