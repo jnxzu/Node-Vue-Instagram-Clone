@@ -27,12 +27,26 @@
     "prettier": "^2.1.2"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "bcryptjs": "^2.4.3",
+    "connect-mongo": "^3.2.0",
+    "console": "^0.7.2",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "error-handler": "^1.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "fs": "0.0.1-security",
     "https": "^1.0.0",
     "mongoose": "^5.10.11",
     "mongoose-aggregate-paginate-v2": "^1.0.42",
     "mongoose-unique-validator": "^2.0.3",
-    "passport": "^0.4.1"
+    "morgan": "^1.10.0",
+    "passport": "^0.4.1",
+    "passport-http": "^0.3.0",
+    "passport-local": "^1.0.0",
+    "passport.socketio": "^3.7.0",
+    "socket.io": "^2.3.0"
   }
 }
