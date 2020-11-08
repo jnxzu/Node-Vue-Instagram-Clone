@@ -20,11 +20,12 @@ export default {
 
 <style lang="scss" scoped>
 .timelinepostcomments {
+  margin-top: 5px;
   padding: 0 10px;
 
   .view {
     font-size: smaller;
-    color: #aaa;
+    color: #888;
     cursor: pointer;
   }
 
