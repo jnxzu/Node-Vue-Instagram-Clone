@@ -21,5 +21,9 @@ export default {
   margin: 0 auto;
   max-width: 975px;
   padding-top: 30px;
+
+  @media (max-width: 600px) {
+    padding-top: 0;
+  }
 }
 </style>

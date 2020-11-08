@@ -35,7 +35,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .timelinepost {
   background: #fff;
   max-width: 615px;
@@ -43,10 +43,6 @@ export default {
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-
-  a {
-    font-weight: 600;
-  }
 
   &__image {
     width: 100%;

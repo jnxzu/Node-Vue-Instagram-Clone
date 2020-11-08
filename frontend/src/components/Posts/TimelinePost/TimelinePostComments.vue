@@ -1,5 +1,15 @@
 <template>
-  <div class="timelinepostcomments"></div>
+  <div class="timelinepostcomments">
+    <span class="view">View all 10 comments</span>
+    <div class="comment">
+      <router-link to="u/catman">catman</router-link>
+      thats so cool
+    </div>
+    <div class="comment">
+      <router-link to="u/catwoman">catwoman</router-link>
+      wow
+    </div>
+  </div>
 </template>
 
 <script>
@@ -8,4 +18,20 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.timelinepostcomments {
+  padding: 0 10px;
+
+  .view {
+    font-size: smaller;
+    color: #aaa;
+    cursor: pointer;
+  }
+
+  .comment {
+    a {
+      font-weight: 600;
+    }
+  }
+}
+</style>

@@ -19,6 +19,7 @@ export default {
   padding: 0 10px;
 
   a {
+    font-weight: 600;
     display: inline;
   }
 }

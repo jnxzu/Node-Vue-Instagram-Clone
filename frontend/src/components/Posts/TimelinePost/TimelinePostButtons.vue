@@ -17,9 +17,9 @@ export default {
 
 <style lang="scss" scoped>
 .timelinepostbuttons {
-  height: 40px;
+  height: 45px;
   display: flex;
-  padding: 0 10px;
+  padding: 5px 10px;
   > i {
     cursor: pointer;
   }

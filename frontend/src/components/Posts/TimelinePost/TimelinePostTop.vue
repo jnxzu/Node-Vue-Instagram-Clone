@@ -1,7 +1,7 @@
 <template>
   <div class="timelineposttop">
     <router-link to="u/placekitten">
-      <img class="timelineposttop__avatar" src="https://placekitten.com/150/150" />
+      <img src="https://placekitten.com/150/150" />
     </router-link>
     <router-link to="u/placekitten"> placekitten </router-link>
   </div>
@@ -21,13 +21,14 @@ export default {
   padding-left: 15px;
 
   a {
+    font-weight: 600;
     margin-right: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  &__avatar {
+  img {
     width: 40px;
     height: 40px;
     border-radius: 50%;

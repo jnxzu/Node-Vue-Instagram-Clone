@@ -11,7 +11,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .navsearch {
   @media (max-width: 600px) {
     display: none;
