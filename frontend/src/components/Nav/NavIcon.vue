@@ -47,7 +47,7 @@ export default {
   &.active,
   &:hover {
     .navicon__selection {
-      height: 5px;
+      height: 3px;
     }
   }
 }
@@ -70,7 +70,7 @@ export default {
   &.active,
   &:hover {
     .navicon__selection {
-      height: 5px;
+      height: 3px;
     }
   }
 }
