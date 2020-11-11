@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const express = require('express');
 const cookieParser = require('cookie-parser');
 
@@ -22,18 +21,27 @@ const passport = require('./passport');
 const server = require('./https')(app);
 
 const port = process.env.PORT;
-const Post = require('./models/Post');
-const userRoutes = require('./routes/UserRoutes');
-const AuctionRoutes = require('./routes/PostRoutes');
-const messageRoutes = require('./routes/MessageRoutes');
-const postServices = require('./services/PostServices');
-const roomRoutes = require('./routes/RoomRoutes');
+//const Post = require('./models/Post');
+const users = require('./routes/UserRoutes');
+//const AuctionRoutes = require('./routes/PostRoutes');
+//const messageRoutes = require('./routes/MessageRoutes');
+//const postServices = require('./services/PostServices');
+//const roomRoutes = require('./routes/RoomRoutes');
+const MongoClient = require('mongodb').MongoClient;
 
 app.use(express.json());
 
 app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
 
 app.use(cookieParser());
+
+// Atlas connection
+const uri = process.env.DATABASE_URL;
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect(err => {
+  const collection = client.db("camradb").collection("users");
+  client.close();
+});
 
 // Session store
 const sessionStore = new MongoStore({
@@ -66,10 +74,10 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(path.join(__dirname, 'client/dist')));
 
 // Routing
-app.use('/api/users', userRoutes);
-app.use('/api/auctions', AuctionRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/rooms', roomRoutes);
+app.use('/UserRoutes', users);
+//app.use('/api/auctions', AuctionRoutes);
+//app.use('/api/messages', messageRoutes);
+//app.use('/api/rooms', roomRoutes);
 
 // Wyłapujemy odwołania do nieobsługiwanych adresów
 app.use((_, res) => {

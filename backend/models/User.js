@@ -1,5 +1,4 @@
 const mongoose = require('../mongoose');
-
 const { Schema } = mongoose;
 const bcrypt = require('../bcrypt');
 
@@ -20,7 +19,7 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-// bez poniższej wtyczki nie dostaniemy sensownego sygnału
+/*// bez poniższej wtyczki nie dostaniemy sensownego sygnału
 // błędu przy naruszeniu „unikatowości” nazwy użytkownika
 const uniqueValidator = require('mongoose-unique-validator');
 // ale z nią – już wszystko będzie jak należy
@@ -42,4 +41,5 @@ User.processErrors = (err) => {
 };
 
 global.UserSchema = global.UserSchema || User;
-module.exports = global.UserSchema;
+module.exports = global.UserSchema;*/
+module.exports = User = mongoose.model('users', UserSchema);
