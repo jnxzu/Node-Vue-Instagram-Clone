@@ -1,9 +1,9 @@
 <template>
   <div class="timelineposttop">
-    <router-link to="u/placekitten">
+    <router-link to="/u/placekitten">
       <img src="https://placekitten.com/150/150" />
     </router-link>
-    <router-link to="u/placekitten"> placekitten </router-link>
+    <router-link to="/u/placekitten"> placekitten </router-link>
   </div>
 </template>
 

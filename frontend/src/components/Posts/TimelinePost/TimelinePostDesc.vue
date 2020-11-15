@@ -1,7 +1,7 @@
 <template>
   <div class="timelinepostdesc">
     <p>
-      <router-link to="u/placekitten">placekitten</router-link> Lorem ipsum dolor sit amet
+      <router-link to="/u/placekitten">placekitten</router-link> Lorem ipsum dolor sit amet
       consectetur adipisicing elit. Quibusdam ad aspernatur perspiciatis corrupti eius ea quaerat
       fugit facilis ex doloremque in ipsa fuga vitae, perferendis soluta non natus neque maiores.
     </p>

@@ -35,6 +35,7 @@ export default {
   justify-content: center;
   border-bottom: 1px solid var(--border);
   background-color: #fff;
+  z-index: 999;
 
   &__inner {
     height: 100%;

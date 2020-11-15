@@ -2,11 +2,11 @@
   <div class="timelinepostcomments">
     <span class="view">View all 10 comments</span>
     <div class="comment">
-      <router-link to="u/catman">catman</router-link>
+      <router-link to="/u/catman">catman</router-link>
       thats so cool
     </div>
     <div class="comment">
-      <router-link to="u/catwoman">catwoman</router-link>
+      <router-link to="/u/catwoman">catwoman</router-link>
       wow
     </div>
   </div>

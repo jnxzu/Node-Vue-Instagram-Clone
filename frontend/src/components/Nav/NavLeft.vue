@@ -1,7 +1,7 @@
 <template>
   <div class="navleft">
     <router-link to="/">
-      <img class="navleft__logo" src="img/logo.png" alt="Camra" />
+      <img class="navleft__logo" src="/img/logo.png" alt="Camra" />
     </router-link>
     <router-link to="/">
       <h1 class="navleft__name">Camra</h1>

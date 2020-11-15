@@ -1,5 +1,5 @@
 <template>
-  <div>register</div>
+  <div class="register"></div>
 </template>
 
 <script>
@@ -7,3 +7,5 @@ export default {
   name: 'Register',
 };
 </script>
+
+<style lang="scss"></style>

@@ -3,7 +3,7 @@
     <img src="https://placekitten.com/50/50" />
     <span>
       Liked by
-      <router-link to="u/kittenlover">kittenlover</router-link>
+      <router-link to="/u/kittenlover">kittenlover</router-link>
       and
       <span class="bolder">1234</span> others
     </span>

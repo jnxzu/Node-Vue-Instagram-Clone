@@ -1,7 +1,7 @@
 <template>
   <div class="navsearch">
     <input class="navsearch__input" />
-    <img class="navsearch__icon" src="img/search-icon.png" alt="Search" />
+    <img class="navsearch__icon" src="/img/search-icon.png" alt="Search" />
   </div>
 </template>
 

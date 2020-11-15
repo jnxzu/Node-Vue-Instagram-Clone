@@ -1,12 +1,12 @@
 <template>
   <div :class="{ navicon: !profile, navprofile: profile, active: isActive }" v-if="isRoute">
     <router-link :to="routeTarget">
-      <img :src="'img/' + imgSrc" :alt="imgAlt" />
+      <img :src="'/img/' + imgSrc" :alt="imgAlt" />
       <div class="navicon__selection"></div>
     </router-link>
   </div>
   <div :class="{ navicon: !profile, navprofile: profile }" v-else>
-    <img :src="'img/' + imgSrc" :alt="imgAlt" />
+    <img :src="'/img/' + imgSrc" :alt="imgAlt" />
     <div class="navicon__selection"></div>
   </div>
 </template>
@@ -41,13 +41,16 @@ export default {
   }
 
   &__selection {
+    height: 3px;
     background: var(--accent);
+    opacity: 0;
+    transition: 0.5s ease all;
   }
 
   &.active,
   &:hover {
     .navicon__selection {
-      height: 3px;
+      opacity: 1;
     }
   }
 }
@@ -64,13 +67,16 @@ export default {
   }
 
   &__selection {
+    height: 3px;
     background: var(--accent);
+    opacity: 0;
+    transition: 0.5s ease all;
   }
 
   &.active,
   &:hover {
     .navicon__selection {
-      height: 3px;
+      opacity: 1;
     }
   }
 }
