@@ -28,11 +28,5 @@ export default {
     color: #888;
     cursor: pointer;
   }
-
-  .comment {
-    a {
-      font-weight: 600;
-    }
-  }
 }
 </style>

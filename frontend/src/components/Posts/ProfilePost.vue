@@ -1,5 +1,5 @@
 <template>
-  <div class="post">
+  <div class="post" @click="goToPost('test')">
     <div class="post__overlay">
       <i class="fas fa-heart"></i>
       <span>5</span>
@@ -13,6 +13,11 @@
 <script>
 export default {
   name: 'ProfilePost',
+  methods: {
+    goToPost(id) {
+      this.$router.push(`/p/${id}`);
+    },
+  },
 };
 </script>
 
@@ -30,9 +35,27 @@ export default {
     position: absolute;
     top: 0;
     opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i,
+    span {
+      opacity: 1;
+      font-size: x-large;
+      color: white;
+    }
+
+    span {
+      margin-left: 5px;
+    }
+
+    i ~ i {
+      margin-left: 10%;
+    }
 
     &:hover {
-      opacity: 0.33;
+      opacity: 0.5;
     }
   }
 

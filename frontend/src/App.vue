@@ -37,11 +37,15 @@ body {
 }
 
 a {
+  font-weight: 600;
   color: black;
   text-decoration: none;
   &:active,
   &:focus {
     outline: none;
+  }
+  &:hover {
+    text-decoration: underline;
   }
 }
 

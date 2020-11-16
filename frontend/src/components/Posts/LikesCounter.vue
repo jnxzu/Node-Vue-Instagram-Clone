@@ -21,13 +21,8 @@ export default {
   font-size: smaller;
   height: 25px;
   padding: 0 10px;
-  margin-bottom: 5px;
   display: flex;
   align-items: center;
-
-  a {
-    font-weight: 600;
-  }
 
   .bolder {
     font-weight: 600;

@@ -26,7 +26,6 @@ export default {
 i {
   cursor: pointer;
   transition: 0.5s ease color;
-  margin-right: 10px;
 }
 
 .colored {

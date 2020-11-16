@@ -169,10 +169,6 @@ export default {
         color: #555;
         margin-top: 10px;
         font-weight: 500;
-
-        a {
-          font-weight: 700;
-        }
       }
     }
   }

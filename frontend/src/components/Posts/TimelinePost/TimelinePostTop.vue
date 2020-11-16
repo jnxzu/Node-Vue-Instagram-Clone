@@ -21,7 +21,6 @@ export default {
   padding-left: 15px;
 
   a {
-    font-weight: 600;
     margin-right: 15px;
     display: flex;
     align-items: center;
