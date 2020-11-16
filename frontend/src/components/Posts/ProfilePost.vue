@@ -1,9 +1,12 @@
 <template>
   <div class="post">
-    <router-link to="/p/test">
-      <div class="post__overlay"></div>
-      <img src="https://placekitten.com/215/215" />
-    </router-link>
+    <div class="post__overlay">
+      <i class="fas fa-heart"></i>
+      <span>5</span>
+      <i class="fas fa-comment"></i>
+      <span>5</span>
+    </div>
+    <img src="https://placekitten.com/215/215" />
   </div>
 </template>
 
@@ -15,33 +18,28 @@ export default {
 
 <style lang="scss" scoped>
 .post {
-  // z-index: -1;
   flex-grow: 1;
   max-width: 31%;
   position: relative;
   cursor: pointer;
 
-  a {
+  &__overlay {
+    background: black;
     height: 100%;
     width: 100%;
+    position: absolute;
+    top: 0;
+    opacity: 0;
 
-    div {
-      background: black;
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-
-      &:hover {
-        opacity: 0.3;
-      }
+    &:hover {
+      opacity: 0.33;
     }
+  }
 
-    img {
-      width: 100%;
-    }
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
