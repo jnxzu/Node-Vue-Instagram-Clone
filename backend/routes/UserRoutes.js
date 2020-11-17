@@ -4,6 +4,16 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require('../models/User');
 
+router.get("/", function(req, res) {
+    User.find({}, function(err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        return res.json(result);
+      }
+    });
+  });
+
 router.post('/register', (req, res) => {
     let { username, password } = req.body;
     User.findOne({username: username}).then(user => {

@@ -49,11 +49,6 @@ const sessionStore = new MongoStore({
   collection: 'sessions',
 });
 
-const userStore = new MongoStore({
-  mongooseConnection: mongoose.connection,
-  collection: 'users',
-});
-
 app.use(
   session({
     secret: process.env.APP_SECRET,
