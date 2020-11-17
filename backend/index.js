@@ -37,16 +37,21 @@ app.use(cookieParser());
 
 // Atlas connection
 const uri = process.env.DATABASE_URL;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+/*const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const collection = client.db("camradb").collection("users");
   client.close();
-});
+});*/
 
 // Session store
 const sessionStore = new MongoStore({
   mongooseConnection: mongoose.connection,
   collection: 'sessions',
+});
+
+const userStore = new MongoStore({
+  mongooseConnection: mongoose.connection,
+  collection: 'users',
 });
 
 app.use(
