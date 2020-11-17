@@ -11,6 +11,12 @@ const PostSchema = new Schema(
       minlength: 3,
       trim: true,
     },
+    poster: {
+      type: String,
+      required: true,
+      minlength: 3,
+      trim: true,
+    },
     caption: {
       type: String,
       trim: true,

@@ -13,21 +13,21 @@ const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 const { Console } = require('console');
 
-const socketio = require('socket.io');
-const passportSocketIo = require('passport.socketio');
+//  const socketio = require('socket.io');
+//  const passportSocketIo = require('passport.socketio');
 
 const mongoose = require('./mongoose');
 const passport = require('./passport');
 const server = require('./https')(app);
 
 const port = process.env.PORT;
-//const Post = require('./models/Post');
+// const Post = require('./models/Post');
 const users = require('./routes/UserRoutes');
-//const AuctionRoutes = require('./routes/PostRoutes');
-//const messageRoutes = require('./routes/MessageRoutes');
-//const postServices = require('./services/PostServices');
-//const roomRoutes = require('./routes/RoomRoutes');
-const MongoClient = require('mongodb').MongoClient;
+// const AuctionRoutes = require('./routes/PostRoutes');
+// const messageRoutes = require('./routes/MessageRoutes');
+// const postServices = require('./services/PostServices');
+// const roomRoutes = require('./routes/RoomRoutes');
+//  const { MongoClient } = require('mongodb');
 
 app.use(express.json());
 
@@ -49,6 +49,7 @@ app.use(
     saveUninitialized: false,
   })
 );
+
 // Inicjalizacja sesji
 app.use(passport.initialize());
 app.use(passport.session());
@@ -67,9 +68,9 @@ app.use(express.static(path.join(__dirname, 'client/dist')));
 
 // Routing
 app.use('/UserRoutes', users);
-//app.use('/api/auctions', AuctionRoutes);
-//app.use('/api/messages', messageRoutes);
-//app.use('/api/rooms', roomRoutes);
+// app.use('/api/auctions', AuctionRoutes);
+// app.use('/api/messages', messageRoutes);
+// app.use('/api/rooms', roomRoutes);
 
 // Wyłapujemy odwołania do nieobsługiwanych adresów
 app.use((_, res) => {
