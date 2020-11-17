@@ -35,14 +35,6 @@ app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
 
 app.use(cookieParser());
 
-// Atlas connection
-const uri = process.env.DATABASE_URL;
-/*const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-client.connect(err => {
-  const collection = client.db("camradb").collection("users");
-  client.close();
-});*/
-
 // Session store
 const sessionStore = new MongoStore({
   mongooseConnection: mongoose.connection,
