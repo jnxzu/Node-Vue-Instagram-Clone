@@ -7,7 +7,6 @@
   </div>
   <div :class="{ navicon: !profile, navprofile: profile }" v-else>
     <img :src="'/img/' + imgSrc" :alt="imgAlt" />
-    <div class="navicon__selection"></div>
   </div>
 </template>
 
@@ -33,8 +32,11 @@ export default {
 .navicon {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-right: 15px;
   cursor: pointer;
+  height: 100%;
 
   img {
     height: 30px;
@@ -45,6 +47,7 @@ export default {
     background: var(--accent);
     opacity: 0;
     transition: 0.5s ease all;
+    width: 100%;
   }
 
   &.active,
@@ -58,10 +61,13 @@ export default {
 .navprofile {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-right: 15px;
+  height: 100%;
 
   img {
-    height: 36px;
+    height: 30px;
     border-radius: 50%;
     border: 1px solid var(--border);
   }
