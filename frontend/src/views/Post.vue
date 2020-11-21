@@ -2,7 +2,9 @@
   <div class="post-container">
     <div class="post">
       <div class="post__image">
-        <img src="https://placekitten.com/600/350" />
+        <!-- <img src="https://placekitten.com/600/300" /> -->
+        <img src="https://placekitten.com/600/1200" />
+        <!-- <img src="https://placekitten.com/600/600" /> -->
       </div>
       <div class="post__info">
         <div class="post__info__top">
@@ -53,13 +55,21 @@ export default {
   margin: 30px auto 0 auto;
   display: flex;
   justify-content: center;
-  max-width: 975px;
+  max-height: 85vh;
+
+  @media (min-width: 975px) {
+    max-width: 975px;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 }
 
 .post {
   min-height: 450px;
   border: 1px solid var(--border);
-  display: flex;
+  display: inline-flex;
 
   @media (max-width: 600px) {
     padding-top: 0;
@@ -67,20 +77,31 @@ export default {
 
   @media (max-width: 974px) {
     flex-direction: column;
+    align-items: center;
   }
 
   &__image {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    img {
+      max-height: 100%;
+      max-width: 100%;
+    }
   }
 
   &__info {
+    max-width: 600px;
     background: #fff;
     border-left: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
+    @media (min-width: 975px) {
+      max-width: 335px;
+    }
 
     &__top {
       height: 75px;
@@ -112,7 +133,6 @@ export default {
     }
 
     &__comments {
-      width: 100%;
       flex-grow: 1;
       height: 0px;
       overflow: auto;
