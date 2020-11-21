@@ -14,13 +14,20 @@
           <i class="far fa-flag"></i>
         </div>
         <div class="post__info__comments">
-          <div class="comment"></div>
+          <post-comment />
+          <post-comment />
+          <post-comment />
         </div>
         <div class="post__info__controls">
           <liked-icon :liked="false" />
           <likes-counter />
         </div>
-        <div class="post__info__input"></div>
+        <div class="post__info__input">
+          <form>
+            <textarea placeholder="submit only active if valid"></textarea>
+            <button>Post</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -29,12 +36,14 @@
 <script>
 import LikedIcon from '../components/Posts/LikedIcon.vue';
 import LikesCounter from '../components/Posts/LikesCounter.vue';
+import PostComment from '../components/Posts/PostComment.vue';
 
 export default {
   name: 'Post',
   components: {
     LikedIcon,
     LikesCounter,
+    PostComment,
   },
 };
 </script>
@@ -42,9 +51,9 @@ export default {
 <style lang="scss" scoped>
 .post-container {
   margin: 30px auto 0 auto;
-  max-width: 975px;
   display: flex;
   justify-content: center;
+  max-width: 975px;
 }
 
 .post {
@@ -56,6 +65,10 @@ export default {
     padding-top: 0;
   }
 
+  @media (max-width: 974px) {
+    flex-direction: column;
+  }
+
   &__image {
     display: flex;
     justify-content: center;
@@ -63,11 +76,11 @@ export default {
   }
 
   &__info {
-    min-width: 335px;
     background: #fff;
     border-left: 1px solid var(--border);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     &__top {
       height: 75px;
@@ -99,10 +112,15 @@ export default {
     }
 
     &__comments {
+      width: 100%;
       flex-grow: 1;
+      height: 0px;
+      overflow: auto;
+      box-sizing: content-box;
     }
 
     &__controls {
+      height: 40px;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       padding: 6px;
@@ -111,7 +129,42 @@ export default {
     }
 
     &__input {
-      height: 60px;
+      height: 75px;
+      form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow-y: auto;
+
+        textarea {
+          flex-grow: 0.7;
+          border: none;
+          resize: none;
+          padding: 5px 15px;
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        button {
+          flex-grow: 0.3;
+          height: 100%;
+          letter-spacing: 3px;
+          color: var(--accent);
+          background: none;
+          border: none;
+          opacity: 0.5;
+          transition: 0.2s ease all;
+          font-weight: 600;
+          cursor: pointer;
+
+          &.valid {
+            opacity: 1;
+          }
+        }
+      }
     }
   }
 }
