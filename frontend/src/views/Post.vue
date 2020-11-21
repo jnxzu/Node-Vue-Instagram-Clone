@@ -3,7 +3,7 @@
     <div class="post">
       <div class="post__image">
         <!-- <img src="https://placekitten.com/600/300" /> -->
-        <img src="https://placekitten.com/600/1200" />
+        <!-- <img src="https://placekitten.com/600/1200" /> -->
         <!-- <img src="https://placekitten.com/600/600" /> -->
       </div>
       <div class="post__info">
@@ -84,6 +84,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @media (max-width: 974px) {
+      max-height: 60vh;
+    }
 
     img {
       max-height: 100%;
