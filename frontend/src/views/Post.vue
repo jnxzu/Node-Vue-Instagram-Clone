@@ -2,9 +2,9 @@
   <div class="post-container">
     <div class="post">
       <div class="post__image">
-        <!-- <img src="https://placekitten.com/600/300" /> -->
-        <!-- <img src="https://placekitten.com/600/1200" /> -->
-        <!-- <img src="https://placekitten.com/600/600" /> -->
+        <!-- <img src="https://placekitten.com/600/300"/> -->
+        <!-- <img src="https://placekitten.com/600/1200"/> -->
+        <img src="https://placekitten.com/600/600" />
       </div>
       <div class="post__info">
         <div class="post__info__top">
@@ -62,6 +62,7 @@ export default {
   }
 
   @media (max-width: 600px) {
+    margin: 0;
     width: 100%;
   }
 }
@@ -73,6 +74,7 @@ export default {
 
   @media (max-width: 600px) {
     padding-top: 0;
+    height: calc(100vh - 55px);
   }
 
   @media (max-width: 974px) {
@@ -100,6 +102,7 @@ export default {
     background: #fff;
     border-left: 1px solid var(--border);
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     overflow: hidden;
 
@@ -138,9 +141,12 @@ export default {
 
     &__comments {
       flex-grow: 1;
-      height: 0px;
       overflow: auto;
       box-sizing: content-box;
+
+      @media (min-width: 975px) {
+        height: 0px;
+      }
     }
 
     &__controls {
@@ -153,7 +159,7 @@ export default {
     }
 
     &__input {
-      height: 75px;
+      min-height: 50px;
       form {
         width: 100%;
         display: flex;
