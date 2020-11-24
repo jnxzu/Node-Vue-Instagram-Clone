@@ -19,27 +19,28 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-/*// bez poniższej wtyczki nie dostaniemy sensownego sygnału
-// błędu przy naruszeniu „unikatowości” nazwy użytkownika
-const uniqueValidator = require('mongoose-unique-validator');
-// ale z nią – już wszystko będzie jak należy
-UserSchema.plugin(uniqueValidator);
+// /*// bez poniższej wtyczki nie dostaniemy sensownego sygnału
+// // błędu przy naruszeniu „unikatowości” nazwy użytkownika
+// const uniqueValidator = require('mongoose-unique-validator');
+// // ale z nią – już wszystko będzie jak należy
+// UserSchema.plugin(uniqueValidator);
 
-UserSchema.methods.isValidPassword = function (password) {
-  return bcrypt.compare(password, this.password);
-};
+// UserSchema.methods.isValidPassword = function (password) {
+//   return bcrypt.compare(password, this.password);
+// };
 
-delete mongoose.connection.models.User;
-const User = mongoose.model('User', UserSchema);
+// delete mongoose.connection.models.User;
+// const User = mongoose.model('User', UserSchema);
 
-User.processErrors = (err) => {
-  const msg = {};
-  for (const key in err.errors) {
-    msg[key] = err.errors[key].message;
-  }
-  return msg;
-};
+// User.processErrors = (err) => {
+//   const msg = {};
+//   for (const key in err.errors) {
+//     msg[key] = err.errors[key].message;
+//   }
+//   return msg;
+// };
 
-global.UserSchema = global.UserSchema || User;
-module.exports = global.UserSchema;*/
+// global.UserSchema = global.UserSchema || User;
+// module.exports = global.UserSchema; */
+
 module.exports = User = mongoose.model('users', UserSchema);

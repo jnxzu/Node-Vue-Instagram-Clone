@@ -1,3 +1,9 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable consistent-return */
 const Post = require('../models/Post');
 
 const isAuthenticated = (req, res, next) => {
@@ -38,18 +44,13 @@ module.exports.postsPage =
   (isAuthenticated,
   async (req, res) => {
     const page = parseInt(req.params.page, 10);
-    // hardcoded 10 because it makes sense  i guess
     const aggregateOptions = [];
     const limit = 3;
     const options = {
       page,
       limit,
     };
-    // const match = {
-    //   status: 'onSale',
-    // };
     aggregateOptions.push();
-
     const myAggregate = Post.aggregate(aggregateOptions);
     const result = await Post.aggregatePaginate(myAggregate, options);
     res.status(200).json(result);
@@ -59,20 +60,16 @@ module.exports.mypostsPage =
   (isAuthenticated,
   async (req, res) => {
     const page = parseInt(req.params.page, 10);
-
     const aggregateOptions = [];
-
     const limit = 3;
     const options = {
       page,
       limit,
     };
-
     const match = {
       $or: [{ poster: req.user.username }],
     };
     aggregateOptions.push({ $match: match });
-
     const myAggregate = Post.aggregate(aggregateOptions);
     const result = await Post.aggregatePaginate(myAggregate, options);
     res.status(200).json(result);
@@ -91,8 +88,7 @@ module.exports.mylikesPage =
     };
 
     const match = {};
-    match.bidders = req.user.username;
-    match.status = 'onSale';
+    match.likes = req.user.username;
 
     aggregateOptions.push({ $match: match });
 
@@ -145,7 +141,7 @@ module.exports.read = (req, res, next) => {
     if (err) {
       next(err);
     } else if (post) {
-      res.json(post.bids);
+      res.json(post);
     } else {
       // Not Found
       res.sendStatus(404);

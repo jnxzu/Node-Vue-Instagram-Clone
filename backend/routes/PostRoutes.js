@@ -24,8 +24,6 @@ router
   .delete(isAuth, postservices.deletePost)
   .all(rejectMethod);
 
-// TODO: PAGINATION !
-
 router.route('/page/:page').get(postservices.postsPage).all(rejectMethod);
 
 router.route('/my-posts/page/:page').get(isAuth, postservices.mypostsPage).all(rejectMethod);
