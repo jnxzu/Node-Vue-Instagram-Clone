@@ -4,6 +4,7 @@ const Room = require('../models/Room');
 module.exports.newRoom = (req, res) => {
   if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
   else {
+    // eslint-disable-next-line consistent-return
     User.findOne({ _id: req.session.passport.user }, (err, user) => {
       if (err) {
         return res.status(400).json('Error.. :( ');
@@ -46,6 +47,7 @@ module.exports.findByTwo = (req, res) => {
 };
 
 module.exports.all = (req, res) => {
+  // eslint-disable-next-line array-callback-return
   Room.find((error, docs) => {
     if (error) {
       res.json(error);

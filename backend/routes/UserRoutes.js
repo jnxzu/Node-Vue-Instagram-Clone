@@ -2,11 +2,12 @@ const express = require('express');
 
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const passport = require('passport');
+// const passport = require('passport');
 const User = require('../models/User');
 
 router.post('/register', (req, res) => {
   const { username, password } = req.body;
+  // eslint-disable-next-line consistent-return
   User.findOne({ username }).then((user) => {
     if (user) {
       return res.status(400).json({
@@ -20,6 +21,7 @@ router.post('/register', (req, res) => {
     password,
   });
   bcrypt.genSalt(10, (err, salt) => {
+    // eslint-disable-next-line no-shadow
     bcrypt.hash(newUser.password, salt, (err, hash) => {
       if (err) throw err;
       newUser.password = hash;

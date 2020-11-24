@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const postservices = require('../services/PostServices');
 
+// eslint-disable-next-line consistent-return
 const isAuth = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
