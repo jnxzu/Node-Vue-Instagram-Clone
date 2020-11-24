@@ -27,6 +27,7 @@
     "prettier": "^2.1.2"
   },
   "dependencies": {
+    "@google-cloud/storage": "^5.5.0",
     "axios": "^0.21.0",
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^3.2.0",
@@ -37,6 +38,7 @@
     "error-handler": "^1.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "firebase": "^8.1.1",
     "fs": "0.0.1-security",
     "https": "^1.0.0",
     "mongodb": "^3.6.3",
