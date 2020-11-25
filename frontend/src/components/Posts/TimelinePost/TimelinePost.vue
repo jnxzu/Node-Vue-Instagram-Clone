@@ -6,6 +6,7 @@
     </div>
     <div class="timelinepost__bottom">
       <timeline-post-buttons />
+      <likes-counter />
       <timeline-post-desc />
       <timeline-post-comments />
       <timeline-post-date />
@@ -19,6 +20,7 @@ import TimelinePostButtons from './TimelinePostButtons.vue';
 import TimelinePostDesc from './TimelinePostDesc.vue';
 import TimelinePostComments from './TimelinePostComments.vue';
 import TimelinePostDate from './TimelinePostDate.vue';
+import LikesCounter from '../LikesCounter.vue';
 
 export default {
   name: 'TimelinePost',
@@ -28,6 +30,7 @@ export default {
     TimelinePostDesc,
     TimelinePostComments,
     TimelinePostDate,
+    LikesCounter,
   },
 };
 </script>
