@@ -135,6 +135,10 @@ export default {
       align-items: center;
       padding: 10px 20px;
 
+      @media (max-width: 700px) {
+        border-top: 1px solid var(--border);
+      }
+
       &__avatar {
         height: 25px;
         width: 25px;
