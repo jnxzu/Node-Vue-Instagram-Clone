@@ -2,7 +2,9 @@
   <div id="app">
     <Nav />
     <main>
-      <router-view />
+      <transition name="fade" mode="out-in">
+        <router-view />
+      </transition>
     </main>
   </div>
 </template>
@@ -58,5 +60,14 @@ main {
   margin-top: 55px;
   min-height: calc(100vh - 55px);
   overflow: hidden;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
