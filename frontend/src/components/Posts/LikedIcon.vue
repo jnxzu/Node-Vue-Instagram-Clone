@@ -1,5 +1,5 @@
 <template>
-  <i @click="() => (this.liked = !this.liked)" :class="classObj"></i>
+  <i @click="() => (this.likedVal = !this.likedVal)" :class="classObj"></i>
 </template>
 
 <script>
@@ -8,14 +8,19 @@ export default {
   props: {
     liked: Boolean,
   },
+  data() {
+    return {
+      likedVal: this.liked,
+    };
+  },
   computed: {
     classObj() {
       return {
         'fa-heart': true,
         'fa-2x': true,
-        far: !this.liked,
-        fas: this.liked,
-        colored: this.liked,
+        far: !this.likedVal,
+        fas: this.likedVal,
+        colored: this.likedVal,
       };
     },
   },
