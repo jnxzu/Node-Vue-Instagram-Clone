@@ -187,7 +187,7 @@ export default {
           border: none;
           opacity: 0.5;
           transition: 0.2s ease all;
-          font-weight: 600;
+          font-weight: 700;
           cursor: pointer;
 
           &.valid {

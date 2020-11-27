@@ -129,7 +129,7 @@ export default {
           border: 1px solid var(--border);
           border-radius: 4px;
           padding: 4px 8px;
-          font-weight: 600;
+          font-weight: 700;
           cursor: pointer;
           transition: 0.75s all;
 

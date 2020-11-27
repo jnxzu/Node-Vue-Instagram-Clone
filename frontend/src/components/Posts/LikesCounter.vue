@@ -25,7 +25,7 @@ export default {
   align-items: center;
 
   .bolder {
-    font-weight: 600;
+    font-weight: 700;
   }
 
   img {

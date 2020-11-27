@@ -39,7 +39,7 @@ body {
 }
 
 a {
-  font-weight: 600;
+  font-weight: 700;
   color: black;
   text-decoration: none;
   &:active,
