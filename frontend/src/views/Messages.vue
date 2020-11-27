@@ -2,11 +2,16 @@
   <div class="messenger">
     <div class="messenger__left">
       <div class="messenger__left__top">
-        <div class="messenger__left__top__side"></div>
         <div class="messenger__left__top__center">Chat</div>
-        <div class="messenger__left__top__side"><img src="/img/message-icon.png" /></div>
       </div>
       <div class="messenger__left__bottom">
+        <div class="contact active">
+          <img src="https://placekitten.com/150/150" />
+          <div>
+            <h3>osoba</h3>
+            <span>costam co napisala ostatnio</span>
+          </div>
+        </div>
         <div class="contact">
           <img src="https://placekitten.com/150/150" />
           <div>
@@ -29,15 +34,6 @@
         </div>
         <div class="message">
           <div class="message__content">hej</div>
-        </div>
-        <div class="message">
-          <div class="message__content mine">hej</div>
-        </div>
-        <div class="message">
-          <div class="message__content">hej</div>
-        </div>
-        <div class="message">
-          <div class="message__content mine">hej</div>
         </div>
       </div>
       <div class="messenger__right__input">
@@ -67,13 +63,21 @@ export default {
 
   @media (max-width: 975px) {
     margin: 0 auto;
+    height: calc(100vh - 55px);
+  }
+
+  @media (max-width: 700px) {
+    flex-direction: column;
   }
 
   &__left {
-    width: 350px;
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
+
+    @media (min-width: 701px) {
+      width: 350px;
+    }
 
     &__top {
       height: 60px;
@@ -82,6 +86,10 @@ export default {
       justify-content: center;
       align-items: center;
       padding: 0 15px;
+
+      @media (max-width: 700px) {
+        display: none;
+      }
 
       &__side {
         width: 25px;
@@ -107,6 +115,11 @@ export default {
       flex-grow: 1;
       padding-top: 15px;
       overflow: auto;
+
+      @media (max-width: 700px) {
+        display: flex;
+        padding: 0;
+      }
     }
   }
 
@@ -192,19 +205,39 @@ export default {
   margin-bottom: 15px;
   align-items: center;
   cursor: pointer;
+  padding: 0 10px;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    margin: 0;
+    height: 90px;
+  }
 
   img {
-    height: 65px;
+    width: 65px;
     margin: 0 10px;
     border-radius: 50%;
+
+    @media (max-width: 700px) {
+      width: 50px;
+      margin-top: 10px;
+    }
   }
 
   div {
     flex-grow: 1;
 
+    h3 {
+      white-space: nowrap;
+    }
+
     span {
       font-size: small;
       color: #888;
+
+      @media (max-width: 700px) {
+        display: none;
+      }
     }
   }
 
