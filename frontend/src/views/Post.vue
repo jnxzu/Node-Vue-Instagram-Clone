@@ -2,8 +2,6 @@
   <div class="post-container">
     <div class="post">
       <div class="post__image">
-        <!-- <img src="https://placekitten.com/600/300"/> -->
-        <!-- <img src="https://placekitten.com/600/1200"/> -->
         <img src="https://placekitten.com/600/600" />
       </div>
       <div class="post__info">
