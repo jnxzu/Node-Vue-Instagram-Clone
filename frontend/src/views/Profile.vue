@@ -131,7 +131,7 @@ export default {
           padding: 4px 8px;
           font-weight: 700;
           cursor: pointer;
-          transition: 0.75s all;
+          transition: 0.25s all;
 
           &:hover {
             padding: 4px 10px;

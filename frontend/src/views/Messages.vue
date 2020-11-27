@@ -192,7 +192,7 @@ export default {
             letter-spacing: 3px;
             cursor: pointer;
             opacity: 0.5;
-            transition: 0.2s ease all;
+            transition: 0.25s ease all;
 
             &.valid {
               opacity: 1;

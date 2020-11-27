@@ -184,7 +184,7 @@ export default {
           background: none;
           border: none;
           opacity: 0.5;
-          transition: 0.2s ease all;
+          transition: 0.25s ease all;
           font-weight: 700;
           cursor: pointer;
 

@@ -46,7 +46,7 @@ export default {
     height: 3px;
     background: var(--accent);
     opacity: 0;
-    transition: 0.5s ease all;
+    transition: 0.25s ease all;
     width: 100%;
   }
 
@@ -76,7 +76,7 @@ export default {
     height: 3px;
     background: var(--accent);
     opacity: 0;
-    transition: 0.5s ease all;
+    transition: 0.25s ease all;
   }
 
   &.active,
