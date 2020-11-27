@@ -4,21 +4,19 @@
       <div class="messenger__left__top">
         <div class="messenger__left__top__center">Chat</div>
       </div>
-      <div class="messenger__left__bottom">
-        <div class="contact active">
-          <img src="https://placekitten.com/150/150" />
-          <div>
-            <h3>osoba</h3>
-            <span>costam co napisala ostatnio</span>
-          </div>
-        </div>
-        <div class="contact">
-          <img src="https://placekitten.com/150/150" />
-          <div>
-            <h3>osoba</h3>
-            <span>costam co napisala ostatnio</span>
-          </div>
-        </div>
+      <div class="messenger__left__contacts">
+        <contact
+          :active="true"
+          :name="'osoba'"
+          :lastMsg="'last message'"
+          :avatar="'https://placekitten.com/150/150'"
+        />
+        <contact
+          :active="false"
+          :name="'inna osoba'"
+          :lastMsg="'hejka byku'"
+          :avatar="'https://placekitten.com/150/150'"
+        />
       </div>
     </div>
     <div class="messenger__right">
@@ -29,12 +27,8 @@
         <router-link to="/u/osoba">osoba</router-link>
       </div>
       <div class="messenger__right__messages">
-        <div class="message">
-          <div class="message__content mine">hej</div>
-        </div>
-        <div class="message">
-          <div class="message__content">hej</div>
-        </div>
+        <message :mine="true" :content="'hej'" />
+        <message :mine="false" :content="'spadaj'" />
       </div>
       <div class="messenger__right__input">
         <form @submit.prevent="">
@@ -47,8 +41,15 @@
 </template>
 
 <script>
+import Contact from '../components/Messages/Contact.vue';
+import Message from '../components/Messages/Message.vue';
+
 export default {
   name: 'Messages',
+  components: {
+    Contact,
+    Message,
+  },
 };
 </script>
 
@@ -111,7 +112,7 @@ export default {
       }
     }
 
-    &__bottom {
+    &__contacts {
       flex-grow: 1;
       padding-top: 15px;
       overflow: auto;
@@ -199,76 +200,6 @@ export default {
           }
         }
       }
-    }
-  }
-}
-
-.contact {
-  display: flex;
-  height: 75px;
-  margin-bottom: 15px;
-  align-items: center;
-  cursor: pointer;
-  padding: 0 10px;
-
-  @media (max-width: 700px) {
-    flex-direction: column;
-    margin: 0;
-    height: 90px;
-  }
-
-  img {
-    width: 65px;
-    margin: 0 10px;
-    border-radius: 50%;
-
-    @media (max-width: 700px) {
-      width: 50px;
-      margin-top: 10px;
-    }
-  }
-
-  div {
-    flex-grow: 1;
-
-    h3 {
-      white-space: nowrap;
-    }
-
-    span {
-      font-size: small;
-      color: #888;
-
-      @media (max-width: 700px) {
-        display: none;
-      }
-    }
-  }
-
-  &:hover {
-    background: var(--bg);
-  }
-
-  &.active {
-    background: #ddd;
-  }
-}
-
-.message {
-  width: 100%;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-
-  &__content {
-    border-radius: 25px;
-    width: fit-content;
-    padding: 10px 20px;
-    background: #ddd;
-
-    &.mine {
-      align-self: flex-end;
-      background: var(--accent);
     }
   }
 }
