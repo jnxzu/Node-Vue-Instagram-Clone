@@ -24,6 +24,10 @@ export default {
   align-items: center;
   margin-left: 10px;
 
+  a:hover {
+    text-decoration: none;
+  }
+
   &__logo {
     font-family: 'Amatic SC', cursive;
     cursor: pointer;
