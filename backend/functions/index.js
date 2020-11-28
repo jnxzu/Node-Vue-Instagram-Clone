@@ -86,7 +86,7 @@ const axiosConfig = {
 
 axios.config = axiosConfig;
 
-var firebaseConfig = {
+/*var firebaseConfig = {
   apiKey: process.env.FB_API_KEY,
   authDomain: process.env.FB_AUTH_DOMAIN,
   databaseURL: process.env.FB_DATABASE_URL,
@@ -112,7 +112,7 @@ const downloadFile = async(filename) => {
   })
   .pipe(fs.createWriteStream(filename));;
 }
-downloadFile('maskonur2.png');
+downloadFile('maskonur2.png');*/
 
 server.listen(port, () => {
   console.log(`Serwer działa pod adresem: https://localhost:${port}`);

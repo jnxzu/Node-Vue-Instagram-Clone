@@ -5,6 +5,12 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require('../models/User');
 
+router.get('/hw', (req, res) =>{
+  return res.status(200).json({
+    ttt: "Hello world"
+  });
+});
+
 router.post('/register', (req, res) => {
   const { username, password } = req.body;
   User.findOne({ username }).then((user) => {
