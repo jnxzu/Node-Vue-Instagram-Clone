@@ -5,6 +5,10 @@ const bcrypt = require('bcryptjs');
 // const passport = require('passport');
 const User = require('../models/User');
 
+router.get('/hw', (req, res) => {
+  res.send("Hello world");
+});
+
 router.post('/register', (req, res) => {
   const { username, password } = req.body;
   // eslint-disable-next-line consistent-return
