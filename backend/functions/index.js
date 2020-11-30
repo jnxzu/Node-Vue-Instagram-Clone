@@ -1,8 +1,8 @@
 const functions = require("firebase-functions");
 require('dotenv').config();
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const app = express();
+/*const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const session = require('express-session');
 const errorHandler = require('error-handler');
@@ -14,12 +14,11 @@ const mongoose = require('./mongoose');
 const passport = require('./passport');
 const server = require('./https')(app);
 const port = process.env.PORT;
-const users = require('./routes/UserRoutes');
 app.use(express.json());
 //app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
 app.use(cookieParser());
 
-/*// Session store
+// Session store
 const sessionStore = new MongoStore({
     mongooseConnection: mongoose.connection,
     collection: 'sessions',
@@ -40,25 +39,26 @@ app.use(passport.session());
 
 // Publiczny folder
 // app.use(express.static(path.join(__dirname, 'client/dist')));
-
+*/
 // Routing
+const users = require('./routes/UserRoutes');
 app.use('/UserRoutes', users);
-
+/*
 // Wyłapujemy odwołania do nieobsługiwanych adresów
 app.use((_, res) => {
     res.sendStatus(404);
   });
   
-  const axiosConfig = {
-    withCredentials: true,
-  };
+  //const axiosConfig = {
+  //  withCredentials: true,
+  //};
   
-  axios.config = axiosConfig;
+  //axios.config = axiosConfig;
   
-  server.listen(port, () => {
-    console.log(`Serwer działa pod adresem: https://localhost:${port}`);
-  });
-*/
+  //server.listen(port, () => {
+  //  console.log(`Serwer działa pod adresem: https://localhost:${port}`);
+  //});*/
+
 app.get("/jebacpis", (req, res) => res.send("***** ***"));
 
 // Create and Deploy Your First Cloud Functions
