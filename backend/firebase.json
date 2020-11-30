@@ -4,6 +4,10 @@
       {
         "source": "/jebacpis",
         "function": "api"
+      },
+      {
+        "source": "/hw",
+        "function": "api"
       }
     ]
   }
