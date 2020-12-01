@@ -1,7 +1,7 @@
 <template>
   <div class="navsearch">
     <input class="navsearch__input" />
-    <img class="navsearch__icon" src="img/search-icon.png" alt="Search" />
+    <img class="navsearch__icon" src="/img/search-icon.png" alt="Search" />
   </div>
 </template>
 
@@ -11,7 +11,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .navsearch {
   @media (max-width: 600px) {
     display: none;

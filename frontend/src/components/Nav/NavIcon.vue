@@ -1,13 +1,12 @@
 <template>
   <div :class="{ navicon: !profile, navprofile: profile, active: isActive }" v-if="isRoute">
     <router-link :to="routeTarget">
-      <img :src="'img/' + imgSrc" :alt="imgAlt" />
+      <img :src="'/img/' + imgSrc" :alt="imgAlt" />
       <div class="navicon__selection"></div>
     </router-link>
   </div>
   <div :class="{ navicon: !profile, navprofile: profile }" v-else>
-    <img :src="'img/' + imgSrc" :alt="imgAlt" />
-    <div class="navicon__selection"></div>
+    <img :src="'/img/' + imgSrc" :alt="imgAlt" />
   </div>
 </template>
 
@@ -29,25 +28,32 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .navicon {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-right: 15px;
   cursor: pointer;
+  height: 100%;
 
   img {
     height: 30px;
   }
 
   &__selection {
+    height: 3px;
     background: var(--accent);
+    opacity: 0;
+    transition: 0.25s ease all;
+    width: 100%;
   }
 
   &.active,
   &:hover {
     .navicon__selection {
-      height: 5px;
+      opacity: 1;
     }
   }
 }
@@ -55,22 +61,28 @@ export default {
 .navprofile {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-right: 15px;
+  height: 100%;
 
   img {
-    height: 36px;
+    height: 30px;
     border-radius: 50%;
     border: 1px solid var(--border);
   }
 
   &__selection {
+    height: 3px;
     background: var(--accent);
+    opacity: 0;
+    transition: 0.25s ease all;
   }
 
   &.active,
   &:hover {
     .navicon__selection {
-      height: 5px;
+      opacity: 1;
     }
   }
 }
