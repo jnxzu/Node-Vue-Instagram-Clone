@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 router.get('/hw', (req, res) => {
-  res.send("Hello world");
+  res.send('Hello world');
 });
 
 router.post('/register', (req, res) => {

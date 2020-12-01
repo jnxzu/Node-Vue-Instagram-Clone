@@ -1,7 +1,10 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+const uniqueValidator = require('mongoose-unique-validator');
 const mongoose = require('../mongoose');
-const { Schema } = mongoose;
 const bcrypt = require('../bcrypt');
 
+const { Schema } = mongoose;
 const UserSchema = new Schema(
   {
     username: {
@@ -21,26 +24,28 @@ const UserSchema = new Schema(
 
 // /*// bez poniższej wtyczki nie dostaniemy sensownego sygnału
 // // błędu przy naruszeniu „unikatowości” nazwy użytkownika
-// const uniqueValidator = require('mongoose-unique-validator');
+
 // // ale z nią – już wszystko będzie jak należy
-// UserSchema.plugin(uniqueValidator);
+UserSchema.plugin(uniqueValidator);
 
-// UserSchema.methods.isValidPassword = function (password) {
-//   return bcrypt.compare(password, this.password);
-// };
+UserSchema.methods.isValidPassword = function (password) {
+  return bcrypt.compare(password, this.password);
+};
 
-// delete mongoose.connection.models.User;
-// const User = mongoose.model('User', UserSchema);
+delete mongoose.connection.models.User;
+let User = mongoose.model('User', UserSchema);
 
-// User.processErrors = (err) => {
-//   const msg = {};
-//   for (const key in err.errors) {
-//     msg[key] = err.errors[key].message;
-//   }
-//   return msg;
-// };
+User.processErrors = (err) => {
+  const msg = {};
+  for (const key in err.errors) {
+    msg[key] = err.errors[key].message;
+  }
+  return msg;
+};
 
-// global.UserSchema = global.UserSchema || User;
+global.UserSchema = global.UserSchema || User;
 // module.exports = global.UserSchema; */
 
+// eslint-disable-next-line no-const-assign
+// eslint-disable-next-line no-multi-assign
 module.exports = User = mongoose.model('users', UserSchema);

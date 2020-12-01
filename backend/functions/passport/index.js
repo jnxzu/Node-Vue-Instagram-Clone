@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 // Passport.js
 const passport = require('passport');
 const passportLocal = require('passport-local');
