@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+require('dotenv').config();
+
 (async () => {
   try {
     // eslint-disable-next-line

@@ -16,7 +16,7 @@ const rejectMethod = (_req, res) => {
   res.sendStatus(405);
 };
 
-router.route('/startpost').patch(isAuth, postservices.startPost).all(rejectMethod);
+// router.route('/startpost').patch(isAuth, postservices.startPost).all(rejectMethod);
 
 router
   .route('/post')
@@ -29,9 +29,9 @@ router.route('/page/:page').get(postservices.postsPage).all(rejectMethod);
 
 router.route('/my-posts/page/:page').get(isAuth, postservices.mypostsPage).all(rejectMethod);
 
-router.route('/my-likes/page/:page').get(isAuth, postservices.mybidsPage).all(rejectMethod);
+router.route('/my-likes/page/:page').get(isAuth, postservices.mylikesPage).all(rejectMethod);
 
-router.route('/my-history/page/:page').get(isAuth, postservices.myhistoryPage).all(rejectMethod);
+router.route('/my-history/page/:page').get(isAuth, postservices.mysharesPage).all(rejectMethod);
 
 router
   .route('/')
