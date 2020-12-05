@@ -8,6 +8,18 @@
       {
         "source": "/hw",
         "function": "api"
+      },
+      {
+        "source": "/login",
+        "function": "api"
+      },
+      {
+        "source": "/register",
+        "function": "api"
+      },
+      {
+        "source": "/logout",
+        "function": "api"
       }
     ]
   }

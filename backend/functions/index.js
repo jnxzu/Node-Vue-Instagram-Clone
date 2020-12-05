@@ -58,6 +58,11 @@ app.use((_, res) => {
 
 app.get("/jebacpis", (req, res) => res.send("***** ***"));
 
+// Zostawiam dla testów poza Firebase
+//server.listen(port, () => {
+//  console.log(`Serwer działa pod adresem: https://localhost:${port}`);
+//});
+
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 
