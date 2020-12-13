@@ -2,7 +2,7 @@
   <div class="login">
     <img src="/img/logo.png" />
     <h1 class="login__title">Camra</h1>
-    <form @submit.prevent="">
+    <form @submit.prevent="login">
       <div>
         <input type="text" name="login/email" placeholder="user@email.com" />
         <label for="login/email">login/email</label>
@@ -18,8 +18,24 @@
 </template>
 
 <script>
+// import axios from 'axios';
+
 export default {
   name: 'Login',
+  data() {
+    return {
+      username: '',
+      password: '',
+    };
+  },
+  methods: {
+    // login() {
+    //   axios.post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/login', {
+    //     username: this.username,
+    //     password: this.password,
+    //   });
+    // },
+  },
 };
 </script>
 
