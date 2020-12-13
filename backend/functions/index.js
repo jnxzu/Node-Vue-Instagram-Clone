@@ -1,4 +1,4 @@
-const functions = require("firebase-functions");
+const functions = require('firebase-functions');
 require('dotenv').config();
 const express = require('express');
 const app = express();
@@ -12,7 +12,7 @@ const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 const mongoose = require('./mongoose');
 const passport = require('./passport');
-const server = require('./https')(app);
+// const server = require('./https')(app);
 const port = process.env.PORT;
 app.use(express.json());
 app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
@@ -20,18 +20,18 @@ app.use(cookieParser());
 
 // Session store
 const sessionStore = new MongoStore({
-    mongooseConnection: mongoose.connection,
-    collection: 'sessions',
-  });
+  mongooseConnection: mongoose.connection,
+  collection: 'sessions',
+});
 
 app.use(
-    session({
-      secret: process.env.APP_SECRET,
-      store: sessionStore,
-      resave: false,
-      saveUninitialized: false,
-    })
-  );
+  session({
+    secret: process.env.APP_SECRET,
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 // Inicjalizacja sesji
 app.use(passport.initialize());
@@ -47,16 +47,16 @@ app.use('/UserRoutes', users);
 
 // Wyłapujemy odwołania do nieobsługiwanych adresów
 app.use((_, res) => {
-    res.sendStatus(404);
-  });
-  
-  const axiosConfig = {
-    withCredentials: true,
-  };
-  
-  axios.config = axiosConfig;
+  res.sendStatus(404);
+});
 
-app.get("/jebacpis", (req, res) => res.send("***** ***"));
+const axiosConfig = {
+  withCredentials: true,
+};
+
+axios.config = axiosConfig;
+
+app.get('/jebacpis', (req, res) => res.send('***** ***'));
 
 // Zostawiam dla testów poza Firebase
 //server.listen(port, () => {
@@ -66,4 +66,4 @@ app.get("/jebacpis", (req, res) => res.send("***** ***"));
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 
-exports.api = functions.region("europe-west1").https.onRequest(app);
+exports.api = functions.region('europe-west1').https.onRequest(app);

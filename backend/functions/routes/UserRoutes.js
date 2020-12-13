@@ -6,11 +6,13 @@ const passport = require('passport');
 const User = require('../models/User');
 
 router.get('/hw', (req, res) => {
-  res.send("Hello world");
+  res.set('Access-Control-Allow-Origin', '*');
+  res.send('Hello world');
 });
 
 // LOGIN
 router.post('/login', passport.authenticate('local'), (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   return res.json(req.user);
 });
 
@@ -56,14 +58,14 @@ router.post('/register', (req, res) => {
 
 // LOGOUT
 router.get('/logout', function (req, res) {
-  if (req.session.passport === undefined) res.status(401).json({msg: "Unauthorized"});
+  if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
   else {
-  req.logOut();
-  req.session.destroy(function (err) {
+    req.logOut();
+    req.session.destroy(function (err) {
       if (err) return res.status(500);
-      else res.json({msg: "Logged out!"});
-  });
-}
+      else res.json({ msg: 'Logged out!' });
+    });
+  }
 });
 
 module.exports = router;
