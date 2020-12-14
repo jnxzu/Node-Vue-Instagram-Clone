@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require('../models/User');
 
-router.get('/hw', (req, res) => {
+router.get('/hw', (_, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.send('Hello world');
 });
@@ -18,52 +18,56 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 // REGISTER
 router.post('/register', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+
   const { username, email, password } = req.body;
-  // eslint-disable-next-line consistent-return
-  User.findOne({ username }).then((user) => {
-    if (user) {
+
+  User.findOne({ username }).then((userByUsername) => {
+    if (userByUsername) {
       return res.status(400).json({
         msg: 'Username already exists',
       });
     }
-  });
-  User.findOne({ email }).then((user) => {
-    if (user) {
-      return res.status(400).json({
-        msg: 'Email already exists',
+
+    return User.findOne({ email }).then((userByEmail) => {
+      if (userByEmail) {
+        return res.status(400).json({
+          msg: 'Email already exists',
+        });
+      }
+
+      const newUser = new User({
+        username,
+        email,
+        password,
       });
-    }
-  });
-  // If the data is valid
-  const newUser = new User({
-    username,
-    email,
-    password,
-  });
-  bcrypt.genSalt(10, (err, salt) => {
-    // eslint-disable-next-line no-shadow
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
-      if (err) throw err;
-      newUser.password = hash;
-      newUser.save().then((user) => {
-        console.log(user);
-        return res.status(201).json({
-          success: true,
-          msg: 'User registered',
+
+      bcrypt.genSalt(10, (_, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
         });
       });
+
+      newUser.save().then(() => {
+        return res.status(201).json({
+          success: true,
+        });
+      });
+
+      return res.status(500);
     });
   });
 });
 
 // LOGOUT
-router.get('/logout', function (req, res) {
+router.get('/logout', (req, res) => {
   if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
   else {
     req.logOut();
-    req.session.destroy(function (err) {
+    req.session.destroy((err) => {
       if (err) return res.status(500);
-      else res.json({ msg: 'Logged out!' });
+      return res.json({ loggedOut: true });
     });
   }
 });
