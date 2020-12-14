@@ -5,10 +5,6 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require('../models/User');
 
-router.get('/hw', (_, res) => {
-  res.send('Hello world');
-});
-
 // LOGIN
 router.post('/login', passport.authenticate('local'), (req, res) => {
   return res.json(req.user);
