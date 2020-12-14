@@ -7,7 +7,11 @@ const User = require('../models/User');
 
 // LOGIN
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  return res.json(req.user);
+  return res.json({
+    currentUserId: req.user._id,
+    currentUserName: req.user.username,
+    isAdmin: req.user.isAdmin,
+  });
 });
 
 // REGISTER
@@ -39,11 +43,16 @@ router.post('/register', (req, res) => {
       newUser.username = username;
       newUser.email = email;
       newUser.isAdmin = false;
-      newUser.password = newUser.generateHash(password);
+      newUser.avatarUrl = '';
+      newUser.generateHash(password).then(function assignHash(hash) {
+        newUser.password = hash;
+      });
 
       newUser.save().then(() => {
         return res.status(201).json({
-          success: true,
+          currentUserId: newUser._id,
+          currentUserName: newUser.username,
+          isAdmin: newUser.isAdmin,
         });
       });
 

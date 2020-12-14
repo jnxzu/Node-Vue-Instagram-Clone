@@ -35,6 +35,7 @@
 
 <script>
 import axios from 'axios';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Login',
@@ -49,19 +50,23 @@ export default {
       this.$refs.usernameInput.classList.remove('wrong');
       this.$refs.passwordInput.classList.remove('wrong');
 
+      const v = this;
+
       axios
-        .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/login', {
+        .post('http://localhost:5001/camra-4feb8/europe-west1/api/UserRoutes/login', {
+          // .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/login', {
           username: this.username,
           password: this.password,
         })
         .then((res) => {
-          console.log(res);
+          v.changeUserState(res.data);
         })
         .catch(() => {
-          this.$refs.usernameInput.classList.add('wrong');
-          this.$refs.passwordInput.classList.add('wrong');
+          v.$refs.usernameInput.classList.add('wrong');
+          v.$refs.passwordInput.classList.add('wrong');
         });
     },
+    ...mapActions(['changeUserState']),
   },
 };
 </script>

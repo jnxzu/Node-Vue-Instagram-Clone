@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -10,9 +11,15 @@ export default new Vuex.Store({
     currentUserId: '',
     currentUserName: '',
   },
-  mutations: {},
+  mutations: {
+    CHANGE_USER_STATE(state, payload) {
+      state = { ...payload };
+      state.isAuth = !state.isAuth;
+    },
+  },
   actions: {
-    register({ commit }, data) {},
-    login({ commit }, data) {},
+    changeUserState({ commit }, data) {
+      commit('CHANGE_USER_STATE', data);
+    },
   },
 });

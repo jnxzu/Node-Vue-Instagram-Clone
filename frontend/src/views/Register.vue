@@ -4,15 +4,21 @@
     <h1 class="register__title">Camra</h1>
     <form @submit.prevent="register">
       <div>
-        <input v-model="username" type="text" name="login" placeholder="user" />
+        <input v-model="username" type="text" name="login" placeholder="user" ref="usernameInput" />
         <label for="login">login</label>
       </div>
       <div>
-        <input v-model="email" type="email" name="email" placeholder="user@email.com" />
+        <input
+          v-model="email"
+          type="email"
+          name="email"
+          placeholder="user@email.com"
+          ref="emailInput"
+        />
         <label for="email">email</label>
       </div>
       <div>
-        <input v-model="password" type="password" name="password" />
+        <input v-model="password" type="password" name="password" ref="passwordInput" />
         <label for="password">password</label>
       </div>
       <input class="submit" type="submit" value="Sign up" />
@@ -23,6 +29,7 @@
 
 <script>
 import axios from 'axios';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Register',
@@ -35,14 +42,27 @@ export default {
   },
   methods: {
     register() {
+      this.$refs.usernameInput.classList.remove('wrong');
+      this.$refs.emailInput.classList.remove('wrong');
+      this.$refs.passwordInput.classList.remove('wrong');
+
+      const v = this;
+
       axios
-        .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/register', {
+        .post('http://localhost:5001/camra-4feb8/europe-west1/api/UserRoutes/register', {
+          // .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/register', {
           username: this.username,
           email: this.email,
           password: this.password,
         })
-        .then((res) => console.log(res));
+        .then((res) => v.changeUserState(res.data))
+        .catch(() => {
+          v.$refs.usernameInput.classList.add('wrong');
+          v.$refs.emailInput.classList.add('wrong');
+          v.$refs.passwordInput.classList.add('wrong');
+        });
     },
+    ...mapActions(['changeUserState']),
   },
 };
 </script>
@@ -101,6 +121,10 @@ export default {
         border: 1px solid var(--border);
         padding: 5px 10px;
         width: 200px;
+
+        &.wrong {
+          border: 1px solid red;
+        }
 
         &:focus {
           outline: none;
