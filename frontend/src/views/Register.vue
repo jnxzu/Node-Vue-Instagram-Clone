@@ -37,7 +37,6 @@ export default {
     register() {
       axios
         .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/register', {
-          // .post('http://localhost:5001/camra-4feb8/europe-west1/api/UserRoutes/register', {
           username: this.username,
           email: this.email,
           password: this.password,

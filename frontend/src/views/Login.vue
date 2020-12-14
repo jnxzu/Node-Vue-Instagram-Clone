@@ -51,7 +51,6 @@ export default {
 
       axios
         .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/login', {
-          // .post('http://localhost:5001/camra-4feb8/europe-west1/api/UserRoutes/login', {
           username: this.username,
           password: this.password,
         })
