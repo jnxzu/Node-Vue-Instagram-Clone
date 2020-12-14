@@ -8,6 +8,7 @@
       :imgAlt="'Timeline'"
     />
     <nav-icon
+      v-if="auth"
       :profile="false"
       :isRoute="true"
       :routeTarget="'/messages'"
@@ -15,13 +16,16 @@
       :imgAlt="'Messages'"
     />
     <nav-icon
+      v-if="auth"
       :profile="true"
       :isRoute="true"
-      :routeTarget="'/u/me'"
-      :imgSrc="'profile.jpg'"
+      :routeTarget="`/u/${user}`"
+      :imgSrc="'profile-default.png'"
       :imgAlt="'Profile'"
     />
     <nav-icon
+      v-if="auth"
+      @click.native="logout"
       :profile="false"
       :isRoute="false"
       :routeTarget="''"
@@ -32,12 +36,30 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 import NavIcon from './NavIcon.vue';
 
 export default {
   name: 'NavRight',
   components: {
     NavIcon,
+  },
+  computed: {
+    ...mapState({
+      auth: (state) => state.isAuth,
+      user: (state) => state.user.currentUserName,
+    }),
+  },
+  methods: {
+    logout() {
+      this.updateUserState({
+        currentUserId: '',
+        currentUserName: '',
+        isAdmin: false,
+      });
+      this.$router.push({ name: 'Login' });
+    },
+    ...mapActions(['updateUserState']),
   },
 };
 </script>

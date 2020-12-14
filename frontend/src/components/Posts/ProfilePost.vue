@@ -15,7 +15,7 @@ export default {
   name: 'ProfilePost',
   methods: {
     goToPost(id) {
-      this.$router.push(`/p/${id}`);
+      this.$router.push({ name: 'Post', id });
     },
   },
 };

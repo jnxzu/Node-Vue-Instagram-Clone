@@ -7,18 +7,20 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isAuth: false,
-    isAdmin: false,
-    currentUserId: '',
-    currentUserName: '',
+    user: {
+      isAdmin: false,
+      currentUserId: '',
+      currentUserName: '',
+    },
   },
   mutations: {
     CHANGE_USER_STATE(state, payload) {
-      state = { ...payload };
+      state.user = payload;
       state.isAuth = !state.isAuth;
     },
   },
   actions: {
-    changeUserState({ commit }, data) {
+    updateUserState({ commit }, data) {
       commit('CHANGE_USER_STATE', data);
     },
   },

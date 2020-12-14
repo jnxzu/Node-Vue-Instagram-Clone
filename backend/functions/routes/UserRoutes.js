@@ -62,15 +62,15 @@ router.post('/register', (req, res) => {
 });
 
 // LOGOUT
-router.get('/logout', (req, res) => {
-  if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
-  else {
-    req.logOut();
-    req.session.destroy((err) => {
-      if (err) return res.status(500);
-      return res.json({ loggedOut: true });
-    });
-  }
-});
+// router.get('/logout', (req, res) => {
+//   if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
+//   else {
+//     req.logOut();
+//     req.session.destroy((err) => {
+//       if (err) return res.status(500);
+//       return res.json({ loggedOut: true });
+//     });
+//   }
+// });
 
 module.exports = router;

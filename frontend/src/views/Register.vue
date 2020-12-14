@@ -55,14 +55,17 @@ export default {
           email: this.email,
           password: this.password,
         })
-        .then((res) => v.changeUserState(res.data))
+        .then((res) => {
+          v.updateUserState(res.data);
+          v.$router.push({ name: 'Timeline' });
+        })
         .catch(() => {
           v.$refs.usernameInput.classList.add('wrong');
           v.$refs.emailInput.classList.add('wrong');
           v.$refs.passwordInput.classList.add('wrong');
         });
     },
-    ...mapActions(['changeUserState']),
+    ...mapActions(['updateUserState']),
   },
 };
 </script>
