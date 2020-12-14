@@ -4,11 +4,27 @@
     <h1 class="login__title">Camra</h1>
     <form @submit.prevent="login">
       <div>
-        <input v-model="username" type="text" name="login/email" placeholder="user@email.com" />
+        <input
+          v-model="username"
+          type="text"
+          name="login/email"
+          minlength="3"
+          required
+          autocomplete="off"
+          ref="usernameInput"
+        />
         <label for="login/email">login/email</label>
       </div>
       <div>
-        <input v-model="password" type="password" name="password" />
+        <input
+          v-model="password"
+          type="password"
+          name="password"
+          minlength="3"
+          required
+          autocomplete="off"
+          ref="passwordInput"
+        />
         <label for="password">password</label>
       </div>
       <input class="submit" type="submit" value="Sign in" />
@@ -18,6 +34,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Login',
   data() {
@@ -25,6 +43,25 @@ export default {
       username: '',
       password: '',
     };
+  },
+  methods: {
+    login() {
+      this.$refs.usernameInput.classList.remove('wrong');
+      this.$refs.passwordInput.classList.remove('wrong');
+
+      axios
+        .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/login', {
+          username: this.username,
+          password: this.password,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((_) => {
+          this.$refs.usernameInput.classList.add('wrong');
+          this.$refs.passwordInput.classList.add('wrong');
+        });
+    },
   },
 };
 </script>
@@ -83,6 +120,10 @@ export default {
         border: 1px solid var(--border);
         padding: 5px 10px;
         width: 200px;
+
+        &.wrong {
+          border: 1px solid red;
+        }
 
         &:focus {
           outline: none;
