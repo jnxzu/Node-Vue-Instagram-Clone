@@ -6,20 +6,16 @@ const passport = require('passport');
 const User = require('../models/User');
 
 router.get('/hw', (_, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
   res.send('Hello world');
 });
 
 // LOGIN
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
   return res.json(req.user);
 });
 
 // REGISTER
 router.post('/register', (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-
   const { username, email, password } = req.body;
 
   User.findOne({ username }).then((userByUsername) => {

@@ -16,7 +16,7 @@ const passport = require('./passport');
 // const server = require('./https')(app);
 // const port = process.env.PORT;
 app.use(express.json());
-app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
+app.use(cors());
 app.use(cookieParser());
 
 // Session store
