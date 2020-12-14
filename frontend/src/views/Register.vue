@@ -2,17 +2,17 @@
   <div class="register">
     <img src="/img/logo.png" />
     <h1 class="register__title">Camra</h1>
-    <form @submit.prevent="">
+    <form @submit.prevent="register">
       <div>
-        <input type="text" name="login" placeholder="user" />
+        <input v-model="username" type="text" name="login" placeholder="user" />
         <label for="login">login</label>
       </div>
       <div>
-        <input type="email" name="email" placeholder="user@email.com" />
+        <input v-model="email" type="email" name="email" placeholder="user@email.com" />
         <label for="email">email</label>
       </div>
       <div>
-        <input type="password" name="password" />
+        <input v-model="password" type="password" name="password" />
         <label for="password">password</label>
       </div>
       <input class="submit" type="submit" value="Sign in" />
@@ -22,8 +22,28 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Register',
+  data() {
+    return {
+      username: '',
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    register() {
+      axios
+        .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/register', {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+        })
+        .then((res) => console.log(res));
+    },
+  },
 };
 </script>
 
