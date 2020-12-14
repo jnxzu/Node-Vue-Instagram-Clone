@@ -36,7 +36,7 @@ const UserSchema = new Schema(
 // // ale z nią – już wszystko będzie jak należy
 UserSchema.plugin(uniqueValidator);
 UserSchema.methods.generateHash = (password) => bcrypt.hash(password);
-UserSchema.methods.isValidPassword = (password) => bcrypt.compare(password, this.password);
+UserSchema.methods.isValidPassword = (password, hash) => bcrypt.compare(password, hash);
 // delete mongoose.connection.models.User;
 // const User = mongoose.model('User', UserSchema);
 

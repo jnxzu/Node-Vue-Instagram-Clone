@@ -15,7 +15,7 @@
         <input v-model="password" type="password" name="password" />
         <label for="password">password</label>
       </div>
-      <input class="submit" type="submit" value="Sign in" />
+      <input class="submit" type="submit" value="Sign up" />
     </form>
     <span>Already have an account? <router-link to="/login">Sign in</router-link> instead.</span>
   </div>
@@ -36,7 +36,8 @@ export default {
   methods: {
     register() {
       axios
-        .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/register', {
+        // .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/register', {
+        .post('http://localhost:5001/camra-4feb8/europe-west1/api/UserRoutes/register', {
           username: this.username,
           email: this.email,
           password: this.password,

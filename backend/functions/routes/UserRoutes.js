@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require('../models/User');
 
@@ -28,19 +28,18 @@ router.post('/register', (req, res) => {
         });
       }
 
-      const newUser = new User({
-        username,
-        email,
-        password,
-        isAdmin: false,
-      });
+      // const hashedPw = bcrypt.genSalt(10, (_, salt) => {
+      //   bcrypt.hash(password, salt, (err, hash) => {
+      //     if (err) throw err;
+      //     return hash;
+      //   });
+      // });
 
-      bcrypt.genSalt(10, (_, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
-        });
-      });
+      const newUser = new User();
+      newUser.username = username;
+      newUser.email = email;
+      newUser.isAdmin = false;
+      newUser.password = newUser.generateHash(password);
 
       newUser.save().then(() => {
         return res.status(201).json({

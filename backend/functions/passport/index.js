@@ -14,7 +14,7 @@ const validateUser = (username, password, done) => {
       done(err);
     }
     if (user) {
-      if (user.isValidPassword(password)) {
+      if (user.isValidPassword(password, user.password)) {
         done(null, user);
       } else {
         done(null, null);
