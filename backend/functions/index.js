@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-// const cors = require('cors');
+const cors = require('cors');
 const session = require('express-session');
 // const errorHandler = require('error-handler');
 // const logger = require('morgan');
@@ -16,7 +16,7 @@ const passport = require('./passport');
 // const server = require('./https')(app);
 // const port = process.env.PORT;
 app.use(express.json());
-// app.use(cors({ origin: '*' }));
+app.use(cors({ origin: '*' }));
 app.use(cookieParser());
 
 // Session store
