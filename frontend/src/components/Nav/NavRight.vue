@@ -10,6 +10,14 @@
     </transition>
     <transition name="fade" mode="out-in">
       <nav-icon
+        :profile="false"
+        :routeTarget="'/new'"
+        :imgSrc="'new-post-icon.png'"
+        :imgAlt="'New Post'"
+      />
+    </transition>
+    <transition name="fade" mode="out-in">
+      <nav-icon
         v-if="auth"
         :profile="false"
         :routeTarget="'/messages'"
@@ -67,10 +75,10 @@ export default {
   },
   computed: {
     ...mapState({
-      auth: (state) => state.isAuth,
+      auth: (state) => state.isAuth || false,
       user: (state) => state.user.currentUserName,
       avatar: (state) => state.user.avatarUrl,
-      admin: (state) => state.user.isAdmin,
+      admin: (state) => state.user.isAdmin || false,
     }),
   },
 };

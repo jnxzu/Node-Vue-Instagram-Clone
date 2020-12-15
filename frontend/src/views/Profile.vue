@@ -8,8 +8,10 @@
           <div class="ts-mobile-helper-right">
             <div class="info__contents__top">
               <h2>{{ username }}</h2>
-              <button>{{ followedByMe ? 'Unfollow' : 'Follow' }}</button>
-              <button>Message</button>
+              <button v-if="currentUser === username">
+                {{ followedByMe ? 'Unfollow' : 'Follow' }}
+              </button>
+              <button v-if="currentUser === username">Message</button>
             </div>
             <div class="info__contents__stats">
               <div class="info__contents__stats__group">
