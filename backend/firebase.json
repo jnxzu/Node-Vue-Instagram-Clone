@@ -20,6 +20,14 @@
       {
         "source": "/profile/:username",
         "function": "api"
+      },
+      {
+        "source": "/profile/:username/f",
+        "function": "api"
+      },
+      {
+        "source": "/logout",
+        "function": "api"
       }
     ]
   }

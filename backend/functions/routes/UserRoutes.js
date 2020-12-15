@@ -62,16 +62,16 @@ router.post('/register', (req, res) => {
 });
 
 // LOGOUT
-// router.get('/logout', (req, res) => {
-//   if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
-//   else {
-//     req.logOut();
-//     req.session.destroy((err) => {
-//       if (err) return res.status(500);
-//       return res.json({ loggedOut: true });
-//     });
-//   }
-// });
+router.get('/logout', (req, res) => {
+  if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
+  else {
+    req.logOut();
+    req.session.destroy((err) => {
+      if (err) return res.status(500);
+      return res.json({ loggedOut: true });
+    });
+  }
+});
 
 // PROFILE
 router.get('/profile/:username', (req, res) => {
@@ -90,6 +90,54 @@ router.get('/profile/:username', (req, res) => {
       msg: "User with this username does not exist."
     });
   });
+});
+
+// FOLLOW/UNFOLLOW
+router.patch('/profile/:username/f', (req, res) => {
+  if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
+  else {
+    var username2 = req.params.username;
+    var username1 = req.session.passport.user;
+    User.findOne({ _id: username1 }).then((userByUsername1) => {
+      if (userByUsername1) {
+        User.findOne({ username: username2 }).then((userByUsername2) => {
+          if (userByUsername2) {
+            var n1 = userByUsername1;
+            var n2 = userByUsername2;
+            var i1 = n1.following.indexOf(userByUsername2._id);
+            var i2 = n2.followers.indexOf(userByUsername1._id);
+            if (i1 > -1 && i2 > -1) {
+              n1.following.splice(i1, 1);
+              n2.followers.splice(i2, 1);
+            }
+            if (i1 == -1 && i2 == -1) {
+              n1.following.push(userByUsername2._id);
+              n2.followers.push(userByUsername1._id);
+            }
+            User.findByIdAndUpdate(userByUsername1._id, n1, (err, userByUsername1) => {
+              if (err) res.statusCode(500);
+              else {
+                User.findByIdAndUpdate(userByUsername2._id, n2, (err, userByUsername2) => {
+                  if (err) res.statusCode(500);
+                  else return res.json(userByUsername2.followers);
+                });
+              }
+            });
+          }
+          else {
+            return res.status(404).json({
+              msg: "User not found."
+            });
+          }
+        });
+      }
+      else {
+        return res.status(400).json({
+          msg: "Please log in."
+        });
+      }
+    });
+  }
 });
 
 module.exports = router;
