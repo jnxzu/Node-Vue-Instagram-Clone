@@ -10,6 +10,7 @@
     </transition>
     <transition name="fade" mode="out-in">
       <nav-icon
+        v-if="auth"
         :profile="false"
         :routeTarget="'/new'"
         :imgSrc="'new-post-icon.png'"
