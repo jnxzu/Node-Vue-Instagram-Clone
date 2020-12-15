@@ -75,7 +75,7 @@ router.post('/register', (req, res) => {
 
 // PROFILE
 router.get('/profile/:username', (req, res) => {
-  var username = req.params.username;
+  const { username } = req.params;
   User.findOne({ username }).then((userByUsername) => {
     if (userByUsername) {
       return res.status(200).json({
@@ -83,11 +83,11 @@ router.get('/profile/:username', (req, res) => {
         avatarUrl: userByUsername.avatarUrl,
         posts: userByUsername.posts,
         followers: userByUsername.followers,
-        following: userByUsername.following
+        following: userByUsername.following,
       });
     }
-    else return res.status(404).json({
-      msg: "User with this username does not exist."
+    return res.status(404).json({
+      msg: 'User with this username does not exist.',
     });
   });
 });
