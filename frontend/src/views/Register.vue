@@ -137,7 +137,7 @@ export default {
       label {
         font-family: 'Amatic SC', cursive;
         font-size: x-large;
-        transition: 0.25s ease-out all;
+        transition: all 0.25s ease-out;
       }
 
       input:focus ~ label,
@@ -154,7 +154,7 @@ export default {
       width: 100px;
       padding: 5px 15px;
       cursor: pointer;
-      transition: 0.25s ease-out all;
+      transition: all 0.25s ease-out;
     }
   }
 

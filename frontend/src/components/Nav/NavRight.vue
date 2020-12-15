@@ -1,42 +1,38 @@
 <template>
   <div class="navright">
-    <nav-icon
-      :profile="false"
-      :isRoute="true"
-      :routeTarget="'/'"
-      :imgSrc="'home-icon.png'"
-      :imgAlt="'Timeline'"
-    />
-    <nav-icon
-      v-if="auth"
-      :profile="false"
-      :isRoute="true"
-      :routeTarget="'/messages'"
-      :imgSrc="'messages-icon.png'"
-      :imgAlt="'Messages'"
-    />
-    <nav-icon
-      v-if="auth"
-      :profile="true"
-      :isRoute="true"
-      :routeTarget="`/u/${user}`"
-      :imgSrc="avatar"
-      :imgAlt="'Profile'"
-    />
-    <nav-icon
-      v-if="auth"
-      @click.native="logout"
-      :profile="false"
-      :isRoute="false"
-      :routeTarget="''"
-      :imgSrc="'logout-icon.png'"
-      :imgAlt="'Logout'"
-    />
+    <nav-icon :profile="false" :routeTarget="'/'" :imgSrc="'home-icon.png'" :imgAlt="'Timeline'" />
+    <transition name="fade">
+      <nav-icon
+        v-if="auth"
+        :profile="false"
+        :routeTarget="'/messages'"
+        :imgSrc="'messages-icon.png'"
+        :imgAlt="'Messages'"
+      />
+    </transition>
+    <transition name="fade">
+      <nav-icon
+        v-if="auth"
+        :profile="true"
+        :routeTarget="`/u/${user}`"
+        :imgSrc="avatar"
+        :imgAlt="'Profile'"
+      />
+    </transition>
+    <transition name="fade">
+      <nav-icon
+        v-if="auth"
+        :profile="false"
+        :routeTarget="'/logout'"
+        :imgSrc="'logout-icon.png'"
+        :imgAlt="'Logout'"
+      />
+    </transition>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import NavIcon from './NavIcon.vue';
 
 export default {
@@ -50,17 +46,6 @@ export default {
       user: (state) => state.user.currentUserName,
       avatar: (state) => state.user.avatarUrl,
     }),
-  },
-  methods: {
-    logout() {
-      this.updateUserState({
-        currentUserId: '',
-        currentUserName: '',
-        isAdmin: false,
-      });
-      this.$router.push({ name: 'Login' });
-    },
-    ...mapActions(['updateUserState']),
   },
 };
 </script>

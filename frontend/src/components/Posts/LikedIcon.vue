@@ -30,7 +30,7 @@ export default {
 <style lang="scss" scoped>
 i {
   cursor: pointer;
-  transition: 0.25s ease-out color;
+  transition: color 0.25s ease-out;
 }
 
 .colored {

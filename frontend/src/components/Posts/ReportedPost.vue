@@ -58,7 +58,7 @@ export default {
       font-size: larger;
       border: 1px solid var(--border);
       cursor: pointer;
-      transition: 0.25s ease-out all;
+      transition: all 0.25s ease-out;
 
       @media (max-width: 975px) {
         margin: 0;
