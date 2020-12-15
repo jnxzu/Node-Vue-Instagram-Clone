@@ -20,6 +20,7 @@ const UserSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
       minlength: 3,
     },
     avatarUrl: {
@@ -29,31 +30,18 @@ const UserSchema = new Schema(
       type: Boolean,
       required: true,
     },
+    posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+    followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   },
   { timestamps: true }
 );
 
-// /*// bez poniższej wtyczki nie dostaniemy sensownego sygnału
-// // błędu przy naruszeniu „unikatowości” nazwy użytkownika
-
-// // ale z nią – już wszystko będzie jak należy
 UserSchema.plugin(uniqueValidator);
+
 UserSchema.methods.generateHash = (password) => bcrypt.hash(password);
 UserSchema.methods.isValidPassword = (password, hash) => bcrypt.compare(password, hash);
-// delete mongoose.connection.models.User;
-// const User = mongoose.model('User', UserSchema);
 
-// User.processErrors = (err) => {
-//   const msg = {};
-//   for (const key in err.errors) {
-//     msg[key] = err.errors[key].message;
-//   }
-//   return msg;
-// };
-
-// global.UserSchema = global.UserSchema || User;
-// module.exports = global.UserSchema; */
-
-const User = mongoose.model('users', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 module.exports = User;
