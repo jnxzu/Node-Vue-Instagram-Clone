@@ -79,7 +79,7 @@ router.get('/profile/:username', (req, res) => {
   User.findOne({ username }).then((userByUsername) => {
     if (userByUsername) {
       return res.status(200).json({
-        username: userByUsername.username,
+        bio: userByUsername.bio,
         avatarUrl: userByUsername.avatarUrl,
         posts: userByUsername.posts,
         followers: userByUsername.followers,
