@@ -44,6 +44,9 @@ router.post('/register', (req, res) => {
       newUser.email = email;
       newUser.isAdmin = false;
       newUser.avatarUrl = '';
+      newUser.posts = [];
+      newUser.following = [];
+      newUser.followers = [];
       newUser.generateHash(password).then(function assignHash(hash) {
         newUser.password = hash;
       });
