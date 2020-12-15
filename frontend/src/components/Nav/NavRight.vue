@@ -28,11 +28,29 @@
     </transition>
     <transition name="fade" mode="out-in">
       <nav-icon
+        v-if="admin"
+        :profile="false"
+        :routeTarget="'/admin'"
+        :imgSrc="'admin-icon.png'"
+        :imgAlt="'Admin'"
+      />
+    </transition>
+    <transition name="fade" mode="out-in">
+      <nav-icon
         v-if="auth"
         :profile="false"
         :routeTarget="'/logout'"
         :imgSrc="'logout-icon.png'"
         :imgAlt="'Logout'"
+      />
+    </transition>
+    <transition name="fade" mode="out-in">
+      <nav-icon
+        v-if="!auth"
+        :profile="false"
+        :routeTarget="'/login'"
+        :imgSrc="'login-icon.png'"
+        :imgAlt="'Login'"
       />
     </transition>
   </div>
@@ -52,6 +70,7 @@ export default {
       auth: (state) => state.isAuth,
       user: (state) => state.user.currentUserName,
       avatar: (state) => state.user.avatarUrl,
+      admin: (state) => state.user.isAdmin,
     }),
   },
 };
