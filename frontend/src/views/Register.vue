@@ -48,9 +48,14 @@ export default {
 
       const v = this;
 
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/UserRoutes/register`;
+
       axios
-        .post('http://localhost:5001/camra-4feb8/europe-west1/api/UserRoutes/register', {
-          // .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/register', {
+        .post(url, {
           username: this.username,
           email: this.email,
           password: this.password,
