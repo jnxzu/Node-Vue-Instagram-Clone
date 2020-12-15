@@ -50,8 +50,6 @@ export default {
       this.$refs.usernameInput.classList.remove('wrong');
       this.$refs.passwordInput.classList.remove('wrong');
 
-      const v = this;
-
       const url = `${
         process.env.NODE_ENV === 'production'
           ? process.env.VUE_APP_API_PROD
@@ -64,12 +62,12 @@ export default {
           password: this.password,
         })
         .then((res) => {
-          v.updateUserState(res.data);
-          v.$router.push({ name: 'Timeline' });
+          this.updateUserState(res.data);
+          this.$router.push({ name: 'Timeline' });
         })
         .catch(() => {
-          v.$refs.usernameInput.classList.add('wrong');
-          v.$refs.passwordInput.classList.add('wrong');
+          this.$refs.usernameInput.classList.add('wrong');
+          this.$refs.passwordInput.classList.add('wrong');
         });
     },
     ...mapActions(['updateUserState']),
