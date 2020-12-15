@@ -25,7 +25,7 @@ export default {
   @media (max-width: 975px) {
     flex-direction: column;
     max-width: 600px;
-    margin: 20px 20px 50px 20px;
+    margin: 20px auto 50px auto;
     border: 1px solid var(--border);
   }
 

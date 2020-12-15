@@ -13,7 +13,7 @@ export default {
 
 <style lang="scss" scoped>
 .navsearch {
-  @media (max-width: 600px) {
+  @media (max-width: 780px) {
     display: none;
   }
   max-height: 55px;
