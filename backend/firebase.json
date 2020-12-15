@@ -28,6 +28,10 @@
       {
         "source": "/logout",
         "function": "api"
+      },
+      {
+        "source": "/search",
+        "function": "api"
       }
     ]
   }

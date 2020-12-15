@@ -143,4 +143,13 @@ router.patch('/profile/:username/f', (req, res) => {
   }
 });
 
+// USER SEARCH
+router.post('/search', (req, res) => {
+  const { phrase } = req.body;
+  User.find({ username: {$regex: phrase, $options: 'i'} }).limit(5).then((results) => {
+    return res.json(results.map(r => r.username));
+  });
+});
+
+
 module.exports = router;
