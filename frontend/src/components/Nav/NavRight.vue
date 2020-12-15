@@ -1,7 +1,14 @@
 <template>
   <div class="navright">
-    <nav-icon :profile="false" :routeTarget="'/'" :imgSrc="'home-icon.png'" :imgAlt="'Timeline'" />
-    <transition name="fade">
+    <transition name="fade" mode="out-in">
+      <nav-icon
+        :profile="false"
+        :routeTarget="'/'"
+        :imgSrc="'home-icon.png'"
+        :imgAlt="'Timeline'"
+      />
+    </transition>
+    <transition name="fade" mode="out-in">
       <nav-icon
         v-if="auth"
         :profile="false"
@@ -10,7 +17,7 @@
         :imgAlt="'Messages'"
       />
     </transition>
-    <transition name="fade">
+    <transition name="fade" mode="out-in">
       <nav-icon
         v-if="auth"
         :profile="true"
@@ -19,7 +26,7 @@
         :imgAlt="'Profile'"
       />
     </transition>
-    <transition name="fade">
+    <transition name="fade" mode="out-in">
       <nav-icon
         v-if="auth"
         :profile="false"
@@ -58,5 +65,14 @@ export default {
   justify-content: flex-end;
   align-items: center;
   margin-right: 10px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease-out;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
