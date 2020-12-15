@@ -38,6 +38,15 @@ export default {
   cursor: pointer;
   height: 100%;
 
+  &:last-of-type {
+    transform: scale(1.25);
+    transition: 0.25s ease-out all;
+
+    &:hover {
+      transform: scale(1.3);
+    }
+  }
+
   img {
     height: 30px;
   }

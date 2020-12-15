@@ -11,11 +11,12 @@ export default new Vuex.Store({
       isAdmin: false,
       currentUserId: '',
       currentUserName: '',
+      avatarUrl: 'profile-default.png',
     },
   },
   mutations: {
     CHANGE_USER_STATE(state, payload) {
-      state.user = payload;
+      state.user = { ...state.user, ...payload };
       state.isAuth = !state.isAuth;
     },
   },

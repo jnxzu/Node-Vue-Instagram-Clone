@@ -20,7 +20,7 @@
       :profile="true"
       :isRoute="true"
       :routeTarget="`/u/${user}`"
-      :imgSrc="'profile-default.png'"
+      :imgSrc="avatar"
       :imgAlt="'Profile'"
     />
     <nav-icon
@@ -48,6 +48,7 @@ export default {
     ...mapState({
       auth: (state) => state.isAuth,
       user: (state) => state.user.currentUserName,
+      avatar: (state) => state.user.avatarUrl,
     }),
   },
   methods: {
