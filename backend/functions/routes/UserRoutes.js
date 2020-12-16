@@ -126,17 +126,15 @@ router.patch('/profile/:username/f', (req, res) => {
                 });
               }
             });
-          }
-          else {
+          } else {
             return res.status(404).json({
-              msg: "User not found."
+              msg: 'User not found.',
             });
           }
         });
-      }
-      else {
+      } else {
         return res.status(400).json({
-          msg: "Please log in."
+          msg: 'Please log in.',
         });
       }
     });
@@ -146,10 +144,11 @@ router.patch('/profile/:username/f', (req, res) => {
 // USER SEARCH
 router.post('/search', (req, res) => {
   const { phrase } = req.body;
-  User.find({ username: {$regex: phrase, $options: 'i'} }).limit(5).then((results) => {
-    return res.json(results.map(r => r.username));
-  });
+  User.find({ username: { $regex: phrase, $options: 'i' } })
+    .limit(5)
+    .then((results) => {
+      return res.json(results.map((r) => ({ username: r.username, avatar: r.avatarUrl })));
+    });
 });
-
 
 module.exports = router;
