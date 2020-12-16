@@ -46,23 +46,26 @@ export default {
       this.$refs.emailInput.classList.remove('wrong');
       this.$refs.passwordInput.classList.remove('wrong');
 
-      const v = this;
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/UserRoutes/register`;
 
       axios
-        .post('http://localhost:5001/camra-4feb8/europe-west1/api/UserRoutes/register', {
-          // .post('https://europe-west1-camra-4feb8.cloudfunctions.net/api/UserRoutes/register', {
+        .post(url, {
           username: this.username,
           email: this.email,
           password: this.password,
         })
         .then((res) => {
-          v.updateUserState(res.data);
-          v.$router.push({ name: 'Timeline' });
+          this.updateUserState(res.data);
+          this.$router.push({ name: 'Timeline' });
         })
         .catch(() => {
-          v.$refs.usernameInput.classList.add('wrong');
-          v.$refs.emailInput.classList.add('wrong');
-          v.$refs.passwordInput.classList.add('wrong');
+          this.$refs.usernameInput.classList.add('wrong');
+          this.$refs.emailInput.classList.add('wrong');
+          this.$refs.passwordInput.classList.add('wrong');
         });
     },
     ...mapActions(['updateUserState']),
@@ -137,7 +140,7 @@ export default {
       label {
         font-family: 'Amatic SC', cursive;
         font-size: x-large;
-        transition: 0.25s ease-out all;
+        transition: all 0.25s ease-out;
       }
 
       input:focus ~ label,
@@ -154,7 +157,7 @@ export default {
       width: 100px;
       padding: 5px 15px;
       cursor: pointer;
-      transition: 0.25s ease-out all;
+      transition: all 0.25s ease-out;
     }
   }
 
