@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 const Post = require('../models/Post');
+const User = require('../models/User');
 const postservices = require('../services/PostServices');
 
 // NEW POST
@@ -30,6 +31,45 @@ router.delete('/post/:id', (req, res) => {
       msg: "Deleted"
     });
   });
+});
+
+router.patch('/post/:id', (req, res) => {
+  if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
+  else {
+    var id = req.params.id;
+    var user = req.session.passport.user;
+    User.findById({ _id: user }).then((u) => {
+      if (u) {
+        Post.findById({ _id: id }).then((p) => {
+          if (p) {
+            var p1 = p;
+            var i1 = p1.likes.indexOf(u._id);
+            if (i1 > -1) {
+              p1.likes.splice(i1, 1);
+            } else {
+              p1.likes.push(u._id);
+            }
+            Post.findByIdAndUpdate(p._id, p1, (err, p) => {
+              if (err) return res.status(500).json({
+                msg: "error"
+              });
+              else return res.status(418).json({
+                msg: "done"
+              });
+            });
+          } else {
+            return res.status(404).json({
+              msg: "Post not found"
+            });
+          }
+        });
+      } else {
+        return res.status(400).json({
+          msg: "Please log in."
+        });
+      }
+    });
+  }
 });
   /*
 // eslint-disable-next-line consistent-return

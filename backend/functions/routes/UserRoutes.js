@@ -101,6 +101,7 @@ router.patch('/profile/:username/f', (req, res) => {
   else {
     var username2 = req.params.username;
     var username1 = req.session.passport.user;
+    // ADD: USER CAN'T FOLLOW HIS OWN ACCOUNT
     User.findOne({ _id: username1 }).then((userByUsername1) => {
       if (userByUsername1) {
         User.findOne({ username: username2 }).then((userByUsername2) => {
