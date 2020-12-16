@@ -40,7 +40,11 @@ export default {
   methods: {
     search: _.debounce(function () {
       if (this.phrase.length === 0) return;
-      const url = `${process.env.VUE_APP_API_DEV}/UserRoutes/search`;
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/UserRoutes/search`;
       axios.post(url, { phrase: this.phrase }).then((res) => (this.results = res.data));
     }, 250),
   },

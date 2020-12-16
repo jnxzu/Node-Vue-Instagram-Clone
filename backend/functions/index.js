@@ -15,8 +15,8 @@ const passport = require('./passport');
 const app = express();
 
 app.use(express.json());
-app.use(cors({ origin: '*' })); // DEV
-// app.use(cors({ origin: new RegExp(/.*\/\/camra-4feb8.web.app\/.*/) }));  // PROD
+app.use(cors({ origin: true })); // DEV
+// app.use(cors({ origin: new RegExp(/.*\/\/camra-4feb8.web.app\/.*/) })); // PROD
 app.use(cookieParser());
 
 const sessionStore = new MongoStore({
