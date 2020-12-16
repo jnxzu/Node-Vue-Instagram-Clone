@@ -36,6 +36,10 @@
       {
         "source": "/post",
         "function": "api"
+      },
+      {
+        "source": "/post/:id/report",
+        "function": "api"
       }
     ]
   }

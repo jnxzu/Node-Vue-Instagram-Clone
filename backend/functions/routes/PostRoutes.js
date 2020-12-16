@@ -33,6 +33,28 @@ router.delete('/post/:id', (req, res) => {
   });
 });
 
+// REPORT POST
+router.patch('/post/:id/report', (req, res) => {
+  var id = req.params.id;
+  Post.findById({ _id: id }).then((p) => {
+    if (p) {
+      var p1 = p;
+      if (p1.isReported == false) p1.isReported = true;
+      Post.findByIdAndUpdate(p._id, p1, (err, p) => {
+        if (err) return res.status(500).json({
+          msg: "error"
+        });
+        else return res.status(418).json({
+          msg: "done"
+        });
+      });
+    } else return res.status(500).json({
+      msg: "Could not report post."
+    });
+  });
+});
+
+// LIKE/UNLIKE
 router.patch('/post/:id', (req, res) => {
   if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
   else {
@@ -54,7 +76,7 @@ router.patch('/post/:id', (req, res) => {
                 msg: "error"
               });
               else return res.status(418).json({
-                msg: "done"
+                msg: "Thanks, we will look into this."
               });
             });
           } else {
