@@ -189,13 +189,13 @@ module.exports.validateId = (req, res, next) => {
 };
 
 module.exports.newPost = async (req, res) => {
+  console.log(req.session.passport.user);
   const post = new Post({
-    title: req.user.title,
-    caption: req.user.caption,
-    url: req.user.url,
+    poster: req.session.passport.user,
+    description: req.body.description,
+    imageUrl: "",
     likes: [],
-    shares: [],
-    date: req.user.date,
+    comments: []
   });
   try {
     const doc = await post.save();

@@ -40,6 +40,10 @@ const users = require('./routes/UserRoutes');
 
 app.use('/UserRoutes', users);
 
+const posts = require('./routes/PostRoutes');
+
+app.use('/PostRoutes', posts);
+
 app.use((_, res) => {
   res.sendStatus(404);
 });

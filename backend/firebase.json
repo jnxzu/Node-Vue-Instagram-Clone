@@ -32,6 +32,10 @@
       {
         "source": "/search",
         "function": "api"
+      },
+      {
+        "source": "/post",
+        "function": "api"
       }
     ]
   }
