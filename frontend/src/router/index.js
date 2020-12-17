@@ -9,6 +9,7 @@ import Register from '../views/Register.vue';
 import Login from '../views/Login.vue';
 import Logout from '../views/Logout.vue';
 import Admin from '../views/Admin.vue';
+import NotFound from '../views/NotFound.vue';
 
 Vue.use(VueRouter);
 
@@ -52,6 +53,11 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin,
+  },
+  {
+    path: '/404',
+    name: 'NotFound',
+    component: NotFound,
   },
 ];
 
