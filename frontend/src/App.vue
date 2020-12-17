@@ -3,7 +3,7 @@
     <Nav />
     <main>
       <transition name="fade" mode="out-in">
-        <router-view />
+        <router-view :key="$route.path" />
       </transition>
     </main>
   </div>
