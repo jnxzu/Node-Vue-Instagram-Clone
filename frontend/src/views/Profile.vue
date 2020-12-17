@@ -115,7 +115,7 @@ export default {
       .then((res) => {
         this.userdata = res.data;
       })
-      .catch(() => this.$router.push({ name: '404' }));
+      .catch(() => this.$router.push('/404'));
   },
 };
 </script>

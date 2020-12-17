@@ -150,12 +150,12 @@ export default {
     }
 
     .submit {
-      background: #fff;
-      color: #000;
+      background: var(--accent);
       border: 1px solid var(--border);
+      border-radius: 0.25rem;
       font-size: larger;
       width: 100px;
-      padding: 5px 15px;
+      padding: 0.25rem;
       cursor: pointer;
       transition: all 0.25s ease-out;
     }
