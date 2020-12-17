@@ -6,15 +6,16 @@
       @keydown="search"
       @focus="
         () => {
-          phrase = '';
           results = [];
           search;
         }
       "
+      @blur="() => (results = [])"
     />
     <div :class="{ navsearch__results: true, notempty: hasResults }">
       <div @click="redirect(result.username)" v-for="(result, index) in results" :key="index">
-        {{ result.username }}
+        <img :src="result.avatarUrl || '/img/profile-default.png'" />
+        <span> {{ result.username }}</span>
       </div>
     </div>
     <img class="navsearch__icon" src="/img/search-icon.png" alt="Search" />
@@ -88,12 +89,23 @@ export default {
 
     div {
       display: flex;
-      justify-content: center;
       align-items: center;
       width: 173px;
       height: 40px;
       cursor: pointer;
       background: white;
+      padding: 0 10px;
+
+      img {
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      span {
+        margin-right: auto;
+        font-weight: 700;
+      }
 
       &:hover {
         background: var(--bg);
