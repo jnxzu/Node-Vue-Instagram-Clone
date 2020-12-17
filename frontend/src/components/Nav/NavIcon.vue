@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'NavIcon',
   props: {
@@ -18,8 +20,12 @@ export default {
   },
   computed: {
     isActive() {
+      if (this.profile) return this.$route.params.username === this.currentUser;
       return this.$route.name === this.imgAlt;
     },
+    ...mapState({
+      currentUser: (state) => state.user.currentUserName,
+    }),
   },
 };
 </script>

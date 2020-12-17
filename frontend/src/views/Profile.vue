@@ -8,10 +8,10 @@
           <div class="ts-mobile-helper-right">
             <div class="info__contents__top">
               <h2>{{ username }}</h2>
-              <button v-if="currentUser === username">
+              <button v-if="currentUserName !== username && isAuth" @click="follow">
                 {{ followedByMe ? 'Unfollow' : 'Follow' }}
               </button>
-              <button v-if="currentUser === username">Message</button>
+              <button v-if="currentUserName !== username && isAuth">Message</button>
             </div>
             <div class="info__contents__stats">
               <div class="info__contents__stats__group">
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+/* eslint-disable no-return-assign */
 import axios from 'axios';
 import _ from 'lodash';
 import { mapState } from 'vuex';
@@ -57,6 +58,9 @@ import ProfilePost from '../components/Posts/ProfilePost.vue';
 
 export default {
   name: 'Profile',
+  components: {
+    ProfilePost,
+  },
   data() {
     return {
       username: this.$route.params.username,
@@ -74,12 +78,30 @@ export default {
       return _.chunk(this.userdata.posts, 3);
     },
     followedByMe() {
-      return this.userdata.followers.includes(this.currentUser);
+      return this.userdata.followers.map((u) => u.username).indexOf(this.currentUserName) > -1;
     },
-    ...mapState({ currentUser: (state) => state.currentUserName }),
+    ...mapState({
+      currentUserName: (state) => state.user.currentUserName,
+      isAuth: (state) => state.isAuth,
+    }),
   },
-  components: {
-    ProfilePost,
+  methods: {
+    follow() {
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/UserRoutes/follow`;
+
+      axios.patch(url, { me: this.currentUserName, target: this.username }).then((res) => {
+        if (res.data.add) {
+          this.userdata.followers.push(res.data.new);
+        } else {
+          const i = this.userdata.followers.indexOf(res.data.new);
+          this.userdata.followers.splice(i, 1);
+        }
+      });
+    },
   },
   mounted() {
     const url = `${

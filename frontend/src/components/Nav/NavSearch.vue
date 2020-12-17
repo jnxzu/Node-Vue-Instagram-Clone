@@ -4,13 +4,18 @@
       v-model="phrase"
       class="navsearch__input"
       @keydown="search"
-      @focus="search"
-      @blur="results = []"
+      @focus="
+        () => {
+          phrase = '';
+          results = [];
+          search;
+        }
+      "
     />
     <div :class="{ navsearch__results: true, notempty: hasResults }">
-      <router-link to="/xd" v-for="(result, index) in results" :key="index">
-        <div>{{ result.username }}</div>
-      </router-link>
+      <div @click="redirect(result.username)" v-for="(result, index) in results" :key="index">
+        {{ result.username }}
+      </div>
     </div>
     <img class="navsearch__icon" src="/img/search-icon.png" alt="Search" />
   </div>
@@ -47,6 +52,11 @@ export default {
       }/UserRoutes/search`;
       axios.post(url, { phrase: this.phrase }).then((res) => (this.results = res.data));
     }, 250),
+    redirect(u) {
+      this.results = [];
+      this.phrase = '';
+      this.$router.push(`/u/${u}`);
+    },
   },
 };
 </script>
@@ -63,7 +73,6 @@ export default {
   align-items: center;
 
   &__results {
-    display: none;
     position: absolute;
     top: 40px;
     left: calc(50% - 99px);
