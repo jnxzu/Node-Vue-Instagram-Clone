@@ -1,25 +1,36 @@
 <template>
-  <p></p>
+  <img class="loading-gif" src="/img/loading.gif" />
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'Logout',
-  mounted() {
-    this.logout();
+  data() {
+    return {
+      timeout: null,
+    };
   },
+  computed: { ...mapState({ auth: (state) => state.isAuth }) },
   methods: {
+    ...mapActions(['updateUserState']),
     logout() {
-      this.updateUserState({
-        currentUserId: '',
-        currentUserName: '',
-        isAdmin: false,
-      });
+      if (this.auth) {
+        this.updateUserState({
+          currentUserId: '',
+          currentUserName: '',
+          isAdmin: false,
+        });
+      }
       this.$router.push({ name: 'Login' });
     },
-    ...mapActions(['updateUserState']),
+  },
+  created() {
+    this.timeout = setTimeout(this.logout, 500);
+  },
+  destroyed() {
+    clearTimeout(this.timeout);
   },
 };
 </script>

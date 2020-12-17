@@ -1,5 +1,5 @@
 <template>
-  <div class="timeline">
+  <div class="timeline" v-if="ready">
     <timeline-post
       :poster="'catfan'"
       :avatar="'https://placekitten.com/150/150'"
@@ -31,6 +31,7 @@
       :date="'23 Nov 2020'"
     />
   </div>
+  <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
@@ -40,6 +41,23 @@ export default {
   name: 'Timeline',
   components: {
     TimelinePost,
+  },
+  data() {
+    return {
+      ready: false,
+      timeout: null,
+    };
+  },
+  methods: {
+    readyUp() {
+      this.ready = true;
+    },
+  },
+  created() {
+    this.timeout = setTimeout(this.readyUp, 666);
+  },
+  destroyed() {
+    clearTimeout(this.timeout);
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="messenger">
+  <div class="messenger" v-if="ready">
     <div class="messenger__left">
       <div class="messenger__left__top">
         <div class="messenger__left__top__center">Chat</div>
@@ -38,9 +38,12 @@
       </div>
     </div>
   </div>
+  <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import Contact from '../components/Messages/Contact.vue';
 import Message from '../components/Messages/Message.vue';
 
@@ -49,6 +52,25 @@ export default {
   components: {
     Contact,
     Message,
+  },
+  data() {
+    return {
+      timeout: null,
+      ready: false,
+    };
+  },
+  computed: { ...mapState({ auth: (state) => state.isAuth }) },
+  methods: {
+    checkAuth() {
+      if (!this.auth) this.$router.push({ name: 'Timeline' });
+      else this.ready = true;
+    },
+  },
+  created() {
+    this.timeout = setTimeout(this.checkAuth, 500);
+  },
+  destroyed() {
+    clearTimeout(this.timeout);
   },
 };
 </script>

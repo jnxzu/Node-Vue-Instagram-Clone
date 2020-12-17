@@ -1,5 +1,5 @@
 <template>
-  <div class="register">
+  <div class="register" v-if="ready">
     <img src="/img/logo.png" />
     <h1 class="register__title">Camra</h1>
     <form @submit.prevent="register">
@@ -25,11 +25,12 @@
     </form>
     <span>Already have an account? <router-link to="/login">Sign in</router-link> instead.</span>
   </div>
+  <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
 import axios from 'axios';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'Register',
@@ -38,9 +39,17 @@ export default {
       username: '',
       email: '',
       password: '',
+      timeout: null,
+      ready: false,
     };
   },
+  computed: { ...mapState({ auth: (state) => state.isAuth }) },
   methods: {
+    ...mapActions(['updateUserState']),
+    checkAuth() {
+      if (this.auth) this.$router.push({ name: 'Timeline' });
+      else this.ready = true;
+    },
     register() {
       this.$refs.usernameInput.classList.remove('wrong');
       this.$refs.emailInput.classList.remove('wrong');
@@ -68,7 +77,12 @@ export default {
           this.$refs.passwordInput.classList.add('wrong');
         });
     },
-    ...mapActions(['updateUserState']),
+  },
+  created() {
+    this.timeout = setTimeout(this.checkAuth, 500);
+  },
+  destroyed() {
+    clearTimeout(this.timeout);
   },
 };
 </script>

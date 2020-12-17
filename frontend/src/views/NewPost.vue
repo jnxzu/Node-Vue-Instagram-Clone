@@ -1,5 +1,5 @@
 <template>
-  <div class="newpost">
+  <div class="newpost" v-if="ready">
     <div class="image-container">
       <img ref="image" :class="{ uploaded: uploaded }" :src="imageUrl" />
     </div>
@@ -14,6 +14,7 @@
     </form>
     <button class="post-submit">Post</button>
   </div>
+  <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
@@ -26,23 +27,32 @@ export default {
       desc: '',
       uploaded: false,
       imageUrl: '',
+      timeout: null,
+      ready: false,
     };
   },
   computed: {
     ...mapState({
-      isAuth: (state) => state.isAuth,
+      auth: (state) => state.isAuth,
       currentUserId: (state) => state.user.currentUserId,
     }),
   },
   methods: {
+    checkAuth() {
+      if (!this.auth) this.$router.push({ name: 'Timeline' });
+      else this.ready = true;
+    },
     fileChange(e) {
       this.uploaded = true;
       const file = e.target.files[0];
       this.imageUrl = URL.createObjectURL(file);
     },
   },
-  mounted() {
-    if (!this.isAuth) this.$router.push({ name: 'Login' });
+  created() {
+    this.timeout = setTimeout(this.checkAuth, 500);
+  },
+  destroyed() {
+    clearTimeout(this.timeout);
   },
 };
 </script>

@@ -52,6 +52,15 @@ a {
   }
 }
 
+.loading-gif {
+  height: 150px;
+  width: 150px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-75px);
+  margin-top: 75px;
+}
+
 #app {
   width: 100vw;
 }

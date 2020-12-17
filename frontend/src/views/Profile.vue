@@ -1,5 +1,5 @@
 <template>
-  <div class="profile">
+  <div class="profile" v-if="ready">
     <div class="info">
       <img class="info__avatar" :src="userdata.avatarUrl || '/img/profile-default.png'" />
       <div class="info__contents">
@@ -46,6 +46,7 @@
       </div>
     </div>
   </div>
+  <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
@@ -71,19 +72,20 @@ export default {
         followers: [],
         following: [],
       },
+      ready: false,
     };
   },
   computed: {
-    slicedPosts() {
-      return _.chunk(this.userdata.posts, 3);
-    },
-    followedByMe() {
-      return this.userdata.followers.map((u) => u.username).indexOf(this.currentUserName) > -1;
-    },
     ...mapState({
       currentUserName: (state) => state.user.currentUserName,
       isAuth: (state) => state.isAuth,
     }),
+    followedByMe() {
+      return this.userdata.followers.map((u) => u.username).indexOf(this.currentUserName) > -1;
+    },
+    slicedPosts() {
+      return _.chunk(this.userdata.posts, 3);
+    },
   },
   methods: {
     follow() {
@@ -114,6 +116,7 @@ export default {
       .get(url)
       .then((res) => {
         this.userdata = res.data;
+        this.ready = true;
       })
       .catch(() => this.$router.push('/404'));
   },
