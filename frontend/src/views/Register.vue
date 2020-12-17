@@ -61,6 +61,8 @@ export default {
           : process.env.VUE_APP_API_DEV
       }/UserRoutes/register`;
 
+      this.ready = false;
+
       axios
         .post(url, {
           username: this.username,
@@ -72,6 +74,8 @@ export default {
           this.$router.push({ name: 'Timeline' });
         })
         .catch(() => {
+          this.ready = true;
+
           this.$refs.usernameInput.classList.add('wrong');
           this.$refs.emailInput.classList.add('wrong');
           this.$refs.passwordInput.classList.add('wrong');
