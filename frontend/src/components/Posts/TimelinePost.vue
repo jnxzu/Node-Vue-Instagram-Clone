@@ -12,8 +12,8 @@
     <div class="timelinepost__bottom">
       <div class="timelinepost__bottom__buttons">
         <liked-icon :liked="this.liked" />
-        <i class="far fa-comment fa-2x"></i>
-        <i class="far fa-flag fa-2x"></i>
+        <i class="far fa-comment fa-2x" v-tooltip="'Comment'"></i>
+        <img src="/img/report-icon.png" v-tooltip="'Report'" />
       </div>
       <likes-counter :liked="this.likes" />
       <div class="timelinepost__bottom__desc">
@@ -104,10 +104,12 @@ export default {
         cursor: pointer;
       }
       .fa-comment {
-        margin-left: 5px;
+        margin-left: 10px;
       }
-      .fa-flag {
+      img {
         margin-left: auto;
+        cursor: pointer;
+        height: 30px;
       }
     }
 

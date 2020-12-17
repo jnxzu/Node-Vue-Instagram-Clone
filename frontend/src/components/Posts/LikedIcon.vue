@@ -1,5 +1,9 @@
 <template>
-  <i @click="() => (this.likedVal = !this.likedVal)" :class="classObj"></i>
+  <i
+    @click="() => (this.likedVal = !this.likedVal)"
+    :class="classObj"
+    v-tooltip="likedVal ? 'Unlike' : 'Like'"
+  ></i>
 </template>
 
 <script>

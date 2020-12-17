@@ -6,12 +6,12 @@
       </div>
       <div class="post__info">
         <div class="post__info__top">
-          <img src="/img/profile.jpg" />
+          <img src="/img/profile-default.png" />
           <div class="post__info__top__text">
             <router-link to="/u/user">user</router-link>
             <span>October 25, 2019</span>
           </div>
-          <i class="far fa-flag"></i>
+          <img class="report" src="/img/report-icon.png" v-tooltip="'Report'" />
         </div>
         <div class="post__info__comments">
           <post-comment />
@@ -118,6 +118,11 @@ export default {
       img {
         height: 35px;
         border-radius: 50%;
+
+        &.report {
+          cursor: pointer;
+          height: 20px;
+        }
       }
 
       &__text {

@@ -6,6 +6,7 @@
         :routeTarget="'/'"
         :imgSrc="'home-icon.png'"
         :imgAlt="'Timeline'"
+        v-tooltip="'Timeline'"
       />
     </transition>
     <transition name="fade" mode="out-in">
@@ -15,6 +16,7 @@
         :routeTarget="'/new'"
         :imgSrc="'new-post-icon.png'"
         :imgAlt="'New Post'"
+        v-tooltip="'New Post'"
       />
     </transition>
     <transition name="fade" mode="out-in">
@@ -24,6 +26,7 @@
         :routeTarget="'/messages'"
         :imgSrc="'messages-icon.png'"
         :imgAlt="'Messages'"
+        v-tooltip="'Messages'"
       />
     </transition>
     <transition name="fade" mode="out-in">
@@ -33,6 +36,7 @@
         :routeTarget="`/u/${user}`"
         :imgSrc="avatar"
         :imgAlt="'Profile'"
+        v-tooltip="'My Profile'"
       />
     </transition>
     <transition name="fade" mode="out-in">
@@ -42,6 +46,7 @@
         :routeTarget="'/admin'"
         :imgSrc="'admin-icon.png'"
         :imgAlt="'Admin'"
+        v-tooltip="'Admin Panel'"
       />
     </transition>
     <transition name="fade" mode="out-in">
@@ -51,6 +56,7 @@
         :routeTarget="'/logout'"
         :imgSrc="'logout-icon.png'"
         :imgAlt="'Logout'"
+        v-tooltip="'Logout'"
       />
     </transition>
     <transition name="fade" mode="out-in">
@@ -60,6 +66,7 @@
         :routeTarget="'/login'"
         :imgSrc="'login-icon.png'"
         :imgAlt="'Login'"
+        v-tooltip="'Sign In'"
       />
     </transition>
   </div>
