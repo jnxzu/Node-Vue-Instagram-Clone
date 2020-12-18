@@ -12,13 +12,15 @@
       </transition>
       <textarea rows="5" cols="25" v-model="desc" placeholder="Description..."></textarea>
     </form>
-    <button class="post-submit">Post</button>
+    <button class="post-submit" @click="send">Post</button>
   </div>
   <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import ShortUniqueId from 'short-unique-id';
+import axios from 'axios';
 
 export default {
   name: 'NewPost',
@@ -27,6 +29,7 @@ export default {
       desc: '',
       uploaded: false,
       imageUrl: '',
+      imageFile: {},
       timeout: null,
       ready: false,
     };
@@ -45,7 +48,28 @@ export default {
     fileChange(e) {
       this.uploaded = true;
       const file = e.target.files[0];
+      this.imageFile = file;
       this.imageUrl = URL.createObjectURL(file);
+    },
+    send() {
+      const uid = new ShortUniqueId({ length: 10 });
+      const data = new FormData();
+      data.set('poster', this.currentUserId);
+      data.set('desc', this.desc);
+      data.set('image', this.imageFile, this.imageFile.name.replace(/.*\./, `${uid()}.`));
+
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/PostRoutes/newpost`;
+
+      axios({
+        method: 'post',
+        url,
+        data,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
     },
   },
   created() {

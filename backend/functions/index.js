@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const cors = require('cors');
+const fileParser = require('express-multipart-file-parser');
 
 const cookieParser = require('cookie-parser');
 
@@ -15,6 +16,8 @@ const passport = require('./passport');
 const app = express();
 
 app.use(express.json());
+app.use(fileParser);
+
 app.use(cors({ origin: true })); // DEV
 // app.use(cors({ origin: new RegExp(/.*\/\/camra-4feb8.web.app\/.*/) })); // PROD
 app.use(cookieParser());
@@ -37,8 +40,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const users = require('./routes/UserRoutes');
+const posts = require('./routes/PostRoutes');
 
 app.use('/UserRoutes', users);
+app.use('/PostRoutes', posts);
 
 app.use((_, res) => {
   res.sendStatus(404);

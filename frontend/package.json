@@ -12,9 +12,11 @@
   "dependencies": {
     "axios": "^0.21.0",
     "core-js": "^3.6.5",
+    "form-data": "^3.0.0",
     "lodash": "^4.17.20",
     "sass": "^1.27.0",
     "sass-loader": "^10.0.4",
+    "short-unique-id": "^3.2.3",
     "v-tooltip": "^2.0.3",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
