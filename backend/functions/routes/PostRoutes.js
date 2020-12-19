@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
+/* eslint-disable consistent-return */
 const router = require('express').Router();
 const passport = require('passport');
 const Post = require('../models/Post');
@@ -7,7 +10,7 @@ const postservices = require('../services/PostServices');
 // NEW POST
 router.post('/post', (req, res) => {
   const { description } = req.body;
-  var user = req.session.passport.user;
+  const {user} = req.session.passport;
   const newPost = new Post();
   newPost.poster = user;
   newPost.description = description;
@@ -24,10 +27,10 @@ router.post('/post', (req, res) => {
 
 // DELETE POST
 router.delete('/post/:id', (req, res) => {
-  var id = req.params.id;
+  const {id} = req.params;
   Post.findByIdAndDelete({_id: id}, function(err,docs) {
     if (err) return res.json(err);
-    else return res.json({
+    return res.json({
       msg: "Deleted"
     });
   });
@@ -35,16 +38,16 @@ router.delete('/post/:id', (req, res) => {
 
 // REPORT POST
 router.patch('/post/:id/report', (req, res) => {
-  var id = req.params.id;
+  const {id} = req.params;
   Post.findById({ _id: id }).then((p) => {
     if (p) {
-      var p1 = p;
-      if (p1.isReported == false) p1.isReported = true;
-      Post.findByIdAndUpdate(p._id, p1, (err, p) => {
+      const p1 = p;
+      if (p1.isReported === false) p1.isReported = true;
+      Post.findByIdAndUpdate(p._id, p1, (err, _p) => {
         if (err) return res.status(500).json({
           msg: "error"
         });
-        else return res.status(418).json({
+        return res.status(418).json({
           msg: "done"
         });
       });
@@ -58,14 +61,14 @@ router.patch('/post/:id/report', (req, res) => {
 router.patch('/post/:id', (req, res) => {
   if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
   else {
-    var id = req.params.id;
-    var user = req.session.passport.user;
+    const {id} = req.params;
+    const {user} = req.session.passport;
     User.findById({ _id: user }).then((u) => {
       if (u) {
         Post.findById({ _id: id }).then((p) => {
           if (p) {
-            var p1 = p;
-            var i1 = p1.likes.indexOf(u._id);
+            const p1 = p;
+            const i1 = p1.likes.indexOf(u._id);
             if (i1 > -1) {
               p1.likes.splice(i1, 1);
             } else {
@@ -75,7 +78,7 @@ router.patch('/post/:id', (req, res) => {
               if (err) return res.status(500).json({
                 msg: "error"
               });
-              else return res.status(418).json({
+              return res.status(418).json({
                 msg: "Thanks, we will look into this."
               });
             });
@@ -115,9 +118,9 @@ router
 
   .patch(isAuth, postservices.patchPost)
   .delete(isAuth, postservices.deletePost)
-  .all(rejectMethod);*/
+  .all(rejectMethod); */
 
-/*router.route('/page/:page').get(postservices.postsPage).all(rejectMethod);
+/* router.route('/page/:page').get(postservices.postsPage).all(rejectMethod);
 
 router.route('/my-posts/page/:page').get(isAuth, postservices.mypostsPage).all(rejectMethod);
 
@@ -136,6 +139,6 @@ router
   .route('/post/:id')
   .delete(isAuth, postservices.delete)
   .get(postservices.read)
-  .all(rejectMethod);*/
+  .all(rejectMethod); */
 
 module.exports = router;
