@@ -87,8 +87,10 @@ module.exports.mylikesPage =
       limit,
     };
 
-    const match = {};
-    match.likes = req.user.username;
+    const match = {
+      $or: [{ likes: req.user.username }],
+    };
+
 
     aggregateOptions.push({ $match: match });
 
