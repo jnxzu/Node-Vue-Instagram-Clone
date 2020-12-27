@@ -8,14 +8,14 @@
 const Post = require('../models/Post');
 const User = require('../models/User')
 
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(403).json({
-    message: 'Not authenticated',
-  });
-};
+// const isAuthenticated = (req, res, next) => {
+//   if (req.isAuthenticated()) {
+//     return next();
+//   }
+//   res.status(403).json({
+//     message: 'Not authenticated',
+//   });
+// };
 
 module.exports.newPost = (req, res) => {
   const { description } = req.body;
@@ -80,7 +80,7 @@ module.exports.likeSwitch = (req, res) => {
             } else {
               p1.likes.push(u._id);
             }
-            Post.findByIdAndUpdate(p._id, p1, (err, p) => {
+            Post.findByIdAndUpdate(p._id, p1, (err) => {
               if (err) return res.status(500).json({
                 msg: "error"
               });
