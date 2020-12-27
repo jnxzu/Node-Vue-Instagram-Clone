@@ -8,14 +8,6 @@
 const Post = require('../models/Post');
 const User = require('../models/User')
 
-// const isAuthenticated = (req, res, next) => {
-//   if (req.isAuthenticated()) {
-//     return next();
-//   }
-//   res.status(403).json({
-//     message: 'Not authenticated',
-//   });
-// };
 
 module.exports.newPost = (req, res) => {
   const { description } = req.body;
@@ -101,6 +93,22 @@ module.exports.likeSwitch = (req, res) => {
       }
     });
   }
+}
+
+module.exports.dashboard = (req, res) => {
+  (isAuthenticated,
+  async (req, res) => {
+    const page = parseInt(req.params.page, 10);
+    const aggregateOptions = [];
+    const limit = 10;
+    const options = {
+      page,
+      limit,
+    };
+    aggregateOptions.push();
+    const myAggregate = Post.aggregate(aggregateOptions);
+    const result = await Post.aggregatePaginate(myAggregate, options);
+    res.status(200).json(result);
 }
 
 
