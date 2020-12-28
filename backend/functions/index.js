@@ -36,13 +36,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-const users = require('./routes/UserRoutes');
+const userRoutes = require('./routes/UserRoutes');
+const postRoutes = require('./routes/PostRoutes');
+const chatRoutes = require('./routes/ChatRoutes')
 
-app.use('/UserRoutes', users);
-
-const posts = require('./routes/PostRoutes');
-
-app.use('/PostRoutes', posts);
+app.use('/UserRoutes', userRoutes);
+app.use('/PostRoutes', postRoutes);
+app.use('/ChatRoutes', chatRoutes);
 
 app.use((_, res) => {
   res.sendStatus(404);

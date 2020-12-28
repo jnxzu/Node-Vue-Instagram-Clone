@@ -104,7 +104,21 @@ module.exports.likeSwitch = (req, res) => {
   }
 }
 
-// ADD : MAKE SEPERATE ONE FOR ALL POSTS AND SEPERATE ONE FOR USERS FOLLOWED ONES 
+module.exports.allPostsPaginated = (isAuthenticated, async (req, res) => {
+  const page = parseInt(req.params.page, 10);
+  const aggregateOptions = [];
+  const limit = 10;
+  const options = {
+    page,
+    limit,
+  };
+  aggregateOptions.push();
+  const myAggregate = Post.aggregate(aggregateOptions);
+  const result = await Post.aggregatePaginate(myAggregate, options);
+  res.status(200).json(result);
+});
+
+
 module.exports.dashboard = (isAuthenticated, async (req, res) => {
     const page = parseInt(req.params.page, 10);
     const aggregateOptions = [];
@@ -113,7 +127,11 @@ module.exports.dashboard = (isAuthenticated, async (req, res) => {
       page,
       limit,
     };
-    aggregateOptions.push();
+    // THIS PROBABLY WONT WORK RIP 
+    const match = {
+      $or: { poster: [{followers: req.user.username}]},
+    };
+    aggregateOptions.push({ $match: match });
     const myAggregate = Post.aggregate(aggregateOptions);
     const result = await Post.aggregatePaginate(myAggregate, options);
     res.status(200).json(result);
