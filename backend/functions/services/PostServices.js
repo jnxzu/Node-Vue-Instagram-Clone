@@ -104,6 +104,7 @@ module.exports.likeSwitch = (req, res) => {
   }
 }
 
+// ADD : MAKE SEPERATE ONE FOR ALL POSTS AND SEPERATE ONE FOR USERS FOLLOWED ONES 
 module.exports.dashboard = (isAuthenticated, async (req, res) => {
     const page = parseInt(req.params.page, 10);
     const aggregateOptions = [];
