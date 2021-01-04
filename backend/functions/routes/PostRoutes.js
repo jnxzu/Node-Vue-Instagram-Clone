@@ -54,8 +54,6 @@ const storage = new Storage({
 });
 const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
 
-// uploader.single('image'),
-
 router.post('/newpost', (req, res) => {
   const { poster, desc } = req.body;
   const { originalname, mimetype, buffer } = req.files[0];
@@ -82,7 +80,7 @@ router.post('/newpost', (req, res) => {
     newPost.date = new Date();
 
     newPost.save().then(() => {
-      res.status(200).json({ msg: 'Post created' });
+      res.status(200).json({ msg: 'Success!' });
     });
   });
 

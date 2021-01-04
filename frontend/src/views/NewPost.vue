@@ -52,6 +52,7 @@ export default {
       this.imageUrl = URL.createObjectURL(file);
     },
     send() {
+      this.ready = false;
       const uid = new ShortUniqueId({ length: 10 });
       const data = new FormData();
       data.set('poster', this.currentUserId);
@@ -69,7 +70,7 @@ export default {
         url,
         data,
         headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      }).then(() => this.$router.push({ name: 'Timeline' }));
     },
   },
   created() {
