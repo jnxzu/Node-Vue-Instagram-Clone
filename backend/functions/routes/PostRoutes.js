@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { newPost, flagPost, likeSwitch, timeline } = require('../services/PostServices');
+const { newPost, flagPost, likeSwitch, timeline, getPost } = require('../services/PostServices');
 
 const rejectMethod = (_req, res) => {
   res.sendStatus(405);
@@ -9,7 +9,7 @@ const rejectMethod = (_req, res) => {
 router.route('/new').post(newPost).all(rejectMethod);
 
 // GET POST by id
-// TODO
+router.route('/post/:id').get(getPost).all(rejectMethod);
 
 // REPORT/APPROVE POST
 router.route('/post/:id/flag').patch(flagPost).all(rejectMethod);
