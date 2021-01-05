@@ -111,3 +111,11 @@ module.exports.addComment = (req, res) => {
     return res.status(200).json('Comment added.');
   });
 };
+
+module.exports.removeComment = (req, res) => {
+  const { id, commentId } = req.params;
+  // const { userId } = req.body;
+  Post.findByIdAndUpdate(id, { $pull: { comments: {_id: commentId} } }).then(() => {
+    return res.status(200).json('Comment removed.');
+  });
+};

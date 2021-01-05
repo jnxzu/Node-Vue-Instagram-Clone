@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { newPost, flagPost, likeSwitch, timeline, getPost, addComment } = require('../services/PostServices');
+const { newPost, flagPost, likeSwitch, timeline, getPost, addComment, removeComment } = require('../services/PostServices');
 
 const rejectMethod = (_req, res) => {
   res.sendStatus(405);
@@ -24,6 +24,6 @@ router.route('/timeline').get(timeline).all(rejectMethod);
 router.route('/post/:id/comment').patch(addComment).all(rejectMethod);
 
 // DELETE COMMENT
-// TODO
+router.route('/post/:id/comment/:commentId').patch(removeComment).all(rejectMethod);
 
 module.exports = router;

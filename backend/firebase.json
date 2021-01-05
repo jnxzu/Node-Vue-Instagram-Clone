@@ -48,6 +48,10 @@
       {
         "source": "/post/:id/comment",
         "function": "api"
+      },
+      {
+        "source": "/post/:id/comment/:commentId",
+        "function": "api"
       }
     ]
   }
