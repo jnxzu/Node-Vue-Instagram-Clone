@@ -98,3 +98,16 @@ module.exports.timeline = (req, res) => {
     });
   }
 };
+
+module.exports.addComment = (req, res) => {
+  const { id } = req.params;
+  const { userId, content } = req.body;
+  const newComm = {
+    author: userId,
+    content,
+    date: new Date()
+  };
+  Post.findByIdAndUpdate(id, { $push: { comments: newComm } }).then(() => {
+    return res.status(200).json('Comment added.');
+  });
+};

@@ -44,6 +44,10 @@
       {
         "source": "/post/:id",
         "function": "api"
+      },
+      {
+        "source": "/post/:id/comment",
+        "function": "api"
       }
     ]
   }
