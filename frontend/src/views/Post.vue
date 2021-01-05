@@ -84,6 +84,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
 
     @media (max-width: 974px) {
       max-height: 60vh;

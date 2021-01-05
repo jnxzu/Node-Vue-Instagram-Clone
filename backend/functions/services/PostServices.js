@@ -42,12 +42,12 @@ module.exports.flagPost = (req, res) => {
   const { id } = req.params;
   const { reported } = req.body;
   if (reported) {
-    Post.findByIdAndUpdate(id, { isReported: false }, () => {
-      return res.status(200);
+    Post.findByIdAndUpdate(id, { isReported: false }).then(() => {
+      return res.status(200).json('Post approved.');
     });
   } else {
-    Post.findByIdAndUpdate(id, { isReported: true }, () => {
-      return res.status(200);
+    Post.findByIdAndUpdate(id, { isReported: true }).then(() => {
+      return res.status(200).json('Post reported.');
     });
   }
 };
@@ -56,18 +56,18 @@ module.exports.likeSwitch = (req, res) => {
   const postId = req.params.id;
   const { userId, liked } = req.body;
   if (liked) {
-    Post.findByIdAndUpdate(postId, { $pull: { likes: userId } }, () => {
-      return res.status(200);
+    Post.findByIdAndUpdate(postId, { $pull: { likes: userId } }).then(() => {
+      return res.status(200).json('Like removed.');
     });
   } else {
-    Post.findByIdAndUpdate(postId, { $push: { likes: userId } }, () => {
-      return res.status(200);
+    Post.findByIdAndUpdate(postId, { $push: { likes: userId } }).then(() => {
+      return res.status(200).json('Like added');
     });
   }
 };
 
 module.exports.timeline = (req, res) => {
-  const { userId, currentPage } = req.body;
+  const { userId, currentPage } = req.params;
 
   const options = {
     populate: ['poster', 'likes'],
