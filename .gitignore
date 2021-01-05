@@ -8,6 +8,8 @@ dist
 .env
 privatekey.json
 
+privatekey.json
+
 https
 
 *.log

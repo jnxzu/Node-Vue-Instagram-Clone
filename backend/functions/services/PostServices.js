@@ -1,265 +1,90 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable consistent-return */
+const { Storage } = require('@google-cloud/storage');
 const Post = require('../models/Post');
+const User = require('../models/User');
 
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(403).json({
-    message: 'Not authenticated',
+module.exports.newPost = (req, res) => {
+  const storage = new Storage({
+    projectId: process.env.GCLOUD_PROJECT_ID,
+    keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,
   });
+  const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
+
+  const { poster, desc } = req.body;
+  const { originalname, mimetype, buffer } = req.files[0];
+
+  const blob = bucket.file(originalname);
+  const blobWriter = blob.createWriteStream({
+    metadata: {
+      contentType: mimetype,
+    },
+  });
+  blobWriter.on('finish', () => {
+    const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(
+      blob.name
+    )}?alt=media`;
+    const newPost = new Post();
+    newPost.poster = poster;
+    newPost.description = desc;
+    newPost.imageUrl = publicUrl;
+    newPost.isReported = false;
+    newPost.likes = [];
+    newPost.comments = [];
+    newPost.date = new Date();
+
+    newPost.save().then(() => {
+      res.status(201);
+    });
+  });
+  blobWriter.end(buffer);
 };
 
-const processErrors = (err) => {
-  const msg = {};
-  for (const key in err.errors) {
-    msg[key] = err.errors[key].Post;
+module.exports.flagPost = (req, res) => {
+  const { id } = req.params;
+  const { reported } = req.body;
+  if (reported) {
+    Post.findByIdAndUpdate(id, { isReported: false }, () => {
+      return res.status(200);
+    });
+  } else {
+    Post.findByIdAndUpdate(id, { isReported: true }, () => {
+      return res.status(200);
+    });
   }
-  return msg;
 };
 
-// eslint-disable-next-line
-const checkPosts = (req, res) => {
-  const filter = {
-    date: { $lte: new Date() },
-    status: 'onSale',
+module.exports.likeSwitch = (req, res) => {
+  const postId = req.params.id;
+  const { userId, liked } = req.body;
+  if (liked) {
+    Post.findByIdAndUpdate(postId, { $pull: { likes: userId } }, () => {
+      return res.status(200);
+    });
+  } else {
+    Post.findByIdAndUpdate(postId, { $push: { likes: userId } }, () => {
+      return res.status(200);
+    });
+  }
+};
+
+module.exports.timeline = (req, res) => {
+  const { userId, currentPage } = req.body;
+
+  const options = {
+    populate: ['poster', 'likes'],
+    page: currentPage,
+    limit: 5,
   };
-  // eslint-disable-next-line
-    Post.update(filter, { "$set": { status: 'sold' } }, { "multi": true }, (err, res) => {
-    if (err) {
-      console.log('error updating posts');
-      console.log(err);
-    } else {
-      console.log('posts updated!');
-    }
-  });
-};
 
-module.exports.postsPage =
-  (isAuthenticated,
-  async (req, res) => {
-    const page = parseInt(req.params.page, 10);
-    const aggregateOptions = [];
-    const limit = 3;
-    const options = {
-      page,
-      limit,
-    };
-    aggregateOptions.push();
-    const myAggregate = Post.aggregate(aggregateOptions);
-    const result = await Post.aggregatePaginate(myAggregate, options);
-    res.status(200).json(result);
-  });
-
-module.exports.mypostsPage =
-  (isAuthenticated,
-  async (req, res) => {
-    const page = parseInt(req.params.page, 10);
-    const aggregateOptions = [];
-    const limit = 3;
-    const options = {
-      page,
-      limit,
-    };
-    const match = {
-      $or: [{ poster: req.user.username }],
-    };
-    aggregateOptions.push({ $match: match });
-    const myAggregate = Post.aggregate(aggregateOptions);
-    const result = await Post.aggregatePaginate(myAggregate, options);
-    res.status(200).json(result);
-  });
-
-module.exports.mylikesPage =
-  (isAuthenticated,
-  async (req, res) => {
-    const page = parseInt(req.params.page, 10);
-    const aggregateOptions = [];
-
-    const limit = 3;
-    const options = {
-      page,
-      limit,
-    };
-
-    const match = {};
-    match.likes = req.user.username;
-
-    aggregateOptions.push({ $match: match });
-
-    const myAggregate = Post.aggregate(aggregateOptions);
-    const result = await Post.aggregatePaginate(myAggregate, options);
-    res.status(200).json(result);
-  });
-
-module.exports.mysharesPage =
-  (isAuthenticated,
-  async (req, res) => {
-    const page = parseInt(req.params.page, 10);
-    const aggregateOptions = [];
-
-    const limit = 3;
-    const options = {
-      page,
-      limit,
-    };
-
-    const match = {
-      $or: [{ shares: req.user.username }],
-    };
-
-    aggregateOptions.push({ $match: match });
-
-    const myAggregate = Post.aggregate(aggregateOptions);
-    const result = await Post.aggregatePaginate(myAggregate, options);
-    res.status(200).json(result);
-  });
-
-const savePost = (post, res) => {
-  Post.save((err, doc) => {
-    if (err) {
-      // Unprocessable Entity
-      res.status(422).json(processErrors(err));
-    } else {
-      res.json(doc);
-    }
-  });
-};
-
-module.exports.create = (req, res) => {
-  const post = new Post(req.body);
-  savePost(post, res);
-};
-
-module.exports.read = (req, res, next) => {
-  Post.findById(req.params.id, (err, post) => {
-    if (err) {
-      next(err);
-    } else if (post) {
-      res.json(post);
-    } else {
-      // Not Found
-      res.sendStatus(404);
-    }
-  });
-};
-
-module.exports.list = (req, res) => {
-  Post.find((error, docs) => {
-    if (error) {
-      res.json(error);
-    } else {
-      res.json(docs);
-    }
-  });
-};
-
-module.exports.update = (req, res) => {
-  Post.updateOne({ _id: req.body._id }, req.body, (error, doc) => {
-    if (error) {
-      res.status(500).json(processErrors(error));
-    } else {
-      res.status(201).json(doc);
-    }
-  });
-};
-
-module.exports.delete = (req, res, next) => {
-  Post.findByIdAndRemove(req.params.id, (err) => {
-    if (err) {
-      return next(err);
-    }
-    // No Content
-    res.sendStatus(204);
-  });
-};
-
-module.exports.validateId = (req, res, next) => {
-  const idRegExp = /^[0-9a-fA-F]{24}$/;
-  if (!req.params.id.match(idRegExp)) {
-    // Bad Request
-    return res.sendStatus(400);
-  }
-  next();
-};
-
-module.exports.newPost = async (req, res) => {
-  const post = new Post({
-    title: req.user.title,
-    caption: req.user.caption,
-    url: req.user.url,
-    likes: [],
-    shares: [],
-    date: req.user.date,
-  });
-  try {
-    const doc = await post.save();
-    res.status(201).json(doc);
-  } catch (error) {
-    res.status(500).json(processErrors(error));
-  }
-};
-
-module.exports.patchPost = async (req, res) => {
-  const { body } = req;
-  console.dir(req.body);
-  console.dir(req.body.id);
-  Post.findById(req.body.id, (err, doc) => {
-    if (err) {
-      res.code(500);
-    } else {
-      if (body.poster === req.user.username) {
-        if (body.title) {
-          doc.title = body.title;
-        }
-        if (body.caption) {
-          doc.caption = body.caption;
-        }
-        if (body.url || body.url === '') {
-          doc.date = body.date;
-        }
-      }
-      if (body.like) {
-        doc.likes.push(body.like);
-      }
-      if (body.share) {
-        doc.shares.push(body.share);
-      }
-      doc.save();
-      res.json(doc);
-    }
-  });
-};
-
-module.exports.deletePost = (req, res) => {
-  const filter = {
-    _id: req.body.id,
-    poster: req.user.username,
-  };
-  Post.findOneAndDelete(filter, (err, doc) => {
-    if (err) {
-      res.status(500).json(Post.processErrors(err));
-    } else if (doc === null) {
-      res.json({
-        message: 'Error deleting post',
+  if (userId) {
+    User.find({ followers: userId }).then((users) => {
+      const followedUsers = users.map((u) => u._id);
+      Post.paginate({ poster: { $in: followedUsers } }, options, (_, result) => {
+        return res.status(200).json(result.docs);
       });
-    } else {
-      res.json({
-        message: 'Post successfully deleted',
-      });
-    }
-  });
-};
-
-module.exports.processErrors = (err) => {
-  const msg = {};
-  for (const key in err.errors) {
-    msg[key] = err.errors[key].message;
+    });
+  } else {
+    Post.paginate({}, options, (_, result) => {
+      return res.status(200).json(result.docs);
+    });
   }
-  return msg;
 };

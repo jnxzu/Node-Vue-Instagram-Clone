@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import TimelinePost from '../components/Posts/TimelinePost.vue';
 
 export default {

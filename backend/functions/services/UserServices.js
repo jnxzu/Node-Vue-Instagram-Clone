@@ -1,170 +1,99 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
 const User = require('../models/User.js');
-const bcrypt = require('../bcrypt');
 
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(403).json({
-    message: 'Not authenticated',
+module.exports.login = (req, res) => {
+  return res.json({
+    currentUserId: req.user._id,
+    currentUserName: req.user.username,
+    isAdmin: req.user.isAdmin,
   });
 };
 
-const authMiddleware = (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    res.status(401).send('You are not authenticated');
-  } else {
-    return next();
-  }
-};
+module.exports.register = (req, res) => {
+  const { username, email, password } = req.body;
 
-const processErrors = (err) => {
-  const msg = {};
-  for (const key in err.errors) {
-    msg[key] = err.errors[key].user;
-  }
-  return msg;
-};
-
-const saveUser = (user, res) => {
-  user.save((err, doc) => {
-    if (err) {
-      // Unprocessable Entity
-      res.status(422).json(processErrors(err));
-    } else {
-      res.json(doc);
-    }
-  });
-};
-
-module.exports.saveUser = saveUser;
-
-module.exports.create = (req, res) => {
-  const passwordHash = bcrypt.hash(req.body.password);
-  const user = new User({
-    username: req.body.username,
-    password: passwordHash,
-  });
-  saveUser(user, res);
-};
-
-module.exports.read = (req, res, next) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) {
-      next(err);
-    } else if (user) {
-      res.json(user);
-    } else {
-      // Not Found
-      res.sendStatus(404);
-    }
-  });
-};
-
-module.exports.list = (req, res, next) => {
-  User.find({ username: { $ne: req.body.current } }, (err, users) => {
-    if (err) {
-      next(err);
-    } else {
-      res.json(users);
-    }
-  });
-};
-
-module.exports.update = (req, res, next) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) {
-      next(err);
-    } else if (user) {
-      // eslint-disable-next-line no-param-reassign
-      user.username = req.body.username;
-      // eslint-disable-next-line no-param-reassign
-      user.password = req.body.password;
-      saveUser(user, res);
-    } else {
-      // Not Found
-      res.sendStatus(404);
-    }
-  });
-};
-
-module.exports.delete = (req, res, next) => {
-  User.findByIdAndRemove(req.params.id, (err) => {
-    if (err) {
-      return next(err);
-    }
-    // No Content
-    res.sendStatus(204);
-  });
-};
-
-module.exports.validateId = (req, res, next) => {
-  const idRegExp = /^[0-9a-fA-F]{24}$/;
-  if (!req.params.id.match(idRegExp)) {
-    // Bad Request
-    return res.sendStatus(400);
-  }
-  next();
-};
-
-module.exports.logout =
-  (isAuthenticated,
-  (req, res) => {
-    console.log('Logging out..');
-    req.logout();
-    res.status(200).json({
-      isAuth: req.isAuthenticated(),
-    });
-  });
-
-module.exports.login = async (req, res) => {
-  res.status(200).send({ isAuthenticated: true, user: req.user });
-};
-
-module.exports.loggeduser = (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json({
-      isAuthenticated: req.isAuthenticated(),
-      user: req.user,
-    });
-  } else {
-    res.json({
-      isAuthenticated: req.isAuthenticated(),
-      user: {},
-    });
-  }
-};
-
-module.exports.authMiddleware = authMiddleware;
-
-module.exports.processErrors = (err) => {
-  const msg = {};
-  for (const key in err.errors) {
-    msg[key] = err.errors[key].message;
-  }
-  return msg;
-};
-
-module.exports.register = async (req, res) => {
-  try {
-    const passwordHash = bcrypt.hash(req.body.password);
-    const user = new User({
-      username: req.body.username,
-      password: passwordHash,
-    });
-    console.log(req.body);
-    const doc = await user.save();
-    return res.json(doc);
-  } catch (err) {
-    if (!req.body.password) {
-      // Unprocessable Entity
-      return res.status(422).json({
-        password: 'Error – password must not be empty!',
+  User.findOne({ username }).then((userByUsername) => {
+    if (userByUsername) {
+      return res.status(400).json({
+        msg: 'Username already exists',
       });
     }
-    return res.status(422).json(User.processErrors(err));
+
+    return User.findOne({ email }).then((userByEmail) => {
+      if (userByEmail) {
+        return res.status(400).json({
+          msg: 'Email already exists',
+        });
+      }
+
+      const newUser = new User();
+      newUser.username = username;
+      newUser.email = email;
+      newUser.isAdmin = false;
+      newUser.avatarUrl = '';
+      newUser.posts = [];
+      newUser.following = [];
+      newUser.followers = [];
+      newUser.bio = '';
+      newUser.generateHash(password).then(function assignHash(hash) {
+        newUser.password = hash;
+      });
+
+      newUser.save().then(() => {
+        return res.status(201).json({
+          currentUserId: newUser._id,
+          currentUserName: newUser.username,
+          isAdmin: newUser.isAdmin,
+        });
+      });
+
+      return res.status(500);
+    });
+  });
+};
+
+module.exports.profile = (req, res) => {
+  const { username } = req.params;
+  User.findOne({ username })
+    .populate([
+      { path: 'posts', model: 'Post' },
+      { path: 'followers', model: 'User' },
+      { path: 'following', model: 'User' },
+    ])
+    .then((userByUsername) => {
+      if (userByUsername) {
+        return res.status(200).json({
+          bio: userByUsername.bio,
+          avatarUrl: userByUsername.avatarUrl,
+          posts: userByUsername.posts,
+          followers: userByUsername.followers,
+          following: userByUsername.following,
+        });
+      }
+      return res.status(404).json({
+        msg: 'User with this username does not exist.',
+      });
+    });
+};
+
+module.exports.followSwitch = (req, res) => {
+  const { sender, alreadyFollowing } = req.body;
+  const target = req.params.username;
+  if (alreadyFollowing) {
+    User.findByIdAndUpdate(sender, { $pull: { following: target } }).then(() =>
+      User.findByIdAndUpdate(target, { $pull: { followers: sender } }).then(() => res.status(200))
+    );
+  } else {
+    User.findByIdAndUpdate(sender, { $push: { following: target } }).then(() =>
+      User.findByIdAndUpdate(target, { $pull: { followers: sender } }).then(() => res.status(200))
+    );
   }
+};
+
+module.exports.search = (req, res) => {
+  const { phrase } = req.body;
+  User.find({ username: { $regex: phrase, $options: 'i' } })
+    .limit(5)
+    .then((results) => {
+      return res.json(results.map((r) => r.username));
+    });
 };
