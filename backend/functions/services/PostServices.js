@@ -1,174 +1,90 @@
-/* eslint-disable func-names */
-/* eslint-disable array-callback-return */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable consistent-return */
+const { Storage } = require('@google-cloud/storage');
 const Post = require('../models/Post');
-const User = require('../models/User')
-
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-      return next();
-  }
-  res.status(403).json({
-      message: "Not authenticated"
-  });
-};
-
+const User = require('../models/User');
 
 module.exports.newPost = (req, res) => {
-  const { description } = req.body;
-  const {user} = req.session.passport;
-  const newPost = new Post();
-  newPost.poster = user;
-  newPost.description = description;
-  // INSERT IMAGE UPLOAD HERE
-  newPost.imageUrl = "xxx";
-  newPost.isReported = false;
-  newPost.likes = [];
-  newPost.comments = [];
-  newPost.date = Date.now();
-  newPost.save().then(() => {
-    return res.status(201).json(newPost);
+  const storage = new Storage({
+    projectId: process.env.GCLOUD_PROJECT_ID,
+    keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,
   });
-}
+  const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
 
-module.exports.deletePost = (req, res) => {
-  const {id} = req.params;
-  Post.findByIdAndDelete({_id: id}, function(err) {
-    if (err) return res.json(err);
-    return res.json({
-      msg: "Deleted"
+  const { poster, desc } = req.body;
+  const { originalname, mimetype, buffer } = req.files[0];
+
+  const blob = bucket.file(originalname);
+  const blobWriter = blob.createWriteStream({
+    metadata: {
+      contentType: mimetype,
+    },
+  });
+  blobWriter.on('finish', () => {
+    const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(
+      blob.name
+    )}?alt=media`;
+    const newPost = new Post();
+    newPost.poster = poster;
+    newPost.description = desc;
+    newPost.imageUrl = publicUrl;
+    newPost.isReported = false;
+    newPost.likes = [];
+    newPost.comments = [];
+    newPost.date = new Date();
+
+    newPost.save().then(() => {
+      res.status(201);
     });
   });
-}
+  blobWriter.end(buffer);
+};
 
-module.exports.reportPost = (req, res) => {
-  const {id} = req.params;
-  Post.findById({ _id: id }).then((p) => {
-    if (p) {
-      const p1 = p;
-      if (p1.isReported === false) p1.isReported = true;
-      Post.findByIdAndUpdate(p._id, p1, (err) => {
-        if (err) return res.status(500).json({
-          msg: "error"
-        });
-        return res.status(418).json({
-          msg: "done"
-        });
-      });
-    } else return res.status(500).json({
-      msg: "Could not report post."
+module.exports.flagPost = (req, res) => {
+  const { id } = req.params;
+  const { reported } = req.body;
+  if (reported) {
+    Post.findByIdAndUpdate(id, { isReported: false }, () => {
+      return res.status(200);
     });
-  });
-}
-
-module.exports.likeSwitch = (req, res) => {
-  if (req.session.passport === undefined) res.status(401).json({ msg: 'Unauthorized' });
-  else {
-    const {id} = req.params;
-    const {user} = req.session.passport;
-    User.findById({ _id: user }).then((u) => {
-      if (u) {
-        Post.findById({ _id: id }).then((p) => {
-          if (p) {
-            const p1 = p;
-            const i1 = p1.likes.indexOf(u._id);
-            if (i1 > -1) {
-              p1.likes.splice(i1, 1);
-            } else {
-              p1.likes.push(u._id);
-            }
-            Post.findByIdAndUpdate(p._id, p1, (err) => {
-              if (err) return res.status(500).json({
-                msg: "error"
-              });
-              return res.status(418).json({
-                msg: "Thanks, we will look into this."
-              });
-            });
-          } else {
-            return res.status(404).json({
-              msg: "Post not found"
-            });
-          }
-        });
-      } else {
-        return res.status(400).json({
-          msg: "Please log in."
-        });
-      }
+  } else {
+    Post.findByIdAndUpdate(id, { isReported: true }, () => {
+      return res.status(200);
     });
   }
-}
+};
 
-module.exports.allPostsPaginated = (isAuthenticated, async (req, res) => {
-  const page = parseInt(req.params.page, 10);
-  const aggregateOptions = [];
-  const limit = 10;
+module.exports.likeSwitch = (req, res) => {
+  const postId = req.params.id;
+  const { userId, liked } = req.body;
+  if (liked) {
+    Post.findByIdAndUpdate(postId, { $pull: { likes: userId } }, () => {
+      return res.status(200);
+    });
+  } else {
+    Post.findByIdAndUpdate(postId, { $push: { likes: userId } }, () => {
+      return res.status(200);
+    });
+  }
+};
+
+module.exports.timeline = (req, res) => {
+  const { userId, currentPage } = req.body;
+
   const options = {
-    page,
-    limit,
+    populate: ['poster', 'likes'],
+    page: currentPage,
+    limit: 5,
   };
-  aggregateOptions.push();
-  const myAggregate = Post.aggregate(aggregateOptions);
-  const result = await Post.aggregatePaginate(myAggregate, options);
-  res.status(200).json(result);
-});
 
-
-module.exports.dashboard = (isAuthenticated, async (req, res) => {
-    const page = parseInt(req.params.page, 10);
-    const aggregateOptions = [];
-    const limit = 10;
-    const options = {
-      page,
-      limit,
-    };
-    // THIS PROBABLY WONT WORK RIP 
-    const match = {
-      $or: { poster: [{followers: req.user.username}]},
-    };
-    aggregateOptions.push({ $match: match });
-    const myAggregate = Post.aggregate(aggregateOptions);
-    const result = await Post.aggregatePaginate(myAggregate, options);
-    res.status(200).json(result);
-});
-
-module.exports.mypostsPage = (isAuthenticated, async (req, res) => {
-    const page = parseInt(req.params.page, 10);
-    const aggregateOptions = [];
-    const limit = 10;
-    const options = {
-      page,
-      limit,
-    };
-    const match = {
-      $or: { poster: req.user.username },
-    };
-    aggregateOptions.push({ $match: match });
-    const myAggregate = Post.aggregate(aggregateOptions);
-    const result = await Post.aggregatePaginate(myAggregate, options);
-    res.status(200).json(result);
-  });
-
-module.exports.mylikesPage = (isAuthenticated, async (req, res) => {
-    const page = parseInt(req.params.page, 10);
-    const aggregateOptions = [];
-
-    const limit = 3;
-    const options = {
-      page,
-      limit,
-    };
-
-    const match = {
-      $or: [{ likes: req.user.username }],
-    };
-    aggregateOptions.push({ $match: match });
-    const myAggregate = Post.aggregate(aggregateOptions);
-    const result = await Post.aggregatePaginate(myAggregate, options);
-    res.status(200).json(result);
-});
+  if (userId) {
+    User.find({ followers: userId }).then((users) => {
+      const followedUsers = users.map((u) => u._id);
+      Post.paginate({ poster: { $in: followedUsers } }, options, (_, result) => {
+        return res.status(200).json(result.docs);
+      });
+    });
+  } else {
+    Post.paginate({}, options, (_, result) => {
+      return res.status(200).json(result.docs);
+    });
+  }
+};

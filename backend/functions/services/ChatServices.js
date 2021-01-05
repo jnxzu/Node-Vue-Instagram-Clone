@@ -1,52 +1,30 @@
-/* eslint-disable consistent-return */
 const moment = require('moment');
 const Chat = require('../models/Chat');
-const User = require('../models/User');
 
 module.exports.newMessage = (req, res) => {
-      const msg = {
-        author: req.user.id,
-        content: req.body.content,
-        date: moment(),
-      };
-      User.findOne({ username: req.body.target }).then((messageTarget) => {
-        Chat.findOneAndUpdate(
-          {
-            users: { $all: [req.user.id, messageTarget._id] },
-          },
-          { $push: { messages: msg } },
-        ).then(() => {
-          console.log(
-            `${moment().format('MMMM Do YYYY, h:mm:ss a')} - ${
-              req.user.username
-            } sent '${msg.content}' to ${messageTarget.username}.`,
-          );
-          res.send({ clear: '' });
-        });
-      });
-}
+  const { author, content, target } = req.body;
+
+  const msg = {
+    author,
+    content,
+    date: moment(),
+  };
+
+  Chat.findOneAndUpdate({ users: { $all: [author, target] } }, { $push: { messages: msg } }).then(
+    () => {
+      // let the other guy know to reload messages (SOCKETS)
+      return res.status(201);
+    }
+  );
+};
 
 module.exports.getMessages = (req, res) => {
-    User.findOne({ username: req.body.target }).then((messageTarget) => {
-      Chat.findOne({ users: { $all: [req.user.id, messageTarget._id] } })
-        .populate('messages.author')
-        .then((chat) => {
-          if (chat) res.send({ messages: chat.messages });
-          else {
-            const newChat = new Chat();
-            newChat.users = [req.user.id, messageTarget._id];
-            newChat.messages = [];
-            newChat.save().then((newC) => {
-              messageTarget.chats.push(newC._id);
-              messageTarget.save().then(() => {
-                User.findOneAndUpdate(
-                  { username: req.user.username },
-                  { $push: { chats: newC._id } },
-                ).then(res.send({ messages: newC.messages }));
-              });
-            });
-          }
-        });
-    });
-}
-  
+  const { chatId } = req.params;
+  Chat.findById(chatId).then((chat) => {
+    return res.status(200).json(chat);
+  });
+};
+
+module.exports.newChat = (req, res) => {};
+
+module.exports.getChats = (req, res) => {};

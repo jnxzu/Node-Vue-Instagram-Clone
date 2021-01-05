@@ -34,12 +34,22 @@
 </template>
 
 <script>
+import axios from 'axios';
 import TimelinePost from '../components/Posts/TimelinePost.vue';
 
 export default {
   name: 'Timeline',
   components: {
     TimelinePost,
+  },
+  mounted() {
+    const url = `${
+      process.env.NODE_ENV === 'production'
+        ? process.env.VUE_APP_API_PROD
+        : process.env.VUE_APP_API_DEV
+    }/PostRoutes/timeline`;
+
+    axios.get(url, { userId: '', currentPage: 1 }).then((res) => console.log(res));
   },
 };
 </script>

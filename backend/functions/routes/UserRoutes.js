@@ -1,33 +1,24 @@
-/* eslint-disable consistent-return */
-const express = require('express');
-
-const router = express.Router();
-// const bcrypt = require('bcryptjs');
+const router = require('express').Router();
 const passport = require('passport');
-const userServices = require('../services/UserServices')
+const { login, register, profile, followSwitch, search } = require('../services/UserServices');
 
-// Wyłapywanie odwołań nieobsługiwanymi metodami HTTP
 const rejectMethod = (_req, res) => {
-  // Method Not Allowed
   res.sendStatus(405);
 };
 
 // LOGIN
-router.route('/login').post(passport.authenticate('local'), userServices.login).all(rejectMethod);
+router.route('/login').post(passport.authenticate('local'), login).all(rejectMethod);
 
 // REGISTER
-router.route('/register').post(userServices.register).all(rejectMethod);
-
-// LOGOUT
-router.route('/logout').get(userServices.logout).all(rejectMethod);
+router.route('/register').post(register).all(rejectMethod);
 
 // PROFILE
-router.route('/profile/:username').get(userServices.logout).all(rejectMethod);
+router.route('/profile/:username').get(profile).all(rejectMethod);
 
 // FOLLOW/UNFOLLOW
-router.route('/profile/:username/f').get(userServices.follow).all(rejectMethod);
+router.route('/profile/:username/f').patch(followSwitch).all(rejectMethod);
 
 // USER SEARCH
-router.route('/search').post(userServices.search).all(rejectMethod);
+router.route('/search').get(search).all(rejectMethod);
 
 module.exports = router;

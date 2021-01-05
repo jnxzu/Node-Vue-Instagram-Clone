@@ -1,24 +1,20 @@
 const router = require('express').Router();
-const chatservices = require('../services/ChatServices');
+const { newMessage, getMessages, newChat, getChats } = require('../services/ChatServices');
 
-// Wyłapywanie odwołań nieobsługiwanymi metodami HTTP
 const rejectMethod = (_req, res) => {
-    // Method Not Allowed
-    res.sendStatus(405);
-  };
-  
-// eslint-disable-next-line consistent-return
-const isAuth = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.status(403).json({
-      message: 'Not authenticated',
-    });
+  res.sendStatus(405);
 };
 
-router.route('/new').post(isAuth, chatservices.newMessage).all(rejectMethod);
+// NEW MESSAGE
+router.route('/newMsg').post(newMessage).all(rejectMethod);
 
-router.route('/all').get(isAuth, chatservices.getMessages).all(rejectMethod);
+// GET MESSAGES
+router.route('/getMsg/:chatId').get(getMessages).all(rejectMethod);
+
+// NEW CHAT
+router.route('/newChat').post(newChat).all(rejectMethod);
+
+// GET CHATS
+router.route('/getChats').get(getChats).all(rejectMethod);
 
 module.exports = router;
