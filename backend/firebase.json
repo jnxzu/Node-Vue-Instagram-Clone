@@ -40,6 +40,10 @@
       {
         "source": "/post/:id/report",
         "function": "api"
+      },
+      {
+        "source": "/post/:id",
+        "function": "api"
       }
     ]
   }
