@@ -4,6 +4,42 @@
       {
         "source": "/jebacpis",
         "function": "api"
+      },
+      {
+        "source": "/hw",
+        "function": "api"
+      },
+      {
+        "source": "/login",
+        "function": "api"
+      },
+      {
+        "source": "/register",
+        "function": "api"
+      },
+      {
+        "source": "/profile/:username",
+        "function": "api"
+      },
+      {
+        "source": "/profile/:username/f",
+        "function": "api"
+      },
+      {
+        "source": "/logout",
+        "function": "api"
+      },
+      {
+        "source": "/search",
+        "function": "api"
+      },
+      {
+        "source": "/post",
+        "function": "api"
+      },
+      {
+        "source": "/post/:id/report",
+        "function": "api"
       }
     ]
   }

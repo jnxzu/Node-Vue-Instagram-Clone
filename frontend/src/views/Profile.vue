@@ -1,38 +1,38 @@
 <template>
-  <div class="profile">
+  <div class="profile" v-if="ready">
     <div class="info">
-      <img class="info__avatar" src="https://placekitten.com/150/150" />
+      <img class="info__avatar" :src="userdata.avatarUrl || '/img/profile-default.png'" />
       <div class="info__contents">
         <div class="ts-mobile-helper">
-          <img class="mobile-img" src="https://placekitten.com/150/150" />
+          <img class="mobile-img" :src="userdata.avatarUrl || '/img/profile-default.png'" />
           <div class="ts-mobile-helper-right">
             <div class="info__contents__top">
-              <h2>{{ $route.params.username }}</h2>
-              <button>Follow</button>
-              <button>Message</button>
+              <h2>{{ username }}</h2>
+              <button v-if="currentUserName !== username && isAuth" @click="follow">
+                {{ followedByMe ? 'Unfollow' : 'Follow' }}
+              </button>
+              <button v-if="currentUserName !== username && isAuth">Message</button>
             </div>
             <div class="info__contents__stats">
               <div class="info__contents__stats__group">
-                <h3>10</h3>
+                <h3>{{ userdata.posts.length }}</h3>
                 <h5>posts</h5>
               </div>
               <div class="info__contents__stats__group">
-                <h3>100</h3>
+                <h3>{{ userdata.followers.length }}</h3>
                 <h5>followers</h5>
               </div>
               <div class="info__contents__stats__group">
-                <h3>1000</h3>
+                <h3>{{ userdata.following.length }}</h3>
                 <h5>following</h5>
               </div>
             </div>
           </div>
         </div>
         <div class="info__contents__desc">
-          <h3>{{ $route.params.username }}</h3>
+          <h3>{{ username }}</h3>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi maiores, recusandae
-            similique architecto labore velit quaerat facere deserunt ut, officia tempora,
-            accusantium ad sapiente? Eius reprehenderit libero qui voluptatibus voluptate!
+            {{ userdata.bio }}
           </p>
         </div>
         <div class="info__contents__followed">
@@ -41,31 +41,84 @@
       </div>
     </div>
     <div class="posts">
-      <div class="posts__row">
-        <profile-post />
-        <profile-post />
-        <profile-post />
-      </div>
-      <div class="posts__row">
-        <profile-post />
-        <profile-post />
-        <profile-post />
-      </div>
-      <div class="posts__row">
-        <profile-post />
-        <profile-post />
+      <div class="posts__row" v-for="(chunk, index) in slicedPosts" :key="index">
+        <profile-post v-for="post in chunk" :key="post.id" />
       </div>
     </div>
   </div>
+  <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
+/* eslint-disable no-return-assign */
+import axios from 'axios';
+import _ from 'lodash';
+import { mapState } from 'vuex';
+
 import ProfilePost from '../components/Posts/ProfilePost.vue';
 
 export default {
   name: 'Profile',
   components: {
     ProfilePost,
+  },
+  data() {
+    return {
+      username: this.$route.params.username,
+      userdata: {
+        bio: '',
+        avatarUrl: '',
+        posts: [],
+        followers: [],
+        following: [],
+      },
+      ready: false,
+    };
+  },
+  computed: {
+    ...mapState({
+      currentUserName: (state) => state.user.currentUserName,
+      isAuth: (state) => state.isAuth,
+    }),
+    followedByMe() {
+      return this.userdata.followers.map((u) => u.username).indexOf(this.currentUserName) > -1;
+    },
+    slicedPosts() {
+      return _.chunk(this.userdata.posts, 3);
+    },
+  },
+  methods: {
+    follow() {
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/UserRoutes/follow`;
+
+      axios.patch(url, { me: this.currentUserName, target: this.username }).then((res) => {
+        if (res.data.add) {
+          this.userdata.followers.push(res.data.new);
+        } else {
+          const i = this.userdata.followers.indexOf(res.data.new);
+          this.userdata.followers.splice(i, 1);
+        }
+      });
+    },
+  },
+  mounted() {
+    const url = `${
+      process.env.NODE_ENV === 'production'
+        ? process.env.VUE_APP_API_PROD
+        : process.env.VUE_APP_API_DEV
+    }/UserRoutes/profile/${this.username}`;
+
+    axios
+      .get(url)
+      .then((res) => {
+        this.userdata = res.data;
+        this.ready = true;
+      })
+      .catch(() => this.$router.push('/404'));
   },
 };
 </script>
@@ -131,7 +184,7 @@ export default {
           padding: 4px 8px;
           font-weight: 700;
           cursor: pointer;
-          transition: 0.25s all;
+          transition: all 0.25s ease-out;
 
           &:hover {
             padding: 4px 10px;

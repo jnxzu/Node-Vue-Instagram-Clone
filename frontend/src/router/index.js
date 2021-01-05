@@ -7,7 +7,10 @@ import Post from '../views/Post.vue';
 import Messages from '../views/Messages.vue';
 import Register from '../views/Register.vue';
 import Login from '../views/Login.vue';
+import Logout from '../views/Logout.vue';
 import Admin from '../views/Admin.vue';
+import NotFound from '../views/NotFound.vue';
+import NewPost from '../views/NewPost.vue';
 
 Vue.use(VueRouter);
 
@@ -43,9 +46,24 @@ const routes = [
     component: Login,
   },
   {
+    path: '/logout',
+    name: 'Logout',
+    component: Logout,
+  },
+  {
     path: '/admin',
     name: 'Admin',
     component: Admin,
+  },
+  {
+    path: '/new',
+    name: 'New Post',
+    component: NewPost,
+  },
+  {
+    path: '/*',
+    name: 'NotFound',
+    component: NotFound,
   },
 ];
 

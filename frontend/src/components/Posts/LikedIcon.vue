@@ -1,12 +1,17 @@
 <template>
-  <i @click="() => (this.likedVal = !this.likedVal)" :class="classObj"></i>
+  <i @click="toggleLike" :class="classObj" v-tooltip="likedVal ? 'Unlike' : 'Like'"></i>
 </template>
 
 <script>
+import axios from 'axios';
+import _ from 'lodash';
+import { mapState } from 'vuex';
+
 export default {
   name: 'LikedIcon',
   props: {
     liked: Boolean,
+    postId: String,
   },
   data() {
     return {
@@ -23,6 +28,23 @@ export default {
         colored: this.likedVal,
       };
     },
+    ...mapState({ currentUserId: (state) => state.user.currentUserId }),
+  },
+  methods: {
+    toggleLike: _.debounce(function tL() {
+      if (this.currentUserId) {
+        const url = `${
+          process.env.NODE_ENV === 'production'
+            ? process.env.VUE_APP_API_PROD
+            : process.env.VUE_APP_API_DEV
+        }/PostRoutes/post/${this.postId}`;
+
+        this.likedVal = !this.likedVal;
+        axios.patch(url, { userId: this.currentUserId, liked: !this.likedVal });
+      } else {
+        this.$router.push({ name: 'Login' });
+      }
+    }, 300),
   },
 };
 </script>
@@ -30,7 +52,7 @@ export default {
 <style lang="scss" scoped>
 i {
   cursor: pointer;
-  transition: 0.25s ease-out color;
+  transition: color 0.25s ease-out;
 }
 
 .colored {

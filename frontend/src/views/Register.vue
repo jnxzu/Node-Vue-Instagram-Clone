@@ -1,29 +1,93 @@
 <template>
-  <div class="register">
+  <div class="register" v-if="ready">
     <img src="/img/logo.png" />
     <h1 class="register__title">Camra</h1>
-    <form @submit.prevent="">
+    <form @submit.prevent="register">
       <div>
-        <input type="text" name="login" placeholder="user" />
+        <input v-model="username" type="text" name="login" placeholder="user" ref="usernameInput" />
         <label for="login">login</label>
       </div>
       <div>
-        <input type="email" name="email" placeholder="user@email.com" />
+        <input
+          v-model="email"
+          type="email"
+          name="email"
+          placeholder="user@email.com"
+          ref="emailInput"
+        />
         <label for="email">email</label>
       </div>
       <div>
-        <input type="password" name="password" />
+        <input v-model="password" type="password" name="password" ref="passwordInput" />
         <label for="password">password</label>
       </div>
-      <input class="submit" type="submit" value="Sign in" />
+      <input class="submit" type="submit" value="Sign up" />
     </form>
     <span>Already have an account? <router-link to="/login">Sign in</router-link> instead.</span>
   </div>
+  <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
+import axios from 'axios';
+import { mapActions, mapState } from 'vuex';
+
 export default {
   name: 'Register',
+  data() {
+    return {
+      username: '',
+      email: '',
+      password: '',
+      timeout: null,
+      ready: false,
+    };
+  },
+  computed: { ...mapState({ auth: (state) => state.isAuth }) },
+  methods: {
+    ...mapActions(['updateUserState']),
+    checkAuth() {
+      if (this.auth) this.$router.push({ name: 'Timeline' });
+      else this.ready = true;
+    },
+    register() {
+      this.$refs.usernameInput.classList.remove('wrong');
+      this.$refs.emailInput.classList.remove('wrong');
+      this.$refs.passwordInput.classList.remove('wrong');
+
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/UserRoutes/register`;
+
+      this.ready = false;
+
+      axios
+        .post(url, {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+        })
+        .then((res) => {
+          this.updateUserState(res.data);
+          this.$router.push({ name: 'Timeline' });
+        })
+        .catch(() => {
+          this.ready = true;
+
+          this.$refs.usernameInput.classList.add('wrong');
+          this.$refs.emailInput.classList.add('wrong');
+          this.$refs.passwordInput.classList.add('wrong');
+        });
+    },
+  },
+  created() {
+    this.timeout = setTimeout(this.checkAuth, 500);
+  },
+  destroyed() {
+    clearTimeout(this.timeout);
+  },
 };
 </script>
 
@@ -82,6 +146,10 @@ export default {
         padding: 5px 10px;
         width: 200px;
 
+        &.wrong {
+          border: 1px solid red;
+        }
+
         &:focus {
           outline: none;
         }
@@ -90,7 +158,7 @@ export default {
       label {
         font-family: 'Amatic SC', cursive;
         font-size: x-large;
-        transition: 0.25s ease-out all;
+        transition: all 0.25s ease-out;
       }
 
       input:focus ~ label,
@@ -100,14 +168,14 @@ export default {
     }
 
     .submit {
-      background: #fff;
-      color: #000;
+      background: var(--accent);
       border: 1px solid var(--border);
+      border-radius: 0.25rem;
       font-size: larger;
       width: 100px;
-      padding: 5px 15px;
+      padding: 0.25rem;
       cursor: pointer;
-      transition: 0.25s ease-out all;
+      transition: all 0.25s ease-out;
     }
   }
 

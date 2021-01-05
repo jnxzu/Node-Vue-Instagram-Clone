@@ -1,16 +1,15 @@
 <template>
-  <div :class="{ navicon: !profile, navprofile: profile, active: isActive }" v-if="isRoute">
+  <div :class="{ navicon: true, active: isActive }">
     <router-link :to="routeTarget">
-      <img :src="'/img/' + imgSrc" :alt="imgAlt" />
+      <img :src="'/img/' + imgSrc" :alt="imgAlt" :class="{ 'profile-pic': profile }" />
       <div class="navicon__selection"></div>
     </router-link>
-  </div>
-  <div :class="{ navicon: !profile, navprofile: profile }" v-else>
-    <img :src="'/img/' + imgSrc" :alt="imgAlt" />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'NavIcon',
   props: {
@@ -18,12 +17,15 @@ export default {
     imgSrc: String,
     imgAlt: String,
     routeTarget: String,
-    isRoute: Boolean,
   },
   computed: {
     isActive() {
+      if (this.profile) return this.$route.params.username === this.currentUser;
       return this.$route.name === this.imgAlt;
     },
+    ...mapState({
+      currentUser: (state) => state.user.currentUserName,
+    }),
   },
 };
 </script>
@@ -38,6 +40,8 @@ export default {
   cursor: pointer;
   height: 100%;
 
+  transition: transform 0.25s ease-out;
+
   img {
     height: 30px;
   }
@@ -46,7 +50,7 @@ export default {
     height: 3px;
     background: var(--accent);
     opacity: 0;
-    transition: 0.25s ease all;
+    transition: opacity 0.25s ease-out;
     width: 100%;
   }
 
@@ -58,32 +62,9 @@ export default {
   }
 }
 
-.navprofile {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-right: 15px;
-  height: 100%;
-
-  img {
-    height: 30px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-  }
-
-  &__selection {
-    height: 3px;
-    background: var(--accent);
-    opacity: 0;
-    transition: 0.25s ease all;
-  }
-
-  &.active,
-  &:hover {
-    .navicon__selection {
-      opacity: 1;
-    }
-  }
+.profile-pic {
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
 }
 </style>

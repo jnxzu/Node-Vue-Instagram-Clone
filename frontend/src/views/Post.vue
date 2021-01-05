@@ -6,12 +6,12 @@
       </div>
       <div class="post__info">
         <div class="post__info__top">
-          <img src="/img/profile.jpg" />
+          <img src="/img/profile-default.png" />
           <div class="post__info__top__text">
             <router-link to="/u/user">user</router-link>
             <span>October 25, 2019</span>
           </div>
-          <i class="far fa-flag"></i>
+          <img class="report" src="/img/report-icon.png" v-tooltip="'Report'" />
         </div>
         <div class="post__info__comments">
           <post-comment />
@@ -84,6 +84,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
 
     @media (max-width: 974px) {
       max-height: 60vh;
@@ -118,6 +120,11 @@ export default {
       img {
         height: 35px;
         border-radius: 50%;
+
+        &.report {
+          cursor: pointer;
+          height: 20px;
+        }
       }
 
       &__text {
@@ -184,7 +191,7 @@ export default {
           background: none;
           border: none;
           opacity: 0.5;
-          transition: 0.25s ease all;
+          transition: all 0.25s ease-out;
           font-weight: 700;
           cursor: pointer;
 
