@@ -12,7 +12,7 @@ module.exports.newMessage = (req, res) => {
 
   Chat.findOneAndUpdate({ users: { $all: [author, target] } }, { $push: { messages: msg } }).then(
     () => {
-      // let the other guy know to reload messages (SOCKETS)
+      // TODO poinformowac odbiorce zeby sobie odswiezyl wiadomosci czyli func ponizej (za pomoca socketow)
       return res.status(201);
     }
   );
@@ -25,6 +25,8 @@ module.exports.getMessages = (req, res) => {
   });
 };
 
+// TODO
 module.exports.newChat = (req, res) => {};
 
+// TODO
 module.exports.getChats = (req, res) => {};
