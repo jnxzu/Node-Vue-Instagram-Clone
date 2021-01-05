@@ -19,6 +19,6 @@ router.route('/profile/:username').get(profile).all(rejectMethod);
 router.route('/profile/:username/f').patch(followSwitch).all(rejectMethod);
 
 // USER SEARCH
-router.route('/search').get(search).all(rejectMethod);
+router.route('/search').post(search).all(rejectMethod);
 
 module.exports = router;

@@ -94,6 +94,6 @@ module.exports.search = (req, res) => {
   User.find({ username: { $regex: phrase, $options: 'i' } })
     .limit(5)
     .then((results) => {
-      return res.json(results.map((r) => r.username));
+      return res.json(results);
     });
 };
