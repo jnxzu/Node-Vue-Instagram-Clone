@@ -56,7 +56,7 @@ module.exports.getPost = (req, res) => {
   const { id } = req.params;
   Post.findById(id).then((post) => {
     if (post) return res.status(200).json(post);
-    else return res.status(404).json({
+    return res.status(404).json({
       msg: "Post not found"
     });
   });
