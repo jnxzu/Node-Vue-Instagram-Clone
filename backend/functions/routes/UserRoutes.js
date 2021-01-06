@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const passport = require('passport');
-const { login, register, profile, followSwitch, search } = require('../services/UserServices');
+const { login, register, profile, followSwitch, search, editBio, changeAvatar } = require('../services/UserServices');
 
 const rejectMethod = (_req, res) => {
   res.sendStatus(405);
@@ -20,5 +20,11 @@ router.route('/profile/:username/f').patch(followSwitch).all(rejectMethod);
 
 // USER SEARCH
 router.route('/search').post(search).all(rejectMethod);
+
+// EDIT BIO
+router.route('/profile/:username/editBio').patch(editBio).all(rejectMethod);
+
+// CHANGE AVATAR
+router.route('/profile/:username/changeAvatar').patch(changeAvatar).all(rejectMethod);
 
 module.exports = router;

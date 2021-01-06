@@ -25,8 +25,21 @@ module.exports.getMessages = (req, res) => {
   });
 };
 
-// TODO
-module.exports.newChat = (req, res) => {};
+module.exports.newChat = (req, res) => {
+  const {users} = req.body;
+  const newChat = new Chat();
+  newChat.users = users;
+  newChat.save().then(() => {
+    res.status(201);
+  });
+};
 
-// TODO
-module.exports.getChats = (req, res) => {};
+
+module.exports.getChats = (req, res) => {
+  const { user } = req.body;
+  if(user){
+    Chat.find({users: user}).then((chats) => {
+      return res.status(200).json(chats)
+    })
+  }
+};
