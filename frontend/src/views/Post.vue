@@ -49,6 +49,7 @@ export default {
   },
   data() {
     return {
+      ready: false,
       image: '',
       poster: {},
       comments: [],
