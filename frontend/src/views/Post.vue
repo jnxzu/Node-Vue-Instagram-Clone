@@ -28,6 +28,7 @@
             :avatar="comment.author.avatarUrl"
             :poster="comment.author.username"
             :content="comment.content"
+            :date="comment.date"
           />
         </div>
         <div class="post__info__controls">
