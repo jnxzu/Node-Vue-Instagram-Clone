@@ -10,7 +10,6 @@
           search;
         }
       "
-      @blur="() => (results = [])"
     />
     <div :class="{ navsearch__results: true, notempty: hasResults }">
       <div @click="redirect(result.username)" v-for="(result, index) in results" :key="index">
