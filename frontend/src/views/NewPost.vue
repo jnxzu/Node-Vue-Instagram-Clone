@@ -100,6 +100,10 @@ export default {
       visibility: hidden;
       border: 1px solid var(--border);
 
+      @media (max-width: 700px) {
+        max-height: 50vh;
+      }
+
       &.uploaded {
         visibility: visible;
       }
