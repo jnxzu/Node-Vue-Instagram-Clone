@@ -32,7 +32,7 @@ module.exports.newPost = (req, res) => {
     newPost.date = new Date();
 
     newPost.save().then(() => {
-      res.status(201);
+      res.status(201).json(newPost);
     });
   });
   blobWriter.end(buffer);
@@ -73,6 +73,7 @@ module.exports.timeline = (req, res) => {
     populate: ['poster', 'likes'],
     page: currentPage,
     limit: 5,
+    sort: { date: -1 },
   };
 
   if (userId) {
