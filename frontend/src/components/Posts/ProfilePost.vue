@@ -1,18 +1,24 @@
 <template>
-  <div class="post" @click="goToPost('test')">
+  <div class="post" @click="goToPost(postId)">
     <div class="post__overlay">
       <i class="fas fa-heart"></i>
-      <span>5</span>
+      <span>{{ likes.length }}</span>
       <i class="fas fa-comment"></i>
-      <span>5</span>
+      <span>{{ comments.length }}</span>
     </div>
-    <img src="https://placekitten.com/215/215" />
+    <img :src="image" />
   </div>
 </template>
 
 <script>
 export default {
   name: 'ProfilePost',
+  props: {
+    postId: String,
+    image: String,
+    likes: Array,
+    comments: Array,
+  },
   methods: {
     goToPost(id) {
       this.$router.push({ name: 'Post', id });
@@ -23,10 +29,17 @@ export default {
 
 <style lang="scss" scoped>
 .post {
-  flex-grow: 1;
-  max-width: 31%;
   position: relative;
   cursor: pointer;
+  height: 30vw;
+  max-height: 250px;
+  width: 30vw;
+  max-width: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--border);
+  background: #fff;
 
   &__overlay {
     background: black;
@@ -60,9 +73,9 @@ export default {
   }
 
   img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
   }
 }
 </style>

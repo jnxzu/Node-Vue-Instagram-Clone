@@ -42,7 +42,14 @@
     </div>
     <div class="posts">
       <div class="posts__row" v-for="(chunk, index) in slicedPosts" :key="index">
-        <profile-post v-for="post in chunk" :key="post.id" />
+        <profile-post
+          v-for="post in chunk"
+          :key="post._id"
+          :postId="post._id"
+          :image="post.imageUrl"
+          :likes="post.likes"
+          :comments="post.comments"
+        />
       </div>
     </div>
   </div>
@@ -248,10 +255,14 @@ export default {
     &__row {
       display: flex;
       justify-content: center;
-      gap: 25px;
+      padding: 0 50px;
+      gap: 5px;
+      margin-bottom: 5px;
 
       @media (max-width: 600px) {
-        gap: 3px;
+        gap: 5px;
+        padding: 0 20px;
+        justify-content: space-between;
       }
     }
   }
