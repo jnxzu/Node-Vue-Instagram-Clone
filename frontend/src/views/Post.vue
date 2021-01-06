@@ -173,7 +173,8 @@ export default {
 
   @media (max-width: 700px) {
     margin: 0;
-    height: 100%;
+    height: calc(100vh - 55px);
+    max-height: 100%;
   }
 }
 
@@ -206,8 +207,12 @@ export default {
     }
 
     img {
-      max-height: 100%;
+      max-height: 70vh;
       max-width: 100%;
+
+      @media (max-width: 1000px) {
+        max-height: 50vh;
+      }
     }
   }
 
@@ -221,6 +226,10 @@ export default {
 
     @media (max-width: 1000px) {
       width: 100%;
+    }
+
+    @media (max-width: 700px) {
+      flex-grow: 1;
     }
 
     &__top {
