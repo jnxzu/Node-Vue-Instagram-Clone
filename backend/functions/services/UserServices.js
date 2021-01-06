@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+const { Storage } = require('@google-cloud/storage');
 const User = require('../models/User.js');
 
 module.exports.login = (req, res) => {
@@ -97,4 +99,46 @@ module.exports.search = (req, res) => {
     .then((results) => {
       return res.json(results);
     });
+};
+
+module.exports.editBio = (req, res) => {
+    console.dir(req.body);
+    User.updateOne({ _id: req.body._id }, { $set: { bio: req.body.bio} }, (error, doc) => {
+        if (error) {
+            res.status(500).json(error);
+        } else {
+            res.status(201).json(doc);
+        }
+    });
+};
+
+module.exports.changeAvatar = (req, res) => {
+  console.dir(req.body);
+  const storage = new Storage({
+    projectId: process.env.GCLOUD_PROJECT_ID,
+    keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,
+  });
+  const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
+
+  const { originalname, mimetype, buffer } = req.files[0];
+
+  const blob = bucket.file(originalname);
+  const blobWriter = blob.createWriteStream({
+    metadata: {
+      contentType: mimetype,
+    },
+  });
+  blobWriter.on('finish', () => {
+    const url = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(
+      blob.name
+    )}?alt=media`;
+    User.updateOne({ _id: req.body._id }, { $set: { avatarUrl: url} }, (error, doc) => {
+      if (error) {
+          res.status(500).json(error);
+      } else {
+          res.status(201).json(doc);
+      }
+  });
+  });
+  blobWriter.end(buffer);
 };

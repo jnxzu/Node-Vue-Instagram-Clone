@@ -40,6 +40,18 @@
       {
         "source": "/post/:id/report",
         "function": "api"
+      },
+      {
+        "source": "/post/:id",
+        "function": "api"
+      },
+      {
+        "source": "/post/:id/comment",
+        "function": "api"
+      },
+      {
+        "source": "/post/:id/comment/:commentId",
+        "function": "api"
       }
     ]
   }
