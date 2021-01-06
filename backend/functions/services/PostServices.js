@@ -54,12 +54,16 @@ module.exports.flagPost = (req, res) => {
 
 module.exports.getPost = (req, res) => {
   const { id } = req.params;
-  Post.findById(id).then((post) => {
-    if (post) return res.status(200).json(post);
-    return res.status(404).json({
-      msg: "Post not found"
+  Post.findById(id)
+    .populate('poster')
+    .populate('likes')
+    .populate('comments.author')
+    .then((post) => {
+      if (post) return res.status(200).json(post);
+      return res.status(404).json({
+        msg: 'Post not found',
+      });
     });
-  });
 };
 
 module.exports.likeSwitch = (req, res) => {
@@ -106,7 +110,7 @@ module.exports.addComment = (req, res) => {
   const newComm = {
     author: userId,
     content,
-    date: new Date()
+    date: new Date(),
   };
   Post.findByIdAndUpdate(id, { $push: { comments: newComm } }).then(() => {
     return res.status(200).json('Comment added.');
@@ -116,7 +120,7 @@ module.exports.addComment = (req, res) => {
 module.exports.removeComment = (req, res) => {
   const { id, commentId } = req.params;
   // const { userId } = req.body;
-  Post.findByIdAndUpdate(id, { $pull: { comments: {_id: commentId} } }).then(() => {
+  Post.findByIdAndUpdate(id, { $pull: { comments: { _id: commentId } } }).then(() => {
     return res.status(200).json('Comment removed.');
   });
 };

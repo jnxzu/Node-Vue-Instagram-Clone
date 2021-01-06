@@ -1,20 +1,31 @@
 <template>
   <div class="comment">
-    <div class="comment__avatar"><img src="https://placekitten.com/150/150" /></div>
+    <div class="comment__avatar"><img :src="avatar || '/img/profile-default.png'" /></div>
     <div class="comment__content">
       <p>
-        <router-link to="/u/test">user </router-link>Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Debitis, sit quam suscipit minus saepe quisquam assumenda voluptatum et?
-        Odit voluptate impedit a aperiam dolores dolorum consequatur cumque iusto eaque rerum.
+        <router-link :to="`/u/${poster}`">{{ poster }} </router-link>{{ content }}
       </p>
-      <span>10h ago</span>
+      <span>{{ formatDate }}</span>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'PostComment',
+  props: {
+    avatar: String,
+    poster: String,
+    content: String,
+    date: Date,
+  },
+  computed: {
+    formatDate() {
+      return moment(this.date).fromNow();
+    },
+  },
 };
 </script>
 

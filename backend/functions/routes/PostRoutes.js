@@ -1,5 +1,13 @@
 const router = require('express').Router();
-const { newPost, flagPost, likeSwitch, timeline, getPost, addComment, removeComment } = require('../services/PostServices');
+const {
+  newPost,
+  flagPost,
+  likeSwitch,
+  timeline,
+  getPost,
+  addComment,
+  removeComment,
+} = require('../services/PostServices');
 
 const rejectMethod = (_req, res) => {
   res.sendStatus(405);
@@ -8,22 +16,20 @@ const rejectMethod = (_req, res) => {
 // NEW POST
 router.route('/post').post(newPost).all(rejectMethod);
 
-// GET POST by id
-router.route('/post/:id').get(getPost).all(rejectMethod);
+// GET = GET POST BY ID
+// PATCH = LIKE TOGGLE
+router.route('/post/:id').get(getPost).patch(likeSwitch).all(rejectMethod);
 
 // REPORT/APPROVE POST
 router.route('/post/:id/flag').patch(flagPost).all(rejectMethod);
-
-// LIKE/UNLIKE
-router.route('/post/:id').patch(likeSwitch).all(rejectMethod);
 
 // DASHBOARD
 router.route('/timeline').get(timeline).all(rejectMethod);
 
 // ADD COMMENT
-router.route('/post/:id/comment').patch(addComment).all(rejectMethod);
+router.route('/post/:id/comment').post(addComment).all(rejectMethod);
 
 // DELETE COMMENT
-router.route('/post/:id/comment/:commentId').patch(removeComment).all(rejectMethod);
+router.route('/post/:id/comment/:commentId').delete(removeComment).all(rejectMethod);
 
 module.exports = router;

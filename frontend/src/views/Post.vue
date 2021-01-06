@@ -2,30 +2,42 @@
   <div class="post-container" v-if="ready">
     <div class="post">
       <div class="post__image">
-        <img src="https://placekitten.com/600/600" />
+        <img :src="image" />
       </div>
       <div class="post__info">
         <div class="post__info__top">
           <img src="/img/profile-default.png" />
           <div class="post__info__top__text">
-            <router-link to="/u/user">user</router-link>
-            <span>October 25, 2019</span>
+            <router-link :to="`/u/${poster.username}`">{{ poster.username }}</router-link>
+            <span>{{ formattedDate }}</span>
           </div>
-          <img class="report" src="/img/report-icon.png" v-tooltip="'Report'" />
+          <transition name="fade">
+            <img
+              class="post__info__top__report"
+              v-if="!hideReport"
+              src="/img/report-icon.png"
+              v-tooltip="{ content: 'Report' }"
+              @click="report"
+            />
+          </transition>
         </div>
         <div class="post__info__comments">
-          <post-comment />
-          <post-comment />
-          <post-comment />
+          <post-comment
+            v-for="(comment, idx) in comments"
+            :key="idx"
+            :avatar="comment.author.avatarUrl"
+            :poster="comment.author.username"
+            :content="comment.content"
+          />
         </div>
         <div class="post__info__controls">
-          <liked-icon :liked="false" />
-          <likes-counter />
+          <liked-icon :liked="liked" :postId="id" @like-toggle="catchLikeToggle" />
+          <likes-counter :likes="likes" />
         </div>
         <div class="post__info__input">
-          <form>
-            <textarea placeholder="submit only active if valid"></textarea>
-            <button>Post</button>
+          <form @submit.prevent="() => {}">
+            <textarea v-model="newComment" placeholder="Your comment..."></textarea>
+            <button :class="{ valid: validInput }" @click="postComment">Post</button>
           </form>
         </div>
       </div>
@@ -35,6 +47,10 @@
 </template>
 
 <script>
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-prototype-builtins */
+import axios from 'axios';
+import moment from 'moment';
 import { mapState } from 'vuex';
 import LikedIcon from '../components/Posts/LikedIcon.vue';
 import LikesCounter from '../components/Posts/LikesCounter.vue';
@@ -49,16 +65,34 @@ export default {
   },
   data() {
     return {
+      id: '',
       ready: false,
       image: '',
+      date: '',
+      desc: '',
       poster: {},
       comments: [],
       likes: [],
+      hideReport: false,
+      newComment: '',
     };
   },
   computed: {
+    formattedDate() {
+      return moment(this.date).format('Do MMMM YYYY');
+    },
+    validInput() {
+      return this.newComment.length > 0 && this.newComment.length < 150;
+    },
+    liked() {
+      return (
+        this.likes.filter((l) => l._id === this.currentUserId || l.hasOwnProperty('currentUserId'))
+          .length > 0
+      );
+    },
     ...mapState({
       currentUserId: (state) => state.user.currentUserId,
+      fullUser: (state) => state.user,
     }),
   },
   methods: {
@@ -67,8 +101,66 @@ export default {
         process.env.NODE_ENV === 'production'
           ? process.env.VUE_APP_API_PROD
           : process.env.VUE_APP_API_DEV
-      }/profile/${this.userdata.id}`;
+      }/post/${this.$route.params.id}`;
+
+      axios.get(url).then((res) => {
+        this.id = res.data._id;
+        this.image = res.data.imageUrl;
+        this.date = res.data.date;
+        this.desc = res.data.description;
+        this.likes = res.data.likes;
+        this.comments = res.data.comments;
+        this.poster = res.data.poster;
+        this.ready = true;
+      });
     },
+    report() {
+      if (this.currentUserId) {
+        const url = `${
+          process.env.NODE_ENV === 'production'
+            ? process.env.VUE_APP_API_PROD
+            : process.env.VUE_APP_API_DEV
+        }/post/${this.id}/flag`;
+
+        this.hideReport = true;
+
+        axios.patch(url, { reported: false });
+      } else {
+        this.$router.push({ name: 'Login' });
+      }
+    },
+    catchLikeToggle(val) {
+      if (val) {
+        this.likes.push(this.fullUser);
+      } else {
+        this.likes = this.likes.filter(
+          // eslint-disable-next-line comma-dangle
+          (o) => !o.hasOwnProperty('currentUserId') && o._id === this.currentUserId
+        );
+      }
+    },
+    postComment() {
+      if (this.currentUserId) {
+        const url = `${
+          process.env.NODE_ENV === 'production'
+            ? process.env.VUE_APP_API_PROD
+            : process.env.VUE_APP_API_DEV
+        }/post/${this.id}/comment`;
+
+        axios.post(url, { userId: this.currentUserId, content: this.newComment }).then(() => {
+          this.comments.push({
+            author: { username: this.fullUser.currentUserName, avatarUrl: this.fullUser.avatarUrl },
+            content: this.newComment,
+            date: new Date(),
+          });
+        });
+      } else {
+        this.$router.push({ name: 'Login' });
+      }
+    },
+  },
+  mounted() {
+    this.loadPost();
   },
 };
 </script>
@@ -76,44 +168,41 @@ export default {
 <style lang="scss" scoped>
 .post-container {
   margin: 30px auto 0 auto;
-  display: flex;
-  justify-content: center;
   max-height: 85vh;
+  max-width: 975px;
 
-  @media (min-width: 975px) {
-    max-width: 975px;
-  }
-
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     margin: 0;
-    width: 100%;
+    height: 100%;
   }
 }
 
 .post {
   min-height: 450px;
   border: 1px solid var(--border);
-  display: inline-flex;
+  display: flex;
 
-  @media (max-width: 600px) {
-    padding-top: 0;
-    height: calc(100vh - 55px);
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    width: 650px;
+    margin: 0 auto;
   }
 
-  @media (max-width: 974px) {
-    flex-direction: column;
-    align-items: center;
+  @media (max-width: 700px) {
+    width: 100%;
+    height: 100%;
   }
 
   &__image {
+    width: 675px;
     display: flex;
     justify-content: center;
     align-items: center;
     background: #fff;
     border-bottom: 1px solid var(--border);
 
-    @media (max-width: 974px) {
-      max-height: 60vh;
+    @media (max-width: 1000px) {
+      width: 100%;
     }
 
     img {
@@ -123,16 +212,15 @@ export default {
   }
 
   &__info {
-    max-width: 600px;
+    width: 300px;
     background: #fff;
     border-left: 1px solid var(--border);
     display: flex;
-    flex-grow: 1;
     flex-direction: column;
     overflow: hidden;
 
-    @media (min-width: 975px) {
-      max-width: 335px;
+    @media (max-width: 1000px) {
+      width: 100%;
     }
 
     &__top {
@@ -167,15 +255,20 @@ export default {
           font-size: smaller;
         }
       }
+
+      &__report {
+        cursor: pointer;
+      }
     }
 
     &__comments {
       flex-grow: 1;
+      max-height: 500px;
       overflow: auto;
       box-sizing: content-box;
 
-      @media (min-width: 975px) {
-        height: 0px;
+      @media (max-width: 1000px) {
+        max-height: 200px;
       }
     }
 
@@ -201,7 +294,7 @@ export default {
           flex-grow: 0.7;
           border: none;
           resize: none;
-          padding: 5px 15px;
+          padding: 10px;
 
           &:focus {
             outline: none;
@@ -218,9 +311,13 @@ export default {
           opacity: 0.5;
           transition: all 0.25s ease-out;
           font-weight: 700;
-          cursor: pointer;
+
+          &:focus {
+            outline: none;
+          }
 
           &.valid {
+            cursor: pointer;
             opacity: 1;
           }
         }
