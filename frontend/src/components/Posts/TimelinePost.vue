@@ -32,7 +32,7 @@
           <router-link :to="'/u/' + poster">{{ poster }}</router-link> {{ desc }}
         </p>
       </div>
-      <timeline-post-comments :comments="comments" />
+      <timeline-post-comments v-if="comments.length > 0" :comments="comments" />
       <div class="timelinepost__bottom__date">
         <span>{{ date }}</span>
       </div>

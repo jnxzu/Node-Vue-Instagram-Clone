@@ -1,5 +1,5 @@
 <template>
-  <div class="post-container">
+  <div class="post-container" v-if="ready">
     <div class="post">
       <div class="post__image">
         <img src="https://placekitten.com/600/600" />
@@ -31,9 +31,11 @@
       </div>
     </div>
   </div>
+  <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import LikedIcon from '../components/Posts/LikedIcon.vue';
 import LikesCounter from '../components/Posts/LikesCounter.vue';
 import PostComment from '../components/Posts/PostComment.vue';
@@ -44,6 +46,28 @@ export default {
     LikedIcon,
     LikesCounter,
     PostComment,
+  },
+  data() {
+    return {
+      image: '',
+      poster: {},
+      comments: [],
+      likes: [],
+    };
+  },
+  computed: {
+    ...mapState({
+      currentUserId: (state) => state.user.currentUserId,
+    }),
+  },
+  methods: {
+    loadPost() {
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/profile/${this.userdata.id}`;
+    },
   },
 };
 </script>

@@ -1,13 +1,9 @@
 <template>
   <div class="timelinepostcomments">
-    <span class="view">View all 10 comments</span>
-    <div class="comment">
-      <router-link to="/u/catman">catman</router-link>
-      thats so cool
-    </div>
-    <div class="comment">
-      <router-link to="/u/catwoman">catwoman</router-link>
-      wow
+    <span class="view">View all {{ comments.length }} comments</span>
+    <div class="comment" v-for="(comment, idx) in displayComments" :key="idx">
+      <router-link :to="`/u/${comment.author.username}`">{{ comment.author.username }}</router-link>
+      {{ comment.content }}
     </div>
   </div>
 </template>
@@ -15,6 +11,15 @@
 <script>
 export default {
   name: 'TimelinePostComments',
+  props: {
+    comments: Array,
+  },
+  computed: {
+    displayComments() {
+      if (this.comments.length < 2) return this.comments;
+      return this.comments.slice(this.comments.length - 2).reverse();
+    },
+  },
 };
 </script>
 
