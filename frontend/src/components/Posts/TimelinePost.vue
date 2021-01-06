@@ -119,6 +119,10 @@ export default {
   display: flex;
   flex-direction: column;
 
+  @media (max-width: 700px) {
+    margin: 0 auto 30px auto;
+  }
+
   &__top {
     height: 60px;
     display: flex;
@@ -140,13 +144,16 @@ export default {
   }
 
   &__image {
-    background: var(--bg);
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-bottom: 1px solid var(--border);
+    border-top: 1px solid var(--border);
 
     img {
-      width: 100%;
+      max-width: 100%;
+      max-height: 65vh;
     }
   }
 
