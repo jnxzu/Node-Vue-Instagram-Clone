@@ -35,6 +35,7 @@ export default {
       posts: [],
       ready: false,
       currentPage: 1,
+      timeout: null,
     };
   },
   computed: {
@@ -56,12 +57,18 @@ export default {
           this.currentPage += 1;
           this.posts = res.data;
           this.posts.forEach((post) => (post.date = moment(post.date).format('Do MMMM YYYY')));
-          this.ready = true;
+          this.timeout = setTimeout(this.makeReady, 500);
         });
+    },
+    makeReady() {
+      this.ready = true;
     },
   },
   mounted() {
     this.getPosts();
+  },
+  destroyed() {
+    clearTimeout(this.timeout);
   },
 };
 </script>
