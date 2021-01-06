@@ -84,7 +84,7 @@ module.exports.timeline = (req, res) => {
   const { userId, currentPage } = req.params;
 
   const options = {
-    populate: ['poster', 'likes'],
+    populate: ['poster', 'likes', 'comments.author'],
     page: currentPage,
     limit: 5,
     sort: { date: -1 },
