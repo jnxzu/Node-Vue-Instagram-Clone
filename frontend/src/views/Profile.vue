@@ -66,6 +66,7 @@ export default {
     return {
       username: this.$route.params.username,
       userdata: {
+        id: '',
         bio: '',
         avatarUrl: '',
         posts: [],
@@ -78,6 +79,7 @@ export default {
   computed: {
     ...mapState({
       currentUserName: (state) => state.user.currentUserName,
+      currentUserId: (state) => state.user.currentUserId,
       isAuth: (state) => state.isAuth,
     }),
     followedByMe() {
@@ -93,16 +95,18 @@ export default {
         process.env.NODE_ENV === 'production'
           ? process.env.VUE_APP_API_PROD
           : process.env.VUE_APP_API_DEV
-      }/UserRoutes/follow`;
+      }//profile/${this.userdata.id}`;
 
-      axios.patch(url, { me: this.currentUserName, target: this.username }).then((res) => {
-        if (res.data.add) {
-          this.userdata.followers.push(res.data.new);
-        } else {
-          const i = this.userdata.followers.indexOf(res.data.new);
-          this.userdata.followers.splice(i, 1);
-        }
-      });
+      axios
+        .patch(url, { sender: this.currentUserId, alreadyFollowing: this.followedByMe })
+        .then((res) => {
+          if (res.data.add) {
+            this.userdata.followers.push(res.data.new);
+          } else {
+            const i = this.userdata.followers.indexOf(res.data.new);
+            this.userdata.followers.splice(i, 1);
+          }
+        });
     },
   },
   mounted() {
@@ -110,7 +114,7 @@ export default {
       process.env.NODE_ENV === 'production'
         ? process.env.VUE_APP_API_PROD
         : process.env.VUE_APP_API_DEV
-    }/UserRoutes/profile/${this.username}`;
+    }//profile/${this.username}`;
 
     axios
       .get(url)

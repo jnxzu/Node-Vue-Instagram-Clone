@@ -41,11 +41,11 @@ app.use(passport.session());
 
 const userRoutes = require('./routes/UserRoutes');
 const postRoutes = require('./routes/PostRoutes');
-const chatRoutes = require('./routes/ChatRoutes')
+const chatRoutes = require('./routes/ChatRoutes');
 
-app.use('/UserRoutes', userRoutes);
-app.use('/PostRoutes', postRoutes);
-app.use('/ChatRoutes', chatRoutes);
+app.use(userRoutes);
+app.use(postRoutes);
+app.use(chatRoutes);
 
 app.use((_, res) => {
   res.sendStatus(404);

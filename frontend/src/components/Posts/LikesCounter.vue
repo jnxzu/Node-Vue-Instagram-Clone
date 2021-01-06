@@ -1,11 +1,7 @@
 <template>
   <div class="likescounter">
-    <img src="https://placekitten.com/50/50" />
     <span>
-      Liked by
-      <router-link to="/u/kittenlover">kittenlover</router-link>
-      and
-      <span class="bolder">1234</span> others
+      <span class="bolder">{{ likes.length }}</span> like(s)
     </span>
   </div>
 </template>
@@ -13,6 +9,9 @@
 <script>
 export default {
   name: 'LikesCounter',
+  props: {
+    likes: Array,
+  },
 };
 </script>
 
@@ -32,10 +31,6 @@ export default {
     height: 100%;
     border-radius: 50%;
     margin-right: 3px;
-  }
-
-  > span {
-    margin-left: 5px;
   }
 }
 </style>

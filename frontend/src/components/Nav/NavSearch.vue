@@ -50,7 +50,7 @@ export default {
         process.env.NODE_ENV === 'production'
           ? process.env.VUE_APP_API_PROD
           : process.env.VUE_APP_API_DEV
-      }/UserRoutes/search`;
+      }//search`;
       axios.post(url, { phrase: this.phrase }).then((res) => (this.results = res.data));
     }, 250),
     redirect(u) {

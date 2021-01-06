@@ -11,20 +11,22 @@
     </div>
     <div class="timelinepost__bottom">
       <div class="timelinepost__bottom__buttons">
-        <liked-icon :liked="liked" :postId="id" />
+        <liked-icon :liked="liked" :postId="id" @like-toggle="catchLikeToggle" />
         <i
           class="far fa-comment fa-2x"
           v-tooltip="'Comment'"
           @click="() => $router.push(`/p/${id}`)"
         ></i>
-        <img
-          src="/img/report-icon.png"
-          :class="{ hideReport: hideReport }"
-          v-tooltip="{ content: 'Report', classes: { hideReport: hideReport } }"
-          @click="report"
-        />
+        <transition name="fade">
+          <img
+            v-if="!hideReport"
+            src="/img/report-icon.png"
+            v-tooltip="{ content: 'Report' }"
+            @click="report"
+          />
+        </transition>
       </div>
-      <likes-counter :liked="likes" />
+      <likes-counter :likes="likesArray" />
       <div class="timelinepost__bottom__desc">
         <p>
           <router-link :to="'/u/' + poster">{{ poster }}</router-link> {{ desc }}
@@ -39,8 +41,10 @@
 </template>
 
 <script>
-import axios from 'axios';
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-prototype-builtins */
 import { mapState } from 'vuex';
+import axios from 'axios';
 import TimelinePostComments from './TimelinePostComments.vue';
 import LikesCounter from './LikesCounter.vue';
 import LikedIcon from './LikedIcon.vue';
@@ -55,6 +59,7 @@ export default {
   data() {
     return {
       hideReport: false,
+      likesArray: this.likes,
     };
   },
   props: {
@@ -71,6 +76,7 @@ export default {
   computed: {
     ...mapState({
       currentUserId: (state) => state.user.currentUserId,
+      fullUser: (state) => state.user,
     }),
   },
   methods: {
@@ -80,13 +86,20 @@ export default {
           process.env.NODE_ENV === 'production'
             ? process.env.VUE_APP_API_PROD
             : process.env.VUE_APP_API_DEV
-        }/PostRoutes/post/${this.id}/flag`;
+        }//post/${this.id}/flag`;
 
         this.hideReport = true;
 
         axios.patch(url, { reported: false });
       } else {
         this.$router.push({ name: 'Login' });
+      }
+    },
+    catchLikeToggle(val) {
+      if (val) {
+        this.likesArray.push(this.fullUser);
+      } else {
+        this.likesArray = this.likesArray.filter((o) => !o.hasOwnProperty('currentUserId'));
       }
     },
   },

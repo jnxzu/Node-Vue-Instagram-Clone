@@ -6,15 +6,15 @@ const rejectMethod = (_req, res) => {
 };
 
 // NEW MESSAGE
-router.route('/newMsg').post(newMessage).all(rejectMethod);
+router.route('/msg').post(newMessage).all(rejectMethod);
 
 // GET MESSAGES
-router.route('/getMsg/:chatId').get(getMessages).all(rejectMethod);
+router.route('/msg/:chatId').get(getMessages).all(rejectMethod);
 
 // NEW CHAT
-router.route('/newChat').post(newChat).all(rejectMethod);
+router.route('/chat').post(newChat).all(rejectMethod);
 
 // GET CHATS
-router.route('/getChats').get(getChats).all(rejectMethod);
+router.route('/chat').get(getChats).all(rejectMethod);
 
 module.exports = router;

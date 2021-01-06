@@ -6,7 +6,7 @@ const rejectMethod = (_req, res) => {
 };
 
 // NEW POST
-router.route('/new').post(newPost).all(rejectMethod);
+router.route('/post').post(newPost).all(rejectMethod);
 
 // GET POST by id
 // TODO

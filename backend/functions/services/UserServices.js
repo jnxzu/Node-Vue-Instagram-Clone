@@ -62,6 +62,7 @@ module.exports.profile = (req, res) => {
     .then((userByUsername) => {
       if (userByUsername) {
         return res.status(200).json({
+          id: userByUsername._id,
           bio: userByUsername.bio,
           avatarUrl: userByUsername.avatarUrl,
           posts: userByUsername.posts,

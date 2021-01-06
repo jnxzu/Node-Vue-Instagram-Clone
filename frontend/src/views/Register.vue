@@ -59,7 +59,7 @@ export default {
         process.env.NODE_ENV === 'production'
           ? process.env.VUE_APP_API_PROD
           : process.env.VUE_APP_API_DEV
-      }/UserRoutes/register`;
+      }//register`;
 
       this.ready = false;
 
