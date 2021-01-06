@@ -100,6 +100,10 @@ export default {
   justify-content: flex-end;
   align-items: center;
   margin-right: 10px;
+
+  @media (max-width: 700px) {
+    margin: 0;
+  }
 }
 
 .fade-enter-active,

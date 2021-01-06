@@ -137,8 +137,8 @@ export default {
       display: flex;
       flex-direction: column-reverse;
 
-      @media (max-width: 600px) {
-        margin: 10px;
+      @media (max-width: 700px) {
+        margin: 5px;
       }
 
       input {

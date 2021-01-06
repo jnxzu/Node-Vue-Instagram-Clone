@@ -42,6 +42,10 @@ export default {
 
   transition: transform 0.25s ease-out;
 
+  @media (max-width: 700px) {
+    margin-right: 10px;
+  }
+
   img {
     height: 30px;
   }

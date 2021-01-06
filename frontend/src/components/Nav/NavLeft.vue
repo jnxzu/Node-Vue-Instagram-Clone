@@ -24,6 +24,10 @@ export default {
   align-items: center;
   margin-left: 10px;
 
+  @media (max-width: 700px) {
+    margin: 0;
+  }
+
   a:hover {
     text-decoration: none;
   }
