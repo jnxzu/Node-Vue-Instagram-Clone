@@ -63,7 +63,7 @@ export default {
         process.env.NODE_ENV === 'production'
           ? process.env.VUE_APP_API_PROD
           : process.env.VUE_APP_API_DEV
-      }//login`;
+      }/login`;
 
       this.ready = false;
 

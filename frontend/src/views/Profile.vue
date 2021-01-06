@@ -95,7 +95,7 @@ export default {
         process.env.NODE_ENV === 'production'
           ? process.env.VUE_APP_API_PROD
           : process.env.VUE_APP_API_DEV
-      }//profile/${this.userdata.id}`;
+      }/profile/${this.userdata.id}`;
 
       axios
         .patch(url, { sender: this.currentUserId, alreadyFollowing: this.followedByMe })
@@ -114,7 +114,7 @@ export default {
       process.env.NODE_ENV === 'production'
         ? process.env.VUE_APP_API_PROD
         : process.env.VUE_APP_API_DEV
-    }//profile/${this.username}`;
+    }/profile/${this.username}`;
 
     axios
       .get(url)

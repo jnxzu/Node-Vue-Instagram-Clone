@@ -86,7 +86,7 @@ export default {
           process.env.NODE_ENV === 'production'
             ? process.env.VUE_APP_API_PROD
             : process.env.VUE_APP_API_DEV
-        }//post/${this.id}/flag`;
+        }/post/${this.id}/flag`;
 
         this.hideReport = true;
 

@@ -37,7 +37,7 @@ export default {
           process.env.NODE_ENV === 'production'
             ? process.env.VUE_APP_API_PROD
             : process.env.VUE_APP_API_DEV
-        }//post/${this.postId}`;
+        }/post/${this.postId}`;
 
         axios.patch(url, { userId: this.currentUserId, liked: this.likedVal });
         this.likedVal = !this.likedVal;
