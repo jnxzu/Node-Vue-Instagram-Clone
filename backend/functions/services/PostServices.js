@@ -31,8 +31,10 @@ module.exports.newPost = (req, res) => {
     newPost.comments = [];
     newPost.date = new Date();
 
-    newPost.save().then(() => {
-      res.status(201).json(newPost);
+    newPost.save().then((post) => {
+      User.findByIdAndUpdate(poster, { $push: { posts: post._id } }).then(() => {
+        return res.status(201).json(post);
+      });
     });
   });
   blobWriter.end(buffer);
