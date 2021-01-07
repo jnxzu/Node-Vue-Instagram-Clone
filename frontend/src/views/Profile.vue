@@ -1,7 +1,10 @@
 <template>
   <div class="profile" v-if="ready">
     <div class="info">
-      <img class="info__avatar" :src="userdata.avatarUrl || '/img/profile-default.png'" />
+      <img
+        :class="{ info__avatar: true, change: editing }"
+        :src="editing ? '/img/new-avatar.png' : userdata.avatarUrl || '/img/profile-default.png'"
+      />
       <div class="info__contents">
         <div class="ts-mobile-helper">
           <img class="mobile-img" :src="userdata.avatarUrl || '/img/profile-default.png'" />
@@ -12,6 +15,9 @@
                 {{ followedByMe ? 'Unfollow' : 'Follow' }}
               </button>
               <button v-if="currentUserName !== username && isAuth">Message</button>
+              <button v-if="currentUserName === username" @click="editBio()">
+                {{ editing ? 'Save' : 'Edit' }}
+              </button>
             </div>
             <div class="info__contents__stats">
               <div class="info__contents__stats__group">
@@ -31,12 +37,10 @@
         </div>
         <div class="info__contents__desc">
           <h3>{{ username }}</h3>
-          <p>
+          <textarea v-if="editing" v-model="userdata.bio"></textarea>
+          <p v-else>
             {{ userdata.bio }}
           </p>
-        </div>
-        <div class="info__contents__followed">
-          <span>followed by <router-link to="/u/test">test</router-link> + 33 others</span>
         </div>
       </div>
     </div>
@@ -81,6 +85,8 @@ export default {
         following: [],
       },
       ready: false,
+      editing: false,
+      lastBio: '',
     };
   },
   computed: {
@@ -114,6 +120,20 @@ export default {
             this.userdata.followers.splice(i, 1);
           }
         });
+    },
+    editBio() {
+      this.editing = !this.editing;
+      if (this.editing) {
+        this.lastBio = this.userdata.bio;
+      } else if (this.lastBio !== this.userdata.bio) {
+        // axios change bio
+      }
+    },
+    changeAvatar() {
+      if (this.editing) {
+        // upload new avatar
+        this.editing = false;
+      }
     },
   },
   mounted() {
@@ -176,6 +196,10 @@ export default {
       @media (max-width: 600px) {
         display: none;
       }
+
+      &.change {
+        cursor: pointer;
+      }
     }
 
     &__contents {
@@ -227,6 +251,22 @@ export default {
 
       &__desc {
         max-width: 500px;
+
+        p {
+          padding: 10px 0;
+          height: 90px;
+          width: 300px;
+          word-wrap: break-word;
+        }
+
+        textarea {
+          padding: 10px 0;
+          height: 90px;
+          width: 300px;
+          resize: none;
+          font-size: 14px;
+          border: none;
+        }
       }
 
       &__followed {
