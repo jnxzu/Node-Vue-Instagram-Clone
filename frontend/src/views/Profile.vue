@@ -2,8 +2,12 @@
   <div class="profile" v-if="ready">
     <div class="info">
       <img
-        :class="{ info__avatar: true, change: editing }"
-        :src="editing ? '/img/new-avatar.png' : userdata.avatarUrl || '/img/profile-default.png'"
+        :class="{ info__avatar: true, change: avatarHover }"
+        :src="
+          avatarHover ? '/img/new-avatar.png' : userdata.avatarUrl || '/img/profile-default.png'
+        "
+        @mouseover="hoverHandler('enter')"
+        @mouseleave="hoverHandler('leave')"
       />
       <div class="info__contents">
         <div class="ts-mobile-helper">
@@ -87,6 +91,7 @@ export default {
       ready: false,
       editing: false,
       lastBio: '',
+      avatarHover: false,
     };
   },
   computed: {
@@ -128,6 +133,10 @@ export default {
       } else if (this.lastBio !== this.userdata.bio) {
         // axios change bio
       }
+    },
+    hoverHandler(dir) {
+      if (dir === 'enter' && this.editing) this.avatarHover = true;
+      if (dir === 'leave' && this.editing) this.avatarHover = false;
     },
     changeAvatar() {
       if (this.editing) {
