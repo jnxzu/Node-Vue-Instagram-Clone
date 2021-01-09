@@ -1,6 +1,7 @@
 <template>
   <div class="profile" v-if="ready">
     <div class="info">
+      <input ref="browse" type="file" @change="fileChange" hidden v-if="editing" />
       <img
         :class="{ info__avatar: true, change: avatarHover }"
         :src="
@@ -66,9 +67,10 @@
 
 <script>
 /* eslint-disable no-return-assign */
+/* eslint-disable comma-dangle */
 import axios from 'axios';
 import _ from 'lodash';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 import ProfilePost from '../components/Posts/ProfilePost.vue';
 
@@ -92,6 +94,8 @@ export default {
       editing: false,
       lastBio: '',
       avatarHover: false,
+      changedAvatar: false,
+      imageFile: null,
     };
   },
   computed: {
@@ -108,6 +112,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions({ uploadAvatar: 'setAvatar' }),
     follow() {
       const url = `${
         process.env.NODE_ENV === 'production'
@@ -131,7 +136,17 @@ export default {
       if (this.editing) {
         this.lastBio = this.userdata.bio;
       } else if (this.lastBio !== this.userdata.bio) {
-        // axios change bio
+        this.ready = false;
+
+        const url = `${
+          process.env.NODE_ENV === 'production'
+            ? process.env.VUE_APP_API_PROD
+            : process.env.VUE_APP_API_DEV
+        }/profile/${this.userdata.id}/editBio`;
+
+        axios.patch(url, { newBio: this.userdata.bio }).then(function changeReady() {
+          this.ready = true;
+        });
       }
     },
     hoverHandler(dir) {
@@ -139,10 +154,37 @@ export default {
       if (dir === 'leave' && this.editing) this.avatarHover = false;
     },
     changeAvatar() {
-      if (this.editing) {
-        // upload new avatar
-        this.editing = false;
+      if (this.editing && this.changedAvatar) {
+        this.ready = false;
+        const data = new FormData();
+        data.set(
+          'image',
+          this.imageFile,
+          this.imageFile.name.replace(/.*\./, `${this.username}_avatar.`)
+        );
+        const url = `${
+          process.env.NODE_ENV === 'production'
+            ? process.env.VUE_APP_API_PROD
+            : process.env.VUE_APP_API_DEV
+        }/profile/${this.userdata.id}/changeAvatar`;
+
+        axios({
+          method: 'post',
+          url,
+          data,
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }).then(function finishAvatarChange(res) {
+          this.setAvatar(res.data.publicUrl);
+          this.editing = false;
+          this.ready = true;
+        });
       }
+    },
+    fileChange(e) {
+      const file = e.target.files[0];
+      this.imageFile = file;
+      this.userdata.avatarUrl = URL.createObjectURL(file);
+      this.changedAvatar = true;
     },
   },
   mounted() {

@@ -55,8 +55,6 @@ export default {
       this.ready = false;
       const uid = new ShortUniqueId({ length: 10 });
       const data = new FormData();
-      data.set('poster', this.currentUserId);
-      data.set('desc', this.desc);
       data.set('image', this.imageFile, this.imageFile.name.replace(/.*\./, `${uid()}.`));
 
       const url = `${

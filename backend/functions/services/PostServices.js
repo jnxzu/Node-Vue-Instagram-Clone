@@ -33,11 +33,11 @@ module.exports.newPost = (req, res) => {
 
     newPost.save().then((post) => {
       User.findByIdAndUpdate(poster, { $push: { posts: post._id } }).then(() => {
+        blobWriter.end(buffer);
         return res.status(201).json(post);
       });
     });
   });
-  blobWriter.end(buffer);
 };
 
 module.exports.flagPost = (req, res) => {

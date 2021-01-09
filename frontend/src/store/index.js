@@ -19,14 +19,16 @@ export default new Vuex.Store({
       state.user = { ...state.user, ...payload };
       state.isAuth = !state.isAuth;
     },
-    // CHANGE_AVATAR(state, payload) {},
+    CHANGE_AVATAR(state, payload) {
+      state.user.avatarUrl = payload;
+    },
   },
   actions: {
     updateUserState({ commit }, data) {
       commit('CHANGE_USER_STATE', data);
     },
-    // setAvatar({ commit }, url) {
-    // commit('CHANGE_AVATAR', url);
-    // },
+    setAvatar({ commit }, url) {
+      commit('CHANGE_AVATAR', url);
+    },
   },
 });

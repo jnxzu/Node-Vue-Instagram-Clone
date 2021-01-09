@@ -80,7 +80,7 @@ module.exports.profile = (req, res) => {
 
 module.exports.followSwitch = (req, res) => {
   const { sender, alreadyFollowing } = req.body;
-  const target = req.params.username;
+  const target = req.params.id;
   if (alreadyFollowing) {
     User.findByIdAndUpdate(sender, { $pull: { following: target } }).then(() =>
       User.findByIdAndUpdate(target, { $pull: { followers: sender } }).then(() => res.status(200))
@@ -102,24 +102,21 @@ module.exports.search = (req, res) => {
 };
 
 module.exports.editBio = (req, res) => {
-    console.dir(req.body);
-    User.updateOne({ _id: req.body._id }, { $set: { bio: req.body.bio} }, (error, doc) => {
-        if (error) {
-            res.status(500).json(error);
-        } else {
-            res.status(201).json(doc);
-        }
-    });
+  const user = req.params.id;
+  const { newBio } = req.body;
+  User.findByIdAndUpdate(user, { bio: newBio }).then((u) => {
+    return res.status(200).json(u);
+  });
 };
 
 module.exports.changeAvatar = (req, res) => {
-  console.dir(req.body);
   const storage = new Storage({
     projectId: process.env.GCLOUD_PROJECT_ID,
     keyFilename: process.env.GCLOUD_APPLICATION_CREDENTIALS,
   });
   const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
 
+  const { poster } = req.params.id;
   const { originalname, mimetype, buffer } = req.files[0];
 
   const blob = bucket.file(originalname);
@@ -129,16 +126,12 @@ module.exports.changeAvatar = (req, res) => {
     },
   });
   blobWriter.on('finish', () => {
-    const url = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(
+    const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(
       blob.name
     )}?alt=media`;
-    User.updateOne({ _id: req.body._id }, { $set: { avatarUrl: url} }, (error, doc) => {
-      if (error) {
-          res.status(500).json(error);
-      } else {
-          res.status(201).json(doc);
-      }
+    User.findByIdAndUpdate(poster, { avatarUrl: publicUrl }).then(() => {
+      blobWriter.end(buffer);
+      return res.status(201).json(publicUrl);
+    });
   });
-  });
-  blobWriter.end(buffer);
 };
