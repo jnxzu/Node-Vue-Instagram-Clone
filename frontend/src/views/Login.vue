@@ -50,7 +50,7 @@ export default {
   },
   computed: { ...mapState({ auth: (state) => state.isAuth }) },
   methods: {
-    ...mapActions(['updateUserState']),
+    ...mapActions(['updateUserState', 'setAvatar']),
     checkAuth() {
       if (this.auth) this.$router.push({ name: 'Timeline' });
       else this.ready = true;
@@ -73,7 +73,12 @@ export default {
           password: this.password,
         })
         .then((res) => {
-          this.updateUserState(res.data);
+          this.updateUserState({
+            currentUserId: res.data.currentUserId,
+            currentUserName: res.data.currentUserName,
+            isAdmin: res.data.isAdmin,
+          });
+          this.setAvatar(res.data.avatar);
           this.$router.push({ name: 'Timeline' });
         })
         .catch(() => {

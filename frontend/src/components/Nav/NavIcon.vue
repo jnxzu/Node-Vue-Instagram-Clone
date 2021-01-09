@@ -1,7 +1,11 @@
 <template>
   <div :class="{ navicon: true, active: isActive }">
     <router-link :to="routeTarget">
-      <img :src="'/img/' + imgSrc" :alt="imgAlt" :class="{ 'profile-pic': profile }" />
+      <img
+        :src="profile ? `${imgSrc}&${counter}` : imgSrc"
+        :alt="imgAlt"
+        :class="{ 'profile-pic': profile }"
+      />
       <div class="navicon__selection"></div>
     </router-link>
   </div>
@@ -12,6 +16,11 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'NavIcon',
+  data() {
+    return {
+      counter: 0,
+    };
+  },
   props: {
     profile: Boolean,
     imgSrc: String,
@@ -26,6 +35,11 @@ export default {
     ...mapState({
       currentUser: (state) => state.user.currentUserName,
     }),
+  },
+  methods: {
+    reloadAvatar() {
+      this.counter += 1;
+    },
   },
 };
 </script>

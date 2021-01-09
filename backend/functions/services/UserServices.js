@@ -7,6 +7,7 @@ module.exports.login = (req, res) => {
     currentUserId: req.user._id,
     currentUserName: req.user.username,
     isAdmin: req.user.isAdmin,
+    avatar: req.user.avatarUrl,
   });
 };
 
@@ -116,7 +117,7 @@ module.exports.changeAvatar = (req, res) => {
   });
   const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
 
-  const { poster } = req.params.id;
+  const poster = req.params.id;
   const { originalname, mimetype, buffer } = req.files[0];
 
   const blob = bucket.file(originalname);
@@ -125,13 +126,15 @@ module.exports.changeAvatar = (req, res) => {
       contentType: mimetype,
     },
   });
+
   blobWriter.on('finish', () => {
     const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURI(
       blob.name
     )}?alt=media`;
     User.findByIdAndUpdate(poster, { avatarUrl: publicUrl }).then(() => {
-      blobWriter.end(buffer);
       return res.status(201).json(publicUrl);
     });
   });
+
+  blobWriter.end(buffer);
 };

@@ -11,7 +11,7 @@ export default new Vuex.Store({
       isAdmin: false,
       currentUserId: '',
       currentUserName: '',
-      avatarUrl: 'profile-default.png',
+      avatarUrl: '/img/profile-default.png',
     },
   },
   mutations: {

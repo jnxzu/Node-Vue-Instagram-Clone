@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <Nav />
+    <Nav ref="nav" />
     <main>
       <transition name="fade" mode="out-in">
-        <router-view :key="$route.path" />
+        <router-view :key="$route.path" @reload-avatar="reloadAvatar" />
       </transition>
     </main>
   </div>
@@ -16,6 +16,11 @@ export default {
   name: 'App',
   components: {
     Nav,
+  },
+  methods: {
+    reloadAvatar() {
+      this.$refs.nav.reloadAvatar();
+    },
   },
 };
 </script>

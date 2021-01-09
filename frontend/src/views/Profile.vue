@@ -9,6 +9,7 @@
         "
         @mouseover="hoverHandler('enter')"
         @mouseleave="hoverHandler('leave')"
+        @click="() => $refs.browse.click()"
       />
       <div class="info__contents">
         <div class="ts-mobile-helper">
@@ -20,7 +21,7 @@
                 {{ followedByMe ? 'Unfollow' : 'Follow' }}
               </button>
               <button v-if="currentUserName !== username && isAuth">Message</button>
-              <button v-if="currentUserName === username" @click="editBio()">
+              <button v-if="currentUserName === username" @click="editBioAndAvatar()">
                 {{ editing ? 'Save' : 'Edit' }}
               </button>
             </div>
@@ -94,7 +95,7 @@ export default {
       editing: false,
       lastBio: '',
       avatarHover: false,
-      changedAvatar: false,
+      avatarChanged: false,
       imageFile: null,
     };
   },
@@ -109,6 +110,9 @@ export default {
     },
     slicedPosts() {
       return _.chunk(this.userdata.posts, 3);
+    },
+    bioChanged() {
+      return this.userdata.bio !== this.lastBio;
     },
   },
   methods: {
@@ -131,60 +135,60 @@ export default {
           }
         });
     },
-    editBio() {
+    editBioAndAvatar() {
       this.editing = !this.editing;
       if (this.editing) {
         this.lastBio = this.userdata.bio;
-      } else if (this.lastBio !== this.userdata.bio) {
+      } else if (this.bioChanged && !this.avatarChanged) {
         this.ready = false;
-
-        const url = `${
-          process.env.NODE_ENV === 'production'
-            ? process.env.VUE_APP_API_PROD
-            : process.env.VUE_APP_API_DEV
-        }/profile/${this.userdata.id}/editBio`;
-
-        axios.patch(url, { newBio: this.userdata.bio }).then(function changeReady() {
+        this.editBio(() => (this.ready = true));
+      } else if (!this.bioChanged && this.avatarChanged) {
+        this.ready = false;
+        this.editAvatar((res) => {
+          this.uploadAvatar(res.data);
+          this.$emit('reload-avatar');
+          this.editing = false;
           this.ready = true;
         });
+      } else if (this.bioChanged && this.avatarChanged) {
+        this.ready = false;
+        this.editBio(this.editAvatar(() => (this.ready = true)));
       }
+    },
+    editBio(callback) {
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/profile/${this.userdata.id}/editBio`;
+
+      axios.patch(url, { newBio: this.userdata.bio }).then(callback);
+    },
+    editAvatar(callback) {
+      const data = new FormData();
+      data.set('image', this.imageFile, `${this.username}_avatar`);
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/profile/${this.userdata.id}/changeAvatar`;
+
+      axios({
+        method: 'post',
+        url,
+        data,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }).then(callback);
     },
     hoverHandler(dir) {
       if (dir === 'enter' && this.editing) this.avatarHover = true;
       if (dir === 'leave' && this.editing) this.avatarHover = false;
     },
-    changeAvatar() {
-      if (this.editing && this.changedAvatar) {
-        this.ready = false;
-        const data = new FormData();
-        data.set(
-          'image',
-          this.imageFile,
-          this.imageFile.name.replace(/.*\./, `${this.username}_avatar.`)
-        );
-        const url = `${
-          process.env.NODE_ENV === 'production'
-            ? process.env.VUE_APP_API_PROD
-            : process.env.VUE_APP_API_DEV
-        }/profile/${this.userdata.id}/changeAvatar`;
-
-        axios({
-          method: 'post',
-          url,
-          data,
-          headers: { 'Content-Type': 'multipart/form-data' },
-        }).then(function finishAvatarChange(res) {
-          this.setAvatar(res.data.publicUrl);
-          this.editing = false;
-          this.ready = true;
-        });
-      }
-    },
     fileChange(e) {
       const file = e.target.files[0];
       this.imageFile = file;
       this.userdata.avatarUrl = URL.createObjectURL(file);
-      this.changedAvatar = true;
+      this.avatarChanged = true;
     },
   },
   mounted() {

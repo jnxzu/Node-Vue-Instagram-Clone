@@ -33,10 +33,11 @@ module.exports.newPost = (req, res) => {
 
     newPost.save().then((post) => {
       User.findByIdAndUpdate(poster, { $push: { posts: post._id } }).then(() => {
-        blobWriter.end(buffer);
         return res.status(201).json(post);
       });
     });
+
+    blobWriter.end(buffer);
   });
 };
 
@@ -121,7 +122,6 @@ module.exports.addComment = (req, res) => {
 
 module.exports.removeComment = (req, res) => {
   const { id, commentId } = req.params;
-  // const { userId } = req.body;
   Post.findByIdAndUpdate(id, { $pull: { comments: { _id: commentId } } }).then(() => {
     return res.status(200).json('Comment removed.');
   });

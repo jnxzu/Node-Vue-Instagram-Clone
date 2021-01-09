@@ -4,7 +4,7 @@
       <nav-icon
         :profile="false"
         :routeTarget="'/'"
-        :imgSrc="'home-icon.png'"
+        :imgSrc="'/img/home-icon.png'"
         :imgAlt="'Timeline'"
         v-tooltip="'Timeline'"
       />
@@ -14,7 +14,7 @@
         v-if="auth"
         :profile="false"
         :routeTarget="'/new'"
-        :imgSrc="'new-post-icon.png'"
+        :imgSrc="'/img/new-post-icon.png'"
         :imgAlt="'New Post'"
         v-tooltip="'New Post'"
       />
@@ -24,7 +24,7 @@
         v-if="auth"
         :profile="false"
         :routeTarget="'/messages'"
-        :imgSrc="'messages-icon.png'"
+        :imgSrc="'/img/messages-icon.png'"
         :imgAlt="'Messages'"
         v-tooltip="'Messages'"
       />
@@ -37,6 +37,7 @@
         :imgSrc="avatar"
         :imgAlt="'Profile'"
         v-tooltip="'My Profile'"
+        ref="profile"
       />
     </transition>
     <transition name="fade" mode="out-in">
@@ -44,7 +45,7 @@
         v-if="admin"
         :profile="false"
         :routeTarget="'/admin'"
-        :imgSrc="'admin-icon.png'"
+        :imgSrc="'/img/admin-icon.png'"
         :imgAlt="'Admin'"
         v-tooltip="'Admin Panel'"
       />
@@ -54,7 +55,7 @@
         v-if="auth"
         :profile="false"
         :routeTarget="'/logout'"
-        :imgSrc="'logout-icon.png'"
+        :imgSrc="'/img/logout-icon.png'"
         :imgAlt="'Logout'"
         v-tooltip="'Logout'"
       />
@@ -64,7 +65,7 @@
         v-if="!auth"
         :profile="false"
         :routeTarget="'/login'"
-        :imgSrc="'login-icon.png'"
+        :imgSrc="'/img/login-icon.png'"
         :imgAlt="'Login'"
         v-tooltip="'Sign In'"
       />
@@ -88,6 +89,11 @@ export default {
       avatar: (state) => state.user.avatarUrl,
       admin: (state) => state.user.isAdmin || false,
     }),
+  },
+  methods: {
+    reloadAvatarIcon() {
+      this.$refs.profile.reloadAvatar();
+    },
   },
 };
 </script>

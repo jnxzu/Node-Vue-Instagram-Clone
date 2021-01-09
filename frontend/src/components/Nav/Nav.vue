@@ -3,7 +3,7 @@
     <div class="nav__inner">
       <nav-left />
       <nav-search />
-      <nav-right />
+      <nav-right ref="right" />
     </div>
   </nav>
 </template>
@@ -19,6 +19,11 @@ export default {
     NavLeft,
     NavSearch,
     NavRight,
+  },
+  methods: {
+    reloadAvatar() {
+      this.$refs.right.reloadAvatarIcon();
+    },
   },
 };
 </script>

@@ -33,6 +33,6 @@ router.route('/search').post(search).all(rejectMethod);
 router.route('/profile/:id/editBio').patch(editBio).all(rejectMethod);
 
 // CHANGE AVATAR
-router.route('/profile/:id/changeAvatar').patch(changeAvatar).all(rejectMethod);
+router.route('/profile/:id/changeAvatar').post(changeAvatar).all(rejectMethod);
 
 module.exports = router;
