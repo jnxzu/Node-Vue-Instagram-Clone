@@ -7,6 +7,7 @@ const {
   getPost,
   addComment,
   removeComment,
+  admin,
 } = require('../services/PostServices');
 
 const rejectMethod = (_req, res) => {
@@ -25,6 +26,9 @@ router.route('/post/:id/flag').patch(flagPost).all(rejectMethod);
 
 // DASHBOARD
 router.route('/timeline').get(timeline).all(rejectMethod);
+
+// ADMIN
+router.route('/admin').get(admin).all(rejectMethod);
 
 // ADD COMMENT
 router.route('/post/:id/comment').post(addComment).all(rejectMethod);

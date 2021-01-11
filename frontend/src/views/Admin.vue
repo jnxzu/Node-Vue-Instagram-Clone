@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mapState } from 'vuex';
 import ReportedPost from '../components/Posts/ReportedPost.vue';
 
@@ -18,23 +19,22 @@ export default {
   data() {
     return {
       ready: false,
-      timeout: null,
+      posts: [],
     };
   },
   computed: {
     ...mapState({ admin: (state) => state.user.isAdmin }),
   },
   methods: {
-    checkReady() {
-      if (this.admin) this.ready = true;
-      else this.$router.push('404');
+    getPosts() {
+      if (this.admin) {
+        const url = `${
+          process.env.NODE_ENV === 'production'
+            ? process.env.VUE_APP_API_PROD
+            : process.env.VUE_APP_API_DEV
+        }/login`;
+      } else this.$router.push('404');
     },
-  },
-  created() {
-    this.timeout = setTimeout(this.checkReady, 500);
-  },
-  destroyed() {
-    clearTimeout(this.timeout);
   },
 };
 </script>
