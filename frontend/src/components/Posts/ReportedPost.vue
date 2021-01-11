@@ -1,18 +1,44 @@
 <template>
   <div class="reportedpost">
     <div class="reportedpost__image">
-      <img src="https://placekitten.com/600/600" />
+      <img :src="image" />
     </div>
     <div class="reportedpost__controls">
-      <button class="ok">Approve</button>
-      <button class="nah">Delete</button>
+      <button class="ok" @click="approvePost(id)">Approve</button>
+      <button class="nah" @click="deletePost(id)">Delete</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'ReportedPost',
+  props: {
+    id: String,
+    image: String,
+  },
+  methods: {
+    approvePost(postId) {
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/post/${postId}/flag`;
+
+      axios.patch(url, { reported: true }).then(() => this.$emit('delete-post-from-list', postId));
+    },
+    deletePost(postId) {
+      const url = `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_API_PROD
+          : process.env.VUE_APP_API_DEV
+      }/delete/${postId}`;
+
+      axios.delete(url).then(() => this.$emit('delete-post-from-list', postId));
+    },
+  },
 };
 </script>
 
@@ -37,7 +63,9 @@ export default {
       width: 66%;
 
       img {
-        align-self: flex-start;
+        max-width: 100%;
+        max-height: 400px;
+        align-self: center;
       }
     }
   }

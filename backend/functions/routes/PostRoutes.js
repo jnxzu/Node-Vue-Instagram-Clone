@@ -6,8 +6,8 @@ const {
   timeline,
   getPost,
   addComment,
-  removeComment,
   admin,
+  deletePost,
 } = require('../services/PostServices');
 
 const rejectMethod = (_req, res) => {
@@ -24,6 +24,9 @@ router.route('/post/:id').get(getPost).patch(likeSwitch).all(rejectMethod);
 // REPORT/APPROVE POST
 router.route('/post/:id/flag').patch(flagPost).all(rejectMethod);
 
+// DELETE POST
+router.route('/delete/:id').delete(deletePost).all(rejectMethod);
+
 // DASHBOARD
 router.route('/timeline').get(timeline).all(rejectMethod);
 
@@ -32,8 +35,5 @@ router.route('/admin').get(admin).all(rejectMethod);
 
 // ADD COMMENT
 router.route('/post/:id/comment').post(addComment).all(rejectMethod);
-
-// DELETE COMMENT
-router.route('/post/:id/comment/:commentId').delete(removeComment).all(rejectMethod);
 
 module.exports = router;

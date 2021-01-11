@@ -1,12 +1,19 @@
 <template>
   <div class="admin" v-if="ready">
-    <reported-post />
-    <reported-post />
+    <reported-post
+      v-for="post in posts"
+      :key="post._id"
+      :id="post._id"
+      :image="post.imageUrl"
+      @delete-post-from-list="deletePostFromList"
+    />
   </div>
   <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
+/* eslint-disable no-underscore-dangle */
+
 import axios from 'axios';
 import { mapState } from 'vuex';
 import ReportedPost from '../components/Posts/ReportedPost.vue';
@@ -32,9 +39,20 @@ export default {
           process.env.NODE_ENV === 'production'
             ? process.env.VUE_APP_API_PROD
             : process.env.VUE_APP_API_DEV
-        }/login`;
+        }/admin`;
+
+        axios.get(url).then((res) => {
+          this.posts = res.data;
+          this.ready = true;
+        });
       } else this.$router.push('404');
     },
+    deletePostFromList(id) {
+      this.posts = this.posts.filter((p) => p._id !== id);
+    },
+  },
+  mounted() {
+    this.getPosts();
   },
 };
 </script>

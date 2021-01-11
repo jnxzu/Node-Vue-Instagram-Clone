@@ -120,9 +120,15 @@ module.exports.addComment = (req, res) => {
   });
 };
 
-module.exports.removeComment = (req, res) => {
-  const { id, commentId } = req.params;
-  Post.findByIdAndUpdate(id, { $pull: { comments: { _id: commentId } } }).then(() => {
-    return res.status(200).json('Comment removed.');
+module.exports.admin = (_, res) => {
+  Post.find({ isReported: true }).then((posts) => {
+    return res.status(200).json(posts);
+  });
+};
+
+module.exports.deletePost = (req, res) => {
+  const { id } = req.params;
+  Post.findByIdAndDelete(id).then(() => {
+    return res.status(200).json('Post deleted.');
   });
 };
