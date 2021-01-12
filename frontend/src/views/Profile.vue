@@ -202,7 +202,7 @@ export default {
         .get()
         .then((qs) => {
           qs.forEach((doc) => {
-            if (doc.id === this.userdata.id) {
+            if (doc.data().ids.includes(this.userdata.id)) {
               chatAlreadyExists = true;
             }
           });

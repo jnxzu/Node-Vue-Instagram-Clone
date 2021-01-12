@@ -1,6 +1,6 @@
 <template>
   <div :class="{ contact: true, active: this.active }" @click="changeChat">
-    <img :src="this.avatar" />
+    <img :src="avatarUrl" @error="() => (avatarUrl = defaultAvatar)" />
     <div>
       <h3>{{ name }}</h3>
       <span>{{ lastMsg }}</span>
@@ -11,16 +11,21 @@
 <script>
 export default {
   name: 'Contact',
+  data() {
+    return {
+      avatarUrl: `https://firebasestorage.googleapis.com/v0/b/camra-4feb8.appspot.com/o/${this.name}_avatar?alt=media`,
+      defaultAvatar: '/img/profile-default.png',
+    };
+  },
   props: {
     id: String,
     name: String,
     msgs: Array,
-    avatar: String,
     selected: String,
   },
   computed: {
     lastMsg() {
-      return this.msgs[this.msgs.length - 1].content;
+      return this.msgs[this.msgs.length - 1]?.content;
     },
     active() {
       return this.selected === this.id;

@@ -10,8 +10,7 @@
           :key="chat.id"
           :id="chat.id"
           :selected="selectedId"
-          :avatar="chat.target.avatarUrl || '/img/profile-default.png'"
-          :name="chat.target.username"
+          :name="chat.target"
           :msgs="chat.messages"
           @change-selected="changeChat"
         />
@@ -20,10 +19,10 @@
     <div class="messenger__right">
       <div class="messenger__right__top">
         <div class="messenger__right__top__avatar">
-          <img :src="selectedChatroom.target.avatarUrl || '/img/profile-default.png'" />
+          <img :src="avatarUrl" @error="() => (avatarUrl = defaultAvatar)" />
         </div>
-        <router-link :to="`/u/${selectedChatroom.target.username}`">
-          {{ selectedChatroom.target.username }}</router-link
+        <router-link :to="`/u/${selectedChatroom.target}`">
+          {{ selectedChatroom.target }}</router-link
         >
       </div>
       <div class="messenger__right__messages">
@@ -81,6 +80,8 @@ export default {
       messages: [],
       unsubFunction: null,
       newMsg: '',
+      avatarUrl: `https://firebasestorage.googleapis.com/v0/b/camra-4feb8.appspot.com/o/${this.name}_avatar?alt=media`,
+      defaultAvatar: '/img/profile-default.png',
     };
   },
   computed: {
@@ -121,7 +122,7 @@ export default {
           snap.docChanges().forEach((change) => {
             const newOrChangeChatroom = {
               id: change.doc.id,
-              target: change.doc.data().users.filter((u) => u.username !== this.currentUserName)[0],
+              target: change.doc.data().users.filter((u) => u !== this.currentUserName)[0],
               messages: change.doc.data().messages,
             };
             if (change.doc.metadata.hasPendingWrites) {
@@ -132,6 +133,11 @@ export default {
             if (change.type === 'modified') {
               this.chatrooms = this.chatrooms.map((chatroom) =>
                 chatroom.id === newOrChangeChatroom.id ? newOrChangeChatroom : chatroom
+              );
+            }
+            if (change.type === 'removed') {
+              this.chatrooms = this.chatrooms.filter(
+                (chatroom) => chatroom.id !== newOrChangeChatroom.id
               );
             }
           });
@@ -145,7 +151,7 @@ export default {
           qs.forEach((doc) => {
             const chatroom = {
               id: doc.id,
-              target: doc.data().users.filter((u) => u.username !== this.currentUserName)[0],
+              target: doc.data().users.filter((u) => u !== this.currentUserName)[0],
               messages: doc.data().messages,
             };
             this.chatrooms.push(chatroom);
