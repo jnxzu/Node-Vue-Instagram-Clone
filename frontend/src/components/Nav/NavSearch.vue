@@ -22,7 +22,6 @@
 </template>
 
 <script>
-/* eslint-disable func-names */
 /* eslint-disable prefer-arrow-callback */
 
 import _ from 'lodash';
@@ -42,7 +41,7 @@ export default {
     },
   },
   methods: {
-    search: _.debounce(function () {
+    search: _.debounce(function searchUser() {
       if (this.phrase.length === 0) return;
       const url = `${
         process.env.NODE_ENV === 'production'
