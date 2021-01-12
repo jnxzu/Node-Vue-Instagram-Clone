@@ -52,7 +52,6 @@
 </template>
 
 <script>
-/* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable comma-dangle */

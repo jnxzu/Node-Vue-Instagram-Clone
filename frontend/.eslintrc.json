@@ -3,7 +3,9 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "off",
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "no-underscore-dangle": "off",
+    "no-return-assign": "off"
   },
   "root": true,
   "env": {

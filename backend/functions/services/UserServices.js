@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const { Storage } = require('@google-cloud/storage');
 const User = require('../models/User.js');
 

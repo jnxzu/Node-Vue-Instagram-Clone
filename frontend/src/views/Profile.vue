@@ -69,7 +69,6 @@
 </template>
 
 <script>
-/* eslint-disable no-return-assign */
 /* eslint-disable comma-dangle */
 import axios from 'axios';
 import _ from 'lodash';

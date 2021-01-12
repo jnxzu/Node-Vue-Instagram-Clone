@@ -48,7 +48,6 @@
 </template>
 
 <script>
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-prototype-builtins */
 import axios from 'axios';
 import moment from 'moment';

@@ -24,7 +24,6 @@
 <script>
 /* eslint-disable func-names */
 /* eslint-disable prefer-arrow-callback */
-/* eslint-disable no-return-assign */
 
 import _ from 'lodash';
 import axios from 'axios';

@@ -12,8 +12,6 @@
 </template>
 
 <script>
-/* eslint-disable no-underscore-dangle */
-
 import axios from 'axios';
 import { mapState } from 'vuex';
 import ReportedPost from '../components/Posts/ReportedPost.vue';

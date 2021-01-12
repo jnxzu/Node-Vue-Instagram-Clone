@@ -41,7 +41,6 @@
 </template>
 
 <script>
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-prototype-builtins */
 import { mapState } from 'vuex';
 import axios from 'axios';
