@@ -6,29 +6,33 @@
       </div>
       <div class="messenger__left__contacts">
         <contact
-          :active="true"
-          :name="'osoba'"
-          :lastMsg="'last message'"
-          :avatar="'https://placekitten.com/150/150'"
-        />
-        <contact
-          :active="false"
-          :name="'inna osoba'"
-          :lastMsg="'hejka byku'"
-          :avatar="'https://placekitten.com/150/150'"
+          v-for="chat in chatrooms"
+          :key="chat.id"
+          :id="chat.id"
+          :selected="selectedId"
+          :avatar="chat.target.avatarUrl || '/img/profile-default.png'"
+          :name="chat.target.username"
+          :msgs="chat.messages"
+          @change-selected="changeChat"
         />
       </div>
     </div>
     <div class="messenger__right">
       <div class="messenger__right__top">
         <div class="messenger__right__top__avatar">
-          <img src="https://placekitten.com/150/150" />
+          <img :src="selectedChatroom.target.avatarUrl || '/img/profile-default.png'" />
         </div>
-        <router-link to="/u/osoba">osoba</router-link>
+        <router-link :to="`/u/${selectedChatroom.target.username}`">
+          {{ selectedChatroom.target.username }}</router-link
+        >
       </div>
       <div class="messenger__right__messages">
-        <message :mine="true" :content="'hej'" />
-        <message :mine="false" :content="'spadaj'" />
+        <message
+          v-for="(msg, idx) in selectedChatroom.messages"
+          :key="idx"
+          :mine="msg.user === currentUserName"
+          :content="msg.content"
+        />
       </div>
       <div class="messenger__right__input">
         <form @submit.prevent="">
@@ -42,9 +46,11 @@
 </template>
 
 <script>
+/* eslint-disable no-return-assign */
+/* eslint-disable no-param-reassign */
 import { mapState } from 'vuex';
 
-// import db from '../firebase';
+import db from '../firebase';
 
 import Contact from '../components/Messages/Contact.vue';
 import Message from '../components/Messages/Message.vue';
@@ -57,22 +63,54 @@ export default {
   },
   data() {
     return {
-      timeout: null,
       ready: false,
+      chatrooms: [],
+      selectedId: '',
+      messages: [],
     };
   },
-  computed: { ...mapState({ auth: (state) => state.isAuth }) },
-  methods: {
-    checkAuth() {
-      if (!this.auth) this.$router.push({ name: 'Timeline' });
-      else this.ready = true;
+  computed: {
+    ...mapState({
+      auth: (state) => state.isAuth,
+      currentUserId: (state) => state.user.currentUserId,
+      currentUserName: (state) => state.user.currentUserName,
+    }),
+    selectedChatroom() {
+      return this.chatrooms.find((room) => room.id === this.selectedId);
     },
   },
-  created() {
-    this.timeout = setTimeout(this.checkAuth, 500);
+  methods: {
+    changeChat(id) {
+      this.selectedId = id;
+    },
+    listenToChanges() {},
+    getChatrooms() {
+      db.collection('chatrooms')
+        .where('ids', 'array-contains', this.currentUserId)
+        .get()
+        .then((qs) => {
+          qs.forEach((doc) => {
+            const chatroom = {
+              id: doc.id,
+              target: doc.data().users.filter((u) => u.username !== this.currentUserName)[0],
+              messages: doc.data().messages,
+            };
+            this.chatrooms.push(chatroom);
+          });
+          if (this.chatrooms) this.selectedId = this.chatrooms[0].id;
+        });
+    },
+    readyUp() {
+      if (!this.auth) this.$router.push({ name: 'Timeline' });
+      else {
+        // this.listenToChanges();
+        this.getChatrooms();
+        this.ready = true;
+      }
+    },
   },
-  destroyed() {
-    clearTimeout(this.timeout);
+  mounted() {
+    this.readyUp();
   },
 };
 </script>

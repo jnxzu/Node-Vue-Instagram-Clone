@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ contact: true, active: this.active }">
+  <div :class="{ contact: true, active: this.active }" @click="changeChat">
     <img :src="this.avatar" />
     <div>
       <h3>{{ name }}</h3>
@@ -12,10 +12,24 @@
 export default {
   name: 'Contact',
   props: {
-    active: Boolean,
+    id: String,
     name: String,
-    lastMsg: String,
+    msgs: Array,
     avatar: String,
+    selected: String,
+  },
+  computed: {
+    lastMsg() {
+      return this.msgs[this.msgs.length - 1].content;
+    },
+    active() {
+      return this.selected === this.id;
+    },
+  },
+  methods: {
+    changeChat() {
+      this.$emit('change-selected', this.id);
+    },
   },
 };
 </script>
