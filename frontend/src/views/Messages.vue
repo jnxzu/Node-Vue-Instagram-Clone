@@ -42,12 +42,17 @@
       </div>
     </div>
   </div>
+  <h1 class="no-friends" v-else-if="chatrooms.length === 0">Nothing here...</h1>
   <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
 <script>
 /* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-confusing-arrow */
+/* eslint-disable comma-dangle */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable function-paren-newline */
 import { mapState } from 'vuex';
 
 import db from '../firebase';
@@ -67,6 +72,8 @@ export default {
       chatrooms: [],
       selectedId: '',
       messages: [],
+      unsubFunction: null,
+      test: [],
     };
   },
   computed: {
@@ -83,7 +90,30 @@ export default {
     changeChat(id) {
       this.selectedId = id;
     },
-    listenToChanges() {},
+    listenToChanges() {
+      this.unsubFunction = db
+        .collection('chatrooms')
+        .where('ids', 'array-contains', this.currentUserId)
+        .onSnapshot((snap) => {
+          snap.docChanges().forEach((change) => {
+            const newOrChangeChatroom = {
+              id: change.doc.id,
+              target: change.doc.data().users.filter((u) => u.username !== this.currentUserName)[0],
+              messages: change.doc.data().messages,
+            };
+            if (change.doc.metadata.hasPendingWrites) {
+              if (change.type === 'added') {
+                this.chatrooms.push(newOrChangeChatroom);
+              }
+            }
+            if (change.type === 'modified') {
+              this.chatrooms = this.chatrooms.map((chatroom) =>
+                chatroom.id === newOrChangeChatroom.id ? newOrChangeChatroom : chatroom
+              );
+            }
+          });
+        });
+    },
     getChatrooms() {
       db.collection('chatrooms')
         .where('ids', 'array-contains', this.currentUserId)
@@ -103,7 +133,7 @@ export default {
     readyUp() {
       if (!this.auth) this.$router.push({ name: 'Timeline' });
       else {
-        // this.listenToChanges();
+        this.listenToChanges();
         this.getChatrooms();
         this.ready = true;
       }
@@ -112,10 +142,22 @@ export default {
   mounted() {
     this.readyUp();
   },
+  beforeDestroy() {
+    this.unsubFunction();
+  },
 };
 </script>
 
 <style lang="scss">
+.no-friends {
+  font-family: 'Amatic SC', cursive;
+  font-size: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .messenger {
   max-width: 975px;
   height: calc(100vh - 100px);
