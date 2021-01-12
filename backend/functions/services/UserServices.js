@@ -82,15 +82,15 @@ module.exports.followSwitch = (req, res) => {
   const { sender, alreadyFollowing } = req.body;
   const target = req.params.id;
   if (alreadyFollowing) {
-    User.findByIdAndUpdate(sender, { $pull: { following: target } }).then(() =>
+    User.findByIdAndUpdate(sender, { $pull: { following: target } }).then((s) =>
       User.findByIdAndUpdate(target, { $pull: { followers: sender } }).then(() => {
-        return res.status(200).json('Unfollowed');
+        return res.status(200).json({ add: false, new: s });
       })
     );
   } else {
-    User.findByIdAndUpdate(sender, { $push: { following: target } }).then(() =>
+    User.findByIdAndUpdate(sender, { $push: { following: target } }).then((s) =>
       User.findByIdAndUpdate(target, { $push: { followers: sender } }).then(() =>
-        res.status(200).json('Followed')
+        res.status(200).json({ add: true, new: s })
       )
     );
   }

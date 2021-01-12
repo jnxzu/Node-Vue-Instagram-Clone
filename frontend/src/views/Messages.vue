@@ -1,5 +1,5 @@
 <template>
-  <div class="messenger" v-if="ready">
+  <div class="messenger" v-if="ready & (chatrooms.length > 0)">
     <div class="messenger__left">
       <div class="messenger__left__top">
         <div class="messenger__left__top__center">Chat</div>
@@ -19,7 +19,10 @@
     <div class="messenger__right">
       <div class="messenger__right__top">
         <div class="messenger__right__top__avatar">
-          <img :src="avatarUrl" @error="() => (avatarUrl = defaultAvatar)" />
+          <img
+            :src="foundAvatar ? avatarUrl : defaultAvatar"
+            @error="() => (foundAvatar = false)"
+          />
         </div>
         <router-link :to="`/u/${selectedChatroom.target}`">
           {{ selectedChatroom.target }}</router-link
@@ -47,7 +50,7 @@
       </div>
     </div>
   </div>
-  <h1 class="no-friends" v-else-if="chatrooms.length === 0">Nothing here...</h1>
+  <h1 class="no-friends" v-else-if="(chatrooms.length === 0) & ready">Nothing here...</h1>
   <img class="loading-gif" src="/img/loading.gif" v-else />
 </template>
 
@@ -79,8 +82,8 @@ export default {
       messages: [],
       unsubFunction: null,
       newMsg: '',
-      avatarUrl: `https://firebasestorage.googleapis.com/v0/b/camra-4feb8.appspot.com/o/${this.name}_avatar?alt=media`,
       defaultAvatar: '/img/profile-default.png',
+      foundAvatar: true,
     };
   },
   computed: {
@@ -94,6 +97,9 @@ export default {
     },
     validInput() {
       return this.newMsg.length > 0 && this.newMsg.length < 140;
+    },
+    avatarUrl() {
+      return `https://firebasestorage.googleapis.com/v0/b/camra-4feb8.appspot.com/o/${this.selectedChatroom.target}_avatar?alt=media`;
     },
   },
   methods: {

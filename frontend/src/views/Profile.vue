@@ -122,11 +122,12 @@ export default {
   methods: {
     ...mapActions({ uploadAvatar: 'setAvatar' }),
     follow() {
+      this.ready = false;
       const url = `${
         process.env.NODE_ENV === 'production'
           ? process.env.VUE_APP_API_PROD
           : process.env.VUE_APP_API_DEV
-      }/profile/${this.username}/f`;
+      }/profile/${this.userdata.id}/f`;
 
       axios
         .patch(url, { sender: this.currentUserId, alreadyFollowing: this.followedByMe })
@@ -137,6 +138,7 @@ export default {
             const i = this.userdata.followers.indexOf(res.data.new);
             this.userdata.followers.splice(i, 1);
           }
+          this.ready = true;
         });
     },
     editBioAndAvatar() {
