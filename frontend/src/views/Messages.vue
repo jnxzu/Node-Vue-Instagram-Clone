@@ -36,8 +36,14 @@
       </div>
       <div class="messenger__right__input">
         <form @submit.prevent="">
-          <input type="text" maxlength="280" placeholder="submit only active if valid" />
-          <input type="submit" value="Send" />
+          <input
+            v-model="newMsg"
+            type="text"
+            maxlength="140"
+            placeholder="New message..."
+            @keydown.enter="sendMsg"
+          />
+          <input :class="{ valid: validInput }" type="submit" value="Send" @click="sendMsg" />
         </form>
       </div>
     </div>
@@ -54,6 +60,7 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable function-paren-newline */
 import { mapState } from 'vuex';
+import firebase from 'firebase';
 
 import db from '../firebase';
 
@@ -73,7 +80,7 @@ export default {
       selectedId: '',
       messages: [],
       unsubFunction: null,
-      test: [],
+      newMsg: '',
     };
   },
   computed: {
@@ -85,8 +92,24 @@ export default {
     selectedChatroom() {
       return this.chatrooms.find((room) => room.id === this.selectedId);
     },
+    validInput() {
+      return this.newMsg.length > 0 && this.newMsg.length < 140;
+    },
   },
   methods: {
+    sendMsg() {
+      if (this.validInput) {
+        const currentChatRef = db.collection('chatrooms').doc(this.selectedId);
+        currentChatRef
+          .update({
+            messages: firebase.firestore.FieldValue.arrayUnion({
+              content: this.newMsg,
+              user: this.currentUserName,
+            }),
+          })
+          .then(() => (this.newMsg = ''));
+      }
+    },
     changeChat(id) {
       this.selectedId = id;
     },
@@ -128,6 +151,7 @@ export default {
             this.chatrooms.push(chatroom);
           });
           if (this.chatrooms) this.selectedId = this.chatrooms[0].id;
+          this.ready = true;
         });
     },
     readyUp() {
@@ -135,7 +159,6 @@ export default {
       else {
         this.listenToChanges();
         this.getChatrooms();
-        this.ready = true;
       }
     },
   },
@@ -294,11 +317,11 @@ export default {
             color: var(--accent);
             font-weight: 700;
             letter-spacing: 3px;
-            cursor: pointer;
             opacity: 0.5;
             transition: all 0.25s ease-out;
 
             &.valid {
+              cursor: pointer;
               opacity: 1;
             }
           }

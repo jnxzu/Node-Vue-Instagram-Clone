@@ -20,7 +20,9 @@
               <button v-if="currentUserName !== username && isAuth" @click="follow">
                 {{ followedByMe ? 'Unfollow' : 'Follow' }}
               </button>
-              <button v-if="currentUserName !== username && isAuth">Message</button>
+              <button v-if="currentUserName !== username && isAuth" @click="newChat">
+                Message
+              </button>
               <button v-if="currentUserName === username" @click="editBioAndAvatar()">
                 {{ editing ? 'Save' : 'Edit' }}
               </button>
@@ -73,6 +75,8 @@ import axios from 'axios';
 import _ from 'lodash';
 import { mapActions, mapState } from 'vuex';
 
+import db from '../firebase';
+
 import ProfilePost from '../components/Posts/ProfilePost.vue';
 
 export default {
@@ -104,6 +108,7 @@ export default {
       currentUserName: (state) => state.user.currentUserName,
       currentUserId: (state) => state.user.currentUserId,
       isAuth: (state) => state.isAuth,
+      currentUserAvatar: (state) => state.user.avatarUrl,
     }),
     followedByMe() {
       return this.userdata.followers.map((u) => u.username).indexOf(this.currentUserName) > -1;
@@ -189,6 +194,34 @@ export default {
       this.imageFile = file;
       this.userdata.avatarUrl = URL.createObjectURL(file);
       this.avatarChanged = true;
+    },
+    newChat() {
+      let chatAlreadyExists = false;
+      db.collection('chatrooms')
+        .where('ids', 'array-contains', this.currentUserId)
+        .get()
+        .then((qs) => {
+          qs.forEach((doc) => {
+            if (doc.id === this.userdata.id) {
+              chatAlreadyExists = true;
+            }
+          });
+          if (chatAlreadyExists) this.$router.push({ name: 'Messages' });
+          else {
+            db.collection('chatrooms')
+              .add({
+                ids: [this.currentUserId, this.userdata.id],
+                messages: [],
+                users: [
+                  { avatarUrl: this.userdata.avatarUrl, username: this.username },
+                  { avatarUrl: this.currentUserAvatar, username: this.currentUserName },
+                ],
+              })
+              .then(() => {
+                this.$router.push({ name: 'Messages' });
+              });
+          }
+        });
     },
   },
   mounted() {
