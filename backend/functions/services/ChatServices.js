@@ -1,4 +1,5 @@
 const moment = require('moment');
+const io = require('socket.io');
 const Chat = require('../models/Chat');
 
 module.exports.newMessage = (req, res) => {

@@ -3,9 +3,7 @@ const functions = require('firebase-functions');
 const express = require('express');
 const cors = require('cors');
 const fileParser = require('express-multipart-file-parser');
-
 const cookieParser = require('cookie-parser');
-
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
@@ -17,6 +15,7 @@ const mongoose = require('./mongoose');
 const passport = require('./passport');
 
 const app = express();
+const server = require("./https")(app);
 
 app.use(express.json());
 app.use(fileParser);
@@ -56,7 +55,7 @@ app.use((_, res) => {
 
 // I HAVE NO IDEA WHAT IM DOING H E L P 
 // const passportSocketIo = require("passport.socketio");
-const io = socketio(app);
+const io = socketio(server);
 
 io.set('transports', ['websocket']);
 

@@ -52,6 +52,10 @@
       {
         "source": "/post/:id/comment/:commentId",
         "function": "api"
+      },
+      {
+        "source": "/getChats",
+        "function": "api"
       }
     ]
   }
