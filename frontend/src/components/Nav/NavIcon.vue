@@ -2,7 +2,7 @@
   <div :class="{ navicon: true, active: isActive }">
     <router-link :to="routeTarget">
       <img
-        :src="profile ? `${imgSrc}&${counter}` : imgSrc"
+        :src="profile ? `${imgSrc}?${counter}` : imgSrc"
         :alt="imgAlt"
         :class="{ 'profile-pic': profile }"
       />

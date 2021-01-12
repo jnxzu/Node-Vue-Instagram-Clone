@@ -84,7 +84,7 @@ module.exports.likeSwitch = (req, res) => {
 };
 
 module.exports.timeline = (req, res) => {
-  const { userId, currentPage } = req.params;
+  const { userId, currentPage } = req.query;
 
   const options = {
     populate: ['poster', 'likes', 'comments.author'],
@@ -96,6 +96,7 @@ module.exports.timeline = (req, res) => {
   if (userId) {
     User.find({ followers: userId }).then((users) => {
       const followedUsers = users.map((u) => u._id);
+      console.log(followedUsers);
       Post.paginate({ poster: { $in: followedUsers } }, options, (_, result) => {
         return res.status(200).json(result.docs);
       });

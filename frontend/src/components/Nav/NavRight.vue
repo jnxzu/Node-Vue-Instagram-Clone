@@ -34,7 +34,7 @@
         v-if="auth"
         :profile="true"
         :routeTarget="`/u/${user}`"
-        :imgSrc="avatar"
+        :imgSrc="avatar || '/img/profile-default.png'"
         :imgAlt="'Profile'"
         v-tooltip="'My Profile'"
         ref="profile"
