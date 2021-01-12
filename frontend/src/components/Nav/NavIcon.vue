@@ -2,7 +2,7 @@
   <div :class="{ navicon: true, active: isActive }">
     <router-link :to="routeTarget">
       <img
-        :src="profile ? `${imgSrc}?${counter}` : imgSrc"
+        :src="profile ? refreshingImgSrc : imgSrc"
         :alt="imgAlt"
         :class="{ 'profile-pic': profile }"
       />
@@ -31,6 +31,11 @@ export default {
     isActive() {
       if (this.profile) return this.$route.params.username === this.currentUser;
       return this.$route.name === this.imgAlt;
+    },
+    refreshingImgSrc() {
+      return this.imgSrc === '/img/profile-default.png'
+        ? this.imgSrc
+        : `${this.imgSrc}&${this.counter}`;
     },
     ...mapState({
       currentUser: (state) => state.user.currentUserName,
