@@ -24,7 +24,7 @@ router.route('/register').post(register).all(rejectMethod);
 router.route('/profile/:username').get(profile).all(rejectMethod);
 
 // FOLLOW/UNFOLLOW
-router.route('/profile/:id').patch(followSwitch).all(rejectMethod);
+router.route('/profile/:username/f').patch(followSwitch).all(rejectMethod);
 
 // USER SEARCH
 router.route('/search').post(search).all(rejectMethod);

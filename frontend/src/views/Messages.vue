@@ -44,6 +44,8 @@
 <script>
 import { mapState } from 'vuex';
 
+// import db from '../firebase';
+
 import Contact from '../components/Messages/Contact.vue';
 import Message from '../components/Messages/Message.vue';
 
