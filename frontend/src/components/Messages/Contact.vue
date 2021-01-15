@@ -55,12 +55,14 @@ export default {
   }
 
   img {
-    width: 65px;
+    width: 60px;
+    height: 60px;
     margin: 0 10px;
     border-radius: 50%;
 
     @media (max-width: 700px) {
       width: 50px;
+      height: 50px;
       margin-top: 10px;
     }
   }

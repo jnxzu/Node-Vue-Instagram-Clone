@@ -279,12 +279,13 @@ export default {
       }
 
       &__avatar {
-        height: 25px;
-        width: 25px;
+        height: 30px;
+        width: 30px;
         margin-right: 20px;
 
         img {
           height: 100%;
+          width: 100%;
           border-radius: 50%;
         }
       }
