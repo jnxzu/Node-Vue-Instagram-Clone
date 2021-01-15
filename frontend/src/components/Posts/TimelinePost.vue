@@ -30,7 +30,7 @@
         </transition>
       </div>
       <likes-counter :likesCount="likesArray.length" />
-      <div class="timelinepost__bottom__desc">
+      <div class="timelinepost__bottom__desc" v-if="desc">
         <p>
           <router-link :to="'/u/' + poster.username">{{ poster.username }}</router-link> {{ desc }}
         </p>
