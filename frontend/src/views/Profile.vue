@@ -23,7 +23,11 @@
               <button v-if="currentUserName !== username && isAuth" @click="newChat">
                 Message
               </button>
-              <button v-if="currentUserName === username" @click="editBioAndAvatar()">
+              <button
+                class="editBtn"
+                v-if="currentUserName === username"
+                @click="editBioAndAvatar()"
+              >
                 {{ editing ? 'Save' : 'Edit' }}
               </button>
             </div>
@@ -257,7 +261,7 @@ export default {
     display: flex;
 
     @media (max-width: 600px) {
-      padding: 20px;
+      padding: 20px 20px 5px 20px;
     }
 
     .ts-mobile-helper {
@@ -265,13 +269,15 @@ export default {
       align-items: center;
       margin-bottom: 20px;
 
-      img {
+      .mobile-img {
         display: none;
         border-radius: 50%;
         margin-right: 20px;
 
         @media (max-width: 600px) {
           display: inline-block;
+          height: 35vw;
+          width: 35vw;
         }
       }
     }
@@ -378,7 +384,7 @@ export default {
       gap: 3px;
       border: none;
       padding-top: 0;
-      margin-top: 25px;
+      margin-top: 0;
     }
 
     &__row {
@@ -394,6 +400,12 @@ export default {
         justify-content: space-between;
       }
     }
+  }
+}
+
+.editBtn {
+  @media (max-width: 600px) {
+    display: none;
   }
 }
 </style>
