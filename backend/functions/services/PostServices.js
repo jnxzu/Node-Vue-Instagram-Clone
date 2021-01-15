@@ -98,12 +98,12 @@ module.exports.timeline = (req, res) => {
       const followedUsers = users.map((u) => u._id);
       followedUsers.push(userId);
       Post.paginate({ poster: { $in: followedUsers } }, options, (_, result) => {
-        return res.status(200).json(result.docs);
+        return res.status(200).json({ docs: result.docs, np: result.hasNextPage });
       });
     });
   } else {
     Post.paginate({}, options, (_, result) => {
-      return res.status(200).json(result.docs);
+      return res.status(200).json({ docs: result.docs, np: result.hasNextPage });
     });
   }
 };
