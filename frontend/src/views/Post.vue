@@ -6,7 +6,10 @@
       </div>
       <div class="post__info">
         <div class="post__info__top">
-          <img src="/img/profile-default.png" />
+          <img
+            :src="foundAvatar ? avatarSource : defaultAvatar"
+            @error="() => (this.foundAvatar = false)"
+          />
           <div class="post__info__top__text">
             <router-link :to="`/u/${poster.username}`">{{ poster.username }}</router-link>
             <span>{{ formattedDate }}</span>
@@ -75,6 +78,8 @@ export default {
       likes: [],
       hideReport: false,
       newComment: '',
+      foundAvatar: true,
+      defaultAvatar: '/img/profile-default.png',
     };
   },
   computed: {
@@ -89,6 +94,9 @@ export default {
         this.likes.filter((l) => l._id === this.currentUserId || l.hasOwnProperty('currentUserId'))
           .length > 0
       );
+    },
+    avatarSource() {
+      return `https://firebasestorage.googleapis.com/v0/b/camra-4feb8.appspot.com/o/${this.poster.username}_avatar?alt=media`;
     },
     ...mapState({
       currentUserId: (state) => state.user.currentUserId,
