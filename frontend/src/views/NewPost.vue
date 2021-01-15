@@ -56,6 +56,8 @@ export default {
       const uid = new ShortUniqueId({ length: 10 });
       const data = new FormData();
       data.set('image', this.imageFile, this.imageFile.name.replace(/.*\./, `${uid()}.`));
+      data.set('poster', this.currentUserId);
+      data.set('desc', this.desc);
 
       const url = `${
         process.env.NODE_ENV === 'production'
