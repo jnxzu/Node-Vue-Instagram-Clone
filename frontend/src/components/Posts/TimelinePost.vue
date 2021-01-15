@@ -1,10 +1,13 @@
 <template>
   <div class="timelinepost">
     <div class="timelinepost__top">
-      <router-link :to="'/u/' + poster">
-        <img :src="avatar" />
+      <router-link :to="'/u/' + poster.username">
+        <img
+          :src="foundAvatar ? avatarSource : defaultAvatar"
+          @error="() => (this.foundAvatar = false)"
+        />
       </router-link>
-      <router-link :to="'/u/' + poster"> {{ poster }} </router-link>
+      <router-link :to="'/u/' + poster.username"> {{ poster.username }} </router-link>
     </div>
     <div class="timelinepost__image">
       <img :src="imageUrl" />
@@ -26,10 +29,10 @@
           />
         </transition>
       </div>
-      <likes-counter :likes="likesArray" />
+      <likes-counter :likesCount="likesArray.length" />
       <div class="timelinepost__bottom__desc">
         <p>
-          <router-link :to="'/u/' + poster">{{ poster }}</router-link> {{ desc }}
+          <router-link :to="'/u/' + poster.username">{{ poster.username }}</router-link> {{ desc }}
         </p>
       </div>
       <timeline-post-comments v-if="comments.length > 0" :comments="comments" />
@@ -58,25 +61,30 @@ export default {
   data() {
     return {
       hideReport: false,
-      likesArray: this.likes,
+      foundAvatar: true,
+      defaultAvatar: '/img/profile-default.png',
+      likesArray: this.likes.map((l) => l._id),
     };
   },
   props: {
     id: String,
-    poster: String,
-    avatar: String,
+    poster: Object,
     imageUrl: String,
     likes: Array,
     comments: Array,
-    liked: Boolean,
     desc: String,
     date: String,
   },
   computed: {
     ...mapState({
       currentUserId: (state) => state.user.currentUserId,
-      fullUser: (state) => state.user,
     }),
+    avatarSource() {
+      return `https://firebasestorage.googleapis.com/v0/b/camra-4feb8.appspot.com/o/${this.poster.username}_avatar?alt=media`;
+    },
+    liked() {
+      return this.likesArray.includes(this.currentUserId);
+    },
   },
   methods: {
     report() {
@@ -96,9 +104,9 @@ export default {
     },
     catchLikeToggle(val) {
       if (val) {
-        this.likesArray.push(this.fullUser);
+        this.likesArray.push(this.currentUserId);
       } else {
-        this.likesArray = this.likesArray.filter((o) => !o.hasOwnProperty('currentUserId'));
+        this.likesArray = this.likesArray.filter((id) => id !== this.currentUserId);
       }
     },
   },

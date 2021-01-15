@@ -59,7 +59,6 @@ module.exports.getPost = (req, res) => {
   const { id } = req.params;
   Post.findById(id)
     .populate('poster')
-    .populate('likes')
     .populate('comments.author')
     .then((post) => {
       if (post) return res.status(200).json(post);

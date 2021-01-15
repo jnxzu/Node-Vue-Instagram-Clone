@@ -1,7 +1,7 @@
 <template>
   <div class="likescounter">
     <span>
-      <span class="bolder">{{ likes.length }}</span> like(s)
+      <span class="bolder">{{ likesCount }}</span> {{ likesCount !== 1 ? 'likes' : 'like' }}
     </span>
   </div>
 </template>
@@ -10,7 +10,7 @@
 export default {
   name: 'LikesCounter',
   props: {
-    likes: Array,
+    likesCount: Number,
   },
 };
 </script>

@@ -4,12 +4,10 @@
       v-for="post in posts"
       :key="post._id"
       :id="post._id"
-      :poster="post.poster.username"
-      :avatar="post.poster.avatarUrl || '/img/profile-default.png'"
+      :poster="post.poster"
       :imageUrl="post.imageUrl"
       :likes="post.likes"
       :comments="post.comments"
-      :liked="post.likes.map((l) => l._id).includes(currentUserId)"
       :desc="post.description"
       :date="post.date"
     />

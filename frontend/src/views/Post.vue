@@ -36,7 +36,7 @@
         </div>
         <div class="post__info__controls">
           <liked-icon :liked="liked" :postId="id" @like-toggle="catchLikeToggle" />
-          <likes-counter :likes="likes" />
+          <likes-counter :likesCount="likes.length" />
         </div>
         <div class="post__info__input">
           <form @submit.prevent="() => {}">
@@ -90,10 +90,7 @@ export default {
       return this.newComment.length > 0 && this.newComment.length < 150;
     },
     liked() {
-      return (
-        this.likes.filter((l) => l._id === this.currentUserId || l.hasOwnProperty('currentUserId'))
-          .length > 0
-      );
+      return this.likes.includes(this.currentUserId);
     },
     avatarSource() {
       return `https://firebasestorage.googleapis.com/v0/b/camra-4feb8.appspot.com/o/${this.poster.username}_avatar?alt=media`;
@@ -139,12 +136,9 @@ export default {
     },
     catchLikeToggle(val) {
       if (val) {
-        this.likes.push(this.fullUser);
+        this.likes.push(this.currentUserId);
       } else {
-        this.likes = this.likes.filter(
-          // eslint-disable-next-line comma-dangle
-          (o) => !o.hasOwnProperty('currentUserId') && o._id === this.currentUserId
-        );
+        this.likes = this.likes.filter((id) => id !== this.currentUserId);
       }
     },
     postComment() {
