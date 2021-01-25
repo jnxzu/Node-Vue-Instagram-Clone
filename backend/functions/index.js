@@ -15,12 +15,10 @@ const passport = require('./passport');
 
 const app = express();
 
+app.use(cors({ origin: /camra-4feb8/ }));
+app.use(cookieParser());
 app.use(express.json());
 app.use(fileParser);
-
-app.use(cors({ origin: true })); // DEV
-// app.use(cors({ origin: new RegExp(/.*\/\/camra-4feb8.web.app\/.*/) })); // PROD
-app.use(cookieParser());
 
 const sessionStore = new MongoStore({
   mongooseConnection: mongoose.connection,
