@@ -20,7 +20,7 @@ module.exports.register = (req, res) => {
       });
     }
 
-    return User.findOne({ email }).then((userByEmail) => {
+    return User.findOne({ email }).then(async (userByEmail) => {
       if (userByEmail) {
         return res.status(400).json({
           msg: 'Email already exists',
@@ -36,9 +36,8 @@ module.exports.register = (req, res) => {
       newUser.following = [];
       newUser.followers = [];
       newUser.bio = '';
-      newUser.generateHash(password).then(function assignHash(hash) {
-        newUser.password = hash;
-      });
+      const hashPw = await newUser.generateHash(password);
+      newUser.password = hashPw;
 
       newUser.save().then(() => {
         return res.status(201).json({

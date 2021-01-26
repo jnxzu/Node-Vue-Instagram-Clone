@@ -42,7 +42,10 @@ const UserSchema = new Schema(
 
 UserSchema.plugin(uniqueValidator);
 
-UserSchema.methods.generateHash = (password) => bcrypt.hash(password);
+UserSchema.methods.generateHash = async (password) => {
+  const bcryptResult = await bcrypt.hash(password);
+  return bcryptResult;
+};
 UserSchema.methods.isValidPassword = async (password, hash) => {
   const bcryptResult = await bcrypt.compare(password, hash);
   return bcryptResult;
