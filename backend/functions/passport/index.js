@@ -9,18 +9,16 @@ const User = require('../models/User');
 
 // Konfiguracja Passport.js
 const validateUser = (username, password, done) => {
-  User.findOne({ username }, (err, user) => {
-    if (err) {
-      done(err);
-    }
+  User.findOne({ username }, async (err, user) => {
     if (user) {
-      if (user.isValidPassword(password, user.password)) {
+      const pwValid = await user.isValidPassword(password, user.password);
+      if (pwValid) {
         done(null, user);
       } else {
         done(null, null);
       }
     } else {
-      done(null, null);
+      done(err);
     }
   });
 };
