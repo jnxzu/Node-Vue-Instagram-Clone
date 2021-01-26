@@ -79,6 +79,7 @@ export default {
             isAdmin: res.data.isAdmin,
           });
           this.setAvatar(res.data.avatar);
+          this.$emit('reload-avatar');
           this.$router.push({ name: 'Timeline' });
         })
         .catch(() => {

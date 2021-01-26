@@ -45,7 +45,7 @@ export default {
   },
   computed: { ...mapState({ auth: (state) => state.isAuth }) },
   methods: {
-    ...mapActions(['updateUserState']),
+    ...mapActions(['updateUserState', 'setAvatar']),
     checkAuth() {
       if (this.auth) this.$router.push({ name: 'Timeline' });
       else this.ready = true;
@@ -71,6 +71,8 @@ export default {
         })
         .then((res) => {
           this.updateUserState(res.data);
+          this.setAvatar('');
+          this.$emit('reload-avatar');
           this.$router.push({ name: 'Timeline' });
         })
         .catch(() => {
