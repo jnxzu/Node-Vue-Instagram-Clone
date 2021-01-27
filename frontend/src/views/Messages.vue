@@ -10,7 +10,7 @@
           :key="chat.id"
           :id="chat.id"
           :selected="selectedId"
-          :name="chat.target"
+          :name="chat.target.username"
           :msgs="chat.messages"
           @change-selected="changeChat"
         />
@@ -24,8 +24,8 @@
             @error="() => (foundAvatar = false)"
           />
         </div>
-        <router-link :to="`/u/${selectedChatroom.target}`">
-          {{ selectedChatroom.target }}</router-link
+        <router-link :to="`/u/${selectedChatroom.target.username}`">
+          {{ selectedChatroom.target.username }}</router-link
         >
       </div>
       <div class="messenger__right__messages">
@@ -99,7 +99,7 @@ export default {
       return this.newMsg.length > 0 && this.newMsg.length < 140;
     },
     avatarUrl() {
-      return `https://firebasestorage.googleapis.com/v0/b/camra-4feb8.appspot.com/o/${this.selectedChatroom.target}_avatar?alt=media`;
+      return `https://firebasestorage.googleapis.com/v0/b/camra-4feb8.appspot.com/o/${this.selectedChatroom.target.username}_avatar?alt=media`;
     },
   },
   methods: {
