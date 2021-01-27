@@ -56,8 +56,8 @@ export default {
       else this.ready = true;
     },
     login() {
-      this.$refs.usernameInput.classList.remove('wrong');
-      this.$refs.passwordInput.classList.remove('wrong');
+      this.$refs.usernameInput?.classList.remove('wrong');
+      this.$refs.passwordInput?.classList.remove('wrong');
 
       const url = `${
         process.env.NODE_ENV === 'production'
@@ -84,8 +84,8 @@ export default {
         })
         .catch(() => {
           this.ready = true;
-          this.$refs.usernameInput.classList.add('wrong');
-          this.$refs.passwordInput.classList.add('wrong');
+          this.$refs.usernameInput?.classList.add('wrong');
+          this.$refs.passwordInput?.classList.add('wrong');
         });
     },
   },

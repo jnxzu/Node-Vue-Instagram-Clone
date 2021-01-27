@@ -127,7 +127,7 @@ export default {
           snap.docChanges().forEach((change) => {
             const newOrChangeChatroom = {
               id: change.doc.id,
-              target: change.doc.data().users.filter((u) => u !== this.currentUserName)[0],
+              target: change.doc.data().users.filter((u) => u.username !== this.currentUserName)[0],
               messages: change.doc.data().messages,
             };
             if (change.doc.metadata.hasPendingWrites) {
@@ -156,12 +156,12 @@ export default {
           qs.forEach((doc) => {
             const chatroom = {
               id: doc.id,
-              target: doc.data().users.filter((u) => u !== this.currentUserName)[0],
+              target: doc.data().users.filter((u) => u.username !== this.currentUserName)[0],
               messages: doc.data().messages,
             };
             this.chatrooms.push(chatroom);
           });
-          if (this.chatrooms) this.selectedId = this.chatrooms[0].id;
+          if (this.chatrooms.length > 0) this.selectedId = this.chatrooms[0].id;
           this.ready = true;
         });
     },
@@ -177,7 +177,7 @@ export default {
     this.readyUp();
   },
   beforeDestroy() {
-    this.unsubFunction();
+    if (this.unsubFunction) this.unsubFunction();
   },
 };
 </script>

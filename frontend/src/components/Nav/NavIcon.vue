@@ -46,6 +46,9 @@ export default {
       this.counter += 1;
     },
   },
+  mounted() {
+    if (this.profile) this.reloadAvatar();
+  },
 };
 </script>
 

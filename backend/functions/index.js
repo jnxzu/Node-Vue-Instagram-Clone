@@ -15,8 +15,8 @@ const passport = require('./passport');
 
 const app = express();
 
-// app.use(cors({ origin: /camra-4feb8/ }));
-app.use(cors({ origin: true }));
+app.use(cors({ origin: /camra-4feb8/ }));
+// app.use(cors({ origin: true }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(fileParser);

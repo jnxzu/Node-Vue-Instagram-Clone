@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     reloadAvatarIcon() {
-      this.$refs.profile.reloadAvatar();
+      this.$refs.profile?.reloadAvatar();
     },
   },
 };
